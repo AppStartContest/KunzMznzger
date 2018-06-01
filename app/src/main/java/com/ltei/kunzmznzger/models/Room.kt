@@ -1,9 +1,11 @@
 package com.ltei.kunzmznzger.models
 
+import com.ltei.kunzmznzger.libs.Helpers
 import com.ltei.kunzmznzger.libs.models.Model
 import com.ltei.kunzmznzger.libs.models.ModelManager
 import com.ltei.kunzmznzger.models.dao.RoomDAO
 import org.joda.time.DateTime
+import org.json.simple.JSONObject
 
 class Room : Model<Room>() {
 
@@ -11,8 +13,7 @@ class Room : Model<Room>() {
     var createdAt: DateTime? = null
     var updatedAt: DateTime? = null
 
-    var users: ArrayList<User> = ArrayList()
-    var aze: ArrayList<User> = ArrayList()
+    var users: MutableList<User> = ArrayList()
 
     override fun recopy(model: Room) {
         var copy = Room()
@@ -32,5 +33,12 @@ class Room : Model<Room>() {
 
     fun addUser(user: User){
         this.users.add(user)
+    }
+
+    override fun toJson(): JSONObject {
+        val json = JSONObject()
+        json["name"] = this.name
+
+        return json
     }
 }

@@ -53,6 +53,6 @@ public class ApiQuery
     public void setUrlParams (UrlParametersMap urlParams)
     {
         this.urlParams = urlParams;
-        this.suffix = urlParams.toString();
+        this.suffix = urlParams == null ? "" : urlParams.toString();
     }
 }

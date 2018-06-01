@@ -44,10 +44,15 @@ public abstract class Model<T extends Model> implements Comparable<Model<T>>
      */
     public CompletableFuture<T> save() {
         return this.existsInDatabase()
-                .thenCompose(exists -> exists ? getManagerInstance().update(this) : getManagerInstance().create(this));
+                .thenComposeAsync(exists -> {
+                    if(exists)
+                        return getManagerInstance().update(this);
+                    else
+                        return getManagerInstance().create(this);
+                });
     }
 
-    public CompletableFuture<Boolean> delete() {
+    public CompletableFuture<T> delete() {
         return getManagerInstance().delete(this);
     }
 

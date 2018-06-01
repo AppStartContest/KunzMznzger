@@ -1,11 +1,14 @@
 package com.ltei.kunzmznzger.libs.models;
 
+import android.support.annotation.Nullable;
+
 import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -44,7 +47,7 @@ public abstract class ModelManager<T extends Model>
      * @return the last inserted record
      */
     public CompletableFuture<T> getLast() {
-        return getLast(new UrlParametersMap());
+        return this.getLast(new UrlParametersMap());
     }
 
     /**
@@ -57,22 +60,26 @@ public abstract class ModelManager<T extends Model>
         parametersMap = parametersMap.orderBy("-id").limit(1);
 
         ApiQuery query = ApiQueryBuilder.create(getUrl()).params(parametersMap).getQuery();
-        return query.execute()
-                .thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> {
-                    JSONArray json = apiResponse.getJson();
-
-                    ArrayList<T> list = new ArrayList<>();
-                    for (Object obj : json) {
-                        try {
-                            list.add(this.buildFromJson(((JSONObject) obj)));
-                        } catch (ReflectiveOperationException e) {
-                            list.add(null);
-                            e.printStackTrace();
-                        }
-                    }
-
-                    return list.isEmpty() ? null : list.get(0);
-                }));
+        return query.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> {
+            ArrayList<T> list = handleResponseList(apiResponse);
+            if (list == null || list.isEmpty())
+                return null;
+            return list.get(0);
+        }));
+//                    handleResponseList(apiResponse);
+//                    JSONArray json = apiResponse.getJson();
+//
+//                    ArrayList<T> list = new ArrayList<>();
+//                    for (Object obj : json) {
+//                        try {
+//                            list.add(this.buildFromJson(((JSONObject) obj)));
+//                        } catch (ReflectiveOperationException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//                    return list.isEmpty() ? null : list.get(0);
+//                }));
     }
 
     /**
@@ -84,20 +91,7 @@ public abstract class ModelManager<T extends Model>
      */
     public CompletableFuture<T> find(int id, @NotNull UrlParametersMap parametersMap) {
         ApiQuery query = ApiQueryBuilder.create(getUrl() + "/" + id).params(parametersMap).getQuery();
-        return query.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> {
-            try {
-                JSONArray array = apiResponse.getJson();
-                if (array != null && !((JSONObject) array.get(0)).isEmpty()) {
-                    return buildFromJson((JSONObject) array.get(0));
-                }
-
-                return null;
-            } catch (ReflectiveOperationException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }));
-
+        return query.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> handleResponseObject(apiResponse)));
     }
 
 
@@ -119,21 +113,7 @@ public abstract class ModelManager<T extends Model>
      */
     public CompletableFuture<ArrayList<T>> all(@NotNull UrlParametersMap parametersMap) {
         ApiQuery q = ApiQueryBuilder.create(getUrl()).params(parametersMap).getQuery();
-        return q.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> {
-            ArrayList<T> list = new ArrayList<>();
-            JSONArray array = apiResponse.getJson();
-
-            array.forEach(jsonObject -> {
-                try {
-                    list.add(buildFromJson((JSONObject) jsonObject));
-                } catch (ReflectiveOperationException e) {
-                    list.add(null);
-                    e.printStackTrace();
-                }
-            });
-
-            return list;
-        }));
+        return q.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> handleResponseList(apiResponse)));
     }
 
 
@@ -166,25 +146,12 @@ public abstract class ModelManager<T extends Model>
      */
     public CompletableFuture<ArrayList<T>> ofUrl(String url, UrlParametersMap urlParametersMap) {
         ApiQuery q = ApiQueryBuilder.create(ApiConfig.getApiUrl() + url).params(urlParametersMap).getQuery();
-
-        return q.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> {
-            ArrayList<T> list = new ArrayList<>();
-            JSONArray json = apiResponse.getJson();
-            for (Object obj : json) {
-                try {
-                    list.add(buildFromJson(((JSONObject) obj)));
-                } catch (ReflectiveOperationException e) {
-                    list.add(null);
-                    e.printStackTrace();
-                }
-            }
-
-            return list;
-        }));
+        return q.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> handleResponseList(apiResponse)));
     }
 
     /**
      * Build the managed model class from the fetched JSON
+     *
      * @param json the JSON containing data to parse
      * @return the parsed model instance
      * @throws ReflectiveOperationException if reflection error occurs
@@ -208,7 +175,15 @@ public abstract class ModelManager<T extends Model>
             }
 
             String camelCaseKey = Helpers.camelCase(key);
-            Field field = clazz.getDeclaredField(camelCaseKey);
+
+            Field field;
+            try {
+                field = clazz.getDeclaredField(camelCaseKey);
+            }
+            catch(ReflectiveOperationException e){
+                System.err.println(String.format("No field '%s' (for json field '%s') in model class %s", camelCaseKey, key, clazz.getSimpleName()));
+                continue;
+            }
 
             Method setter;
             String setterName = "set" + camelCaseKey.substring(0, 1).toUpperCase() + camelCaseKey.substring(1);
@@ -367,12 +342,14 @@ public abstract class ModelManager<T extends Model>
     /**
      * Get resource's namespace (http://....../api/{resource}) <br/>
      * Ex: for URL like <b>http://.../api/users</b>, the resource is <b>users</b>
+     *
      * @return the resource's namespace
      */
     public abstract String getNamespace();
 
     /**
      * Get the complete URL (base API url + namespace)
+     *
      * @return the complete URL
      */
     public String getUrl() {
@@ -382,58 +359,54 @@ public abstract class ModelManager<T extends Model>
     /**
      * Get the model's class
      * Ex: <code>UserDAO</code> class should return something like <code>User.class</code>
+     *
      * @return the model's class
      */
     protected abstract Class<T> getModelInstanceClass();
 
     /**
      * Create a model in the database
+     *
      * @param model the new model to create
      * @return the created model
      */
     public CompletableFuture<T> create(Model<T> model) {
         ApiQuery query = new ApiQueryBuilder(getUrl(), Http.POST).setData(model.toJson()).getQuery();
         System.out.println(query);
-
-        return query.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> this.handleApiResponse(apiResponse)));
-
+        return query.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> this.handleResponseObject(apiResponse)));
     }
 
     /**
      * Update a model in the database
+     *
      * @param model the model to update
      * @return the updated model
      */
     public CompletableFuture<T> update(Model<T> model) {
         ApiQuery query = new ApiQueryBuilder(getUrl() + "/" + model.getId(), Http.PUT).setData(model.toJson()).getQuery();
-        return query.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> this.handleApiResponse(apiResponse)));
+        return query.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> this.handleResponseObject(apiResponse)));
     }
 
     /**
      * Delete a model from the database
+     *
      * @param model the model to delete
      * @return true if everything was ok, false otherwise
      */
-    public CompletableFuture<Boolean> delete(Model<T> model) {
+    public CompletableFuture<T> delete(Model<T> model) {
         ApiQuery query = new ApiQueryBuilder(getUrl() + "/" + model.getId(), Http.DELETE).getQuery();
-        return query.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> {
-            if (apiResponse.getCode() >= 400) {
-                return false;
-            }
-
-            JSONArray json = apiResponse.getJson();
-
-            return json != null && !json.isEmpty() && !((JSONObject) json.get(0)).isEmpty();
-        }));
+        return query.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> handleResponseObject(apiResponse)));
     }
 
     /**
      * Handle API response and parse JSON
+     *
      * @param apiResponse the response to handle
      * @return the parse model, or null
      */
-    private T handleApiResponse(ApiResponse apiResponse) {
-        if (apiResponse.getCode() >= 400) {
+    @Nullable
+    private T handleResponseObject(@NotNull ApiResponse apiResponse) {
+        if (apiResponse.getCode() >= 300) {
             return null;
         }
 
@@ -450,5 +423,25 @@ public abstract class ModelManager<T extends Model>
             e.printStackTrace();
         }
         return res;
+    }
+
+    @Nullable
+    private ArrayList<T> handleResponseList(@NotNull ApiResponse apiResponse) {
+        if (apiResponse.getCode() >= 300) {
+            return null;
+        }
+
+        ArrayList<T> list = new ArrayList<>();
+        JSONArray array = apiResponse.getJson();
+
+        for (Object obj : array) {
+            try {
+                list.add(buildFromJson(((JSONObject) obj)));
+            } catch (ReflectiveOperationException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return list;
     }
 }

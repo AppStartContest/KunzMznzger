@@ -3,6 +3,7 @@ package com.ltei.kunzmznzger.models
 import com.ltei.kunzmznzger.libs.models.Model
 import com.ltei.kunzmznzger.libs.models.ModelManager
 import com.ltei.kunzmznzger.models.dao.UserDAO
+import org.json.simple.JSONObject
 
 class User : Model<User>() {
 
@@ -29,5 +30,13 @@ class User : Model<User>() {
 
     fun addRoom(room: Room){
         this.rooms.add(room)
+    }
+
+    override fun toJson(): JSONObject {
+        val json = JSONObject()
+        json["name"] = this.name
+        json["phone"] = this.phone
+
+        return json
     }
 }
