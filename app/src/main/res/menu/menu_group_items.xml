@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_group_items_add_member"
+        app:showAsAction="ifRoom"
+        android:title="Add member"
+        android:visible="true" />
+    <item
+        android:id="@+id/menu_group_items_add_message"
+        app:showAsAction="ifRoom|withText"
+        android:title="Add message"
+        android:visible="true" />
+    <item
+        android:id="@+id/menu_group_items_add_event"
+        app:showAsAction="ifRoom"
+        android:title="Add event"
+        android:visible="true" />
+
+    <item
+        android:id="@+id/menu_group_items_history"
+        app:showAsAction="ifRoom"
+        android:title="History"
+        android:visible="true" />
+
+    <item
+        android:id="@+id/menu_group_items_graph"
+        app:showAsAction="ifRoom"
+        android:title="Graph"
+        android:visible="true" />
+
+</menu>
