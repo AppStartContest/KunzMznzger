@@ -69,7 +69,7 @@ public class Api extends AsyncTask<Object, Void, ApiResponse>
             connection.setRequestProperty("models.User-Agent", "java client");
             connection.setInstanceFollowRedirects(false);
 
-            if (!httpMethod.equals("GET") && !httpMethod.equals("DELETE")) {
+            if (!httpMethod.equals("GET") && !httpMethod.equals("DELETE") && data != null) {
                 connection.setRequestProperty("Content-Type", "application/json");
 
                 connection.setDoOutput(true);

@@ -76,7 +76,7 @@ public class ApiQueryBuilder<T extends Model>
         return this;
     }
 
-    public ApiQueryBuilder setData (JSONObject data)
+    public ApiQueryBuilder data(JSONObject data)
     {
         this.data = data;
         return this;

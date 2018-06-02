@@ -8,7 +8,6 @@ import org.joda.time.format.DateTimeFormatter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -46,8 +45,8 @@ public abstract class ModelManager<T extends Model>
      *
      * @return the last inserted record
      */
-    public CompletableFuture<T> getLast() {
-        return this.getLast(new UrlParametersMap());
+    public CompletableFuture<T> findLast() {
+        return this.findLast(new UrlParametersMap());
     }
 
     /**
@@ -56,7 +55,7 @@ public abstract class ModelManager<T extends Model>
      * @param parametersMap additional parameters
      * @return the last inserted record
      */
-    public CompletableFuture<T> getLast(@NotNull UrlParametersMap parametersMap) {
+    public CompletableFuture<T> findLast(@NotNull UrlParametersMap parametersMap) {
         parametersMap = parametersMap.orderBy("-id").limit(1);
 
         ApiQuery query = ApiQueryBuilder.create(getUrl()).params(parametersMap).getQuery();
@@ -179,8 +178,7 @@ public abstract class ModelManager<T extends Model>
             Field field;
             try {
                 field = clazz.getDeclaredField(camelCaseKey);
-            }
-            catch(ReflectiveOperationException e){
+            } catch (ReflectiveOperationException e) {
                 System.err.println(String.format("No field '%s' (for json field '%s') in model class %s", camelCaseKey, key, clazz.getSimpleName()));
                 continue;
             }
@@ -371,7 +369,7 @@ public abstract class ModelManager<T extends Model>
      * @return the created model
      */
     public CompletableFuture<T> create(Model<T> model) {
-        ApiQuery query = new ApiQueryBuilder(getUrl(), Http.POST).setData(model.toJson()).getQuery();
+        ApiQuery query = new ApiQueryBuilder(getUrl(), Http.POST).data(model.toJson()).getQuery();
         System.out.println(query);
         return query.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> this.handleResponseObject(apiResponse)));
     }
@@ -383,7 +381,7 @@ public abstract class ModelManager<T extends Model>
      * @return the updated model
      */
     public CompletableFuture<T> update(Model<T> model) {
-        ApiQuery query = new ApiQueryBuilder(getUrl() + "/" + model.getId(), Http.PUT).setData(model.toJson()).getQuery();
+        ApiQuery query = new ApiQueryBuilder(getUrl() + "/" + model.getId(), Http.PUT).data(model.toJson()).getQuery();
         return query.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> this.handleResponseObject(apiResponse)));
     }
 
@@ -397,6 +395,7 @@ public abstract class ModelManager<T extends Model>
         ApiQuery query = new ApiQueryBuilder(getUrl() + "/" + model.getId(), Http.DELETE).getQuery();
         return query.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> handleResponseObject(apiResponse)));
     }
+
 
     /**
      * Handle API response and parse JSON
@@ -443,5 +442,38 @@ public abstract class ModelManager<T extends Model>
         }
 
         return list;
+    }
+
+    // ----- Attach, detach, sync
+
+    CompletableFuture<T> attach(Model left, Model right, JSONObject data) {
+        UrlParametersMap params = this.buildAttachDetachOrSyncUrlParams(right);
+        return this.AttachDetachOrSync(left, right, data, params, Http.POST); // Attach = POST request
+    }
+
+    CompletableFuture<T> sync(Model left, Model right, JSONObject data, boolean withoutDetaching) {
+        UrlParametersMap params = this.buildAttachDetachOrSyncUrlParams(right).set("syncWithoutDetaching", withoutDetaching);
+        return this.AttachDetachOrSync(left, right, data, params, Http.PUT); // Sync = PUT request
+    }
+
+    CompletableFuture<T> detach(Model left, Model right) {
+        UrlParametersMap params = this.buildAttachDetachOrSyncUrlParams(right);
+        return this.AttachDetachOrSync(left, right, null, params, Http.DELETE); // Sync = PUT request
+    }
+
+    private UrlParametersMap buildAttachDetachOrSyncUrlParams(Model right){
+        String rightNamespace = right.getManagerInstance().getNamespace();
+        return new UrlParametersMap().with(rightNamespace);
+    }
+
+    private CompletableFuture<T> AttachDetachOrSync(Model left, Model right, JSONObject data, UrlParametersMap params, Http method) {
+        String url = getUrl() + "/" +
+                left.getId() + "/" +
+                right.getManagerInstance().getNamespace() + "/" +
+                right.getId();
+
+        // Sync = PUT method
+        ApiQuery query = new ApiQueryBuilder(url, method).params(params).data(data).getQuery();
+        return query.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> this.handleResponseObject(apiResponse)));
     }
 }
