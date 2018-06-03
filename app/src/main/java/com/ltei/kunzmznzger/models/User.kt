@@ -2,13 +2,15 @@ package com.ltei.kunzmznzger.models
 
 import com.ltei.kunzmznzger.libs.models.Model
 import com.ltei.kunzmznzger.libs.models.ModelManager
+import com.ltei.kunzmznzger.libs.models.exceptions.ModelException
 import com.ltei.kunzmznzger.models.dao.UserDAO
 import org.json.simple.JSONObject
+import java.util.concurrent.CompletableFuture
 
 class User : Model<User>() {
 
     var name: String? = null
-    var phone: String? = null
+    var username: String? = null
 
     var rooms: MutableList<Room> = mutableListOf()
 
@@ -16,7 +18,7 @@ class User : Model<User>() {
         val copy = User()
         copy.id = model.id
         copy.name = model.name
-        copy.phone = model.phone
+        copy.username = model.username
         copy.rooms = model.rooms
     }
 
@@ -25,7 +27,7 @@ class User : Model<User>() {
     }
 
     override fun toString(): String {
-        return "User(id=${getId()} name=$name, phone=$phone, rooms=$rooms)"
+        return "User(id=${getId()} name=$name, username=$username, rooms=$rooms)"
     }
 
     fun addRoom(room: Room){
@@ -35,8 +37,21 @@ class User : Model<User>() {
     override fun toJson(): JSONObject {
         val json = JSONObject()
         json["name"] = this.name
-        json["phone"] = this.phone
+        json["username"] = this.username
 
         return json
+    }
+
+    /**
+     * Update the model or create it if it doesn't exist
+     * @return the updated/created model
+     * @throws ModelException If you're trying to create a user. To do that, see UserDao#createAccount()
+     */
+    override fun save(): CompletableFuture<User> {
+        if(this.id < 1){
+            throw ModelException("You can't create a user this way. See UserDao#createAccount()")
+        }
+
+        return super.save()
     }
 }

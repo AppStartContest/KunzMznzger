@@ -28,46 +28,69 @@ class MainActivity : AppCompatActivity() {
 
 
 //        // Example of attachment of two models
-        val newUser = User() // Create the new user and setting an arbitrary name and phone
-        newUser.name = "UserBala"
-        newUser.phone = DateTime.now().toString("MMddHHmmss")
-        newUser.save() // Create the user
-                .thenCompose({ user: User ->
-                    // Find the last room
-                    RoomDAO().findLast().thenCompose { room: Room ->
-                        // Attach this room to the user we just created
-                        user.attach(room)
-                    }
-                })
-                .thenAccept(::debug)
+//        val newUser = User() // Create the new user and setting an arbitrary name and phone
+//        newUser.name = "UserBala"
+//        newUser.phone = DateTime.now().toString("MMddHHmmss")
+//        newUser.save() // Create the user
+//                .thenCompose({ user: User ->
+//                    // Find the last room
+//                    RoomDAO().findLast().thenCompose { room: Room ->
+//                        // Attach this room to the user we just created
+//                        user.attach(room)
+//                    }
+//                })
+//                .thenAccept(::debug)
 
 
         // Example of detachment of two models
-        UserDAO().findLast()
-                .thenCompose {user :User ->
-                    RoomDAO().findLast().thenCompose { room: Room ->
-                        user.detach(room)
+//        UserDAO().findLast()
+//                .thenCompose { user: User ->
+//                    RoomDAO().findLast().thenCompose { room: Room ->
+//                        user.detach(room)
+//                    }
+//                }
+//                .thenAccept(::debug)
+//
+//        // Example of sync of two models
+//        UserDAO().findLast()
+//                .thenCompose { user: User ->
+//                    RoomDAO().findLast().thenCompose { room: Room ->
+//                        user.sync(room) // Sync this room to this user. It will detach other rooms already attached to this user
+////                        user.sync(room, true) // Sync this room to this user WITHOUT detaching other rooms already attached to this user
+////                        user.sync(room, JSONObject()) // Sync this room to this user with additional data (empty here)
+////                        user.sync(room, JSONObject(), true) // Sync this room to this user with additional data (empty here)
+//                        // and without other rooms already attached to this user
+//                    }
+//                }
+//                .thenAccept(::debug)
+
+//        UserDAO().register("Register${DateTime.now().toString("MMddHHmmss")}", "testpw")
+//                .thenCompose {
+//                    debug(it)
+//                        UserDAO().auth(it!!.username!!, "testpw")
+//                }
+//                .thenAccept(::debug)
+
+        val username = "Register" + DateTime.now().toString("MMddHHmmss") // Unique username
+        val pw = "testpw"
+
+        UserDAO().register(username, pw) // Registration example
+                .thenCompose {
+                    debug(it)
+                    UserDAO().auth(username, pw) // Authentication example
+                }
+                .thenCompose {
+                    debug(it)
+                    // Find last room to attach it to the user
+                    RoomDAO().findLast().thenCompose { room: Room? ->
+                        debug(room)
+                        it?.attach(room)
                     }
                 }
                 .thenAccept(::debug)
-
-        // Example of sync of two models
-        UserDAO().findLast()
-                .thenCompose {user :User ->
-                    RoomDAO().findLast().thenCompose { room: Room ->
-                        user.sync(room) // Sync this room to this user. It will detach other rooms already attached to this user
-//                        user.sync(room, true) // Sync this room to this user WITHOUT detaching other rooms already attached to this user
-//                        user.sync(room, JSONObject()) // Sync this room to this user with additional data (empty here)
-//                        user.sync(room, JSONObject(), true) // Sync this room to this user with additional data (empty here)
-                                                                // and without other rooms already attached to this user
-                    }
-                }
-                .thenAccept(::debug)
-
-
     }
 
-    fun debug(arg: Any) {
+    fun debug(arg: Any?) {
         Log.d("[CONSOLE]", "$arg")
     }
 
