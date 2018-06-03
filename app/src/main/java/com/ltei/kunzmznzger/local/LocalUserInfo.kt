@@ -7,24 +7,21 @@ import com.ltei.kunzmznzger.models.User
 import com.ltei.kunzmznzger.models.dao.UserDAO
 
 class LocalUserInfo {
-    
+
     companion object {
-        
-        private var globalInstance: LocalUserInfo? = null
-        
+
+        private var globalInstance: LocalUserInfo = LocalUserInfo()
+
         fun getInstance(): LocalUserInfo {
-            if (globalInstance == null) {
-                globalInstance = LocalUserInfo()
-            }
-            return globalInstance!!
+            return globalInstance
         }
-        
+
     }
-    
+
 
     private var user: User? = null
     private val groups: ArrayList<Room>  = ArrayList()
-    
+
 
     fun isCreated(context: Context): Boolean {
         val key =  context.getString(R.string.preference_file_id)
@@ -118,6 +115,6 @@ class LocalUserInfo {
     fun reloadUser(id: Int) {
         UserDAO().find(id).thenAccept { MAIN_USER = it }
     }*/
-    
-    
+
+
 }
