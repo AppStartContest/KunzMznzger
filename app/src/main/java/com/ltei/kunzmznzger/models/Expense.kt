@@ -20,10 +20,10 @@ class Expense : Model<Expense>(), Serializable {
 
     var value : Float? = null
 
-    var message_list : MutableList<Message> = arrayListOf<Message>()
+    var messages : MutableList<Message> = arrayListOf<Message>()
 
     fun add_message(message: Message){
-        message_list.add(message)
+        messages.add(message)
     }
 
     override fun recopy(model: Expense) {
@@ -34,7 +34,7 @@ class Expense : Model<Expense>(), Serializable {
         copy.created_at = model.created_at
         copy.updated_at = model.updated_at
         copy.deleted_at = model.deleted_at
-        copy.message_list = model.message_list
+        copy.messages = model.messages
         copy.description = model.description
     }
 
@@ -43,14 +43,14 @@ class Expense : Model<Expense>(), Serializable {
     }
 
     override fun toString(): String {
-        return "Expense(id=${getId()} value=$value, createdAt=$created_at, updatedAt=$updated_at, user=$user, room=$room, message=$message_list"
+        return "Expense(id=${getId()} value=$value, createdAt=$created_at, updatedAt=$updated_at, user=$user, room=$room, message=$messages"
 
     }
 
     override fun toJson(): JSONObject {
         val json = super.toJson()
-        json["user_id"] = this.user!!.id
-        json["room_id"] = this.room!!.id
+        json["user_id"] = this.user?.id
+        json["room_id"] = this.room?.id
         json["value"] = this.value
         //json["message"] = this.message_list
 

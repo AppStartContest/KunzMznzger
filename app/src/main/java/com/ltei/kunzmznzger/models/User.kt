@@ -13,6 +13,8 @@ class User : Model<User>() {
     var username: String? = null
 
     var rooms: MutableList<Room> = mutableListOf()
+    var messages : MutableList<Message> = mutableListOf()
+    var expenses : MutableList<Expense> = mutableListOf()
 
     override fun recopy(model: User) {
         val copy = User()
@@ -20,6 +22,8 @@ class User : Model<User>() {
         copy.name = model.name
         copy.username = model.username
         copy.rooms = model.rooms
+        copy.messages = model.messages
+        copy.expenses = model.expenses
     }
 
     override fun getManagerInstance(): ModelManager<User> {
@@ -27,11 +31,19 @@ class User : Model<User>() {
     }
 
     override fun toString(): String {
-        return "User(id=${getId()} name=$name, username=$username, rooms=$rooms)"
+        return "User(id=${getId()} name=$name, username=$username, rooms=$rooms, messages=$messages, expenses=$expenses)"
     }
 
     fun addRoom(room: Room){
         this.rooms.add(room)
+    }
+
+    fun addExpense(expense: Expense){
+        this.expenses.add(expense)
+    }
+
+    fun addMessage(message: Message){
+        this.messages.add(message)
     }
 
     override fun toJson(): JSONObject {
