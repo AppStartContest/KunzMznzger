@@ -27,10 +27,11 @@ class LocalUserInfo {
     
 
     fun isCreated(context: Context): Boolean {
-        val key =  context.getString(R.string.preference_file_id)
+        val key =  context.getString(R.string.preference_item_user_id)
         return context.getSharedPreferences(context.getString(R.string.preference_file_id), Context.MODE_PRIVATE)
-                .getInt(key, -1) != -1
+                .getInt(key, Int.MAX_VALUE) != Int.MAX_VALUE
     }
+
     fun create(context: Context, username: String, name: String, password: String) {
         UserDAO().register(username, password).thenCompose { UserDAO().auth(username, password) }
                 .thenAccept {
@@ -53,6 +54,7 @@ class LocalUserInfo {
     fun load(runnable: Runnable) {
         //TODO
     }
+
     /*fun getHistory(): Array<LocalExpenseInfo> {
         //TODO
     }

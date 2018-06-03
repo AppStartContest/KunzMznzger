@@ -90,20 +90,11 @@ class MainActivity : AppCompatActivity() {
             })
             dialog.show()
         })
-
-        /*// Initialize
-        if (!LocalUserInfo.getInstance().isCreated(this)) {
-            val intent = Intent(this, UserCreationActivity::class.java)
-            startActivity(intent)
-        } else {
-            LocalUserInfo.getInstance().load(Runnable{ onResume() })
-        }*/
-
     }
 
     override fun onResume() {
         super.onResume()
-        if (!LocalUserInfo.getInstance().isCreated(this)) {
+        if ( !LocalUserInfo.getInstance().isCreated(this) ) {
             val intent = Intent(this, UserCreationActivity::class.java)
             startActivity(intent)
             finish()
@@ -114,12 +105,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     fun gotoActivityGroup(groupInfo: Room) {
         val intent = Intent(this, GroupActivity::class.java)
         intent.putExtra(GroupActivity.EXTRAS_ROOM, groupInfo)
         startActivity(intent)
     }
+
+
 
 
 

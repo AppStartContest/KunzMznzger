@@ -2,10 +2,10 @@ package com.ltei.kunzmznzger.view
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.widget.ArrayAdapter
 import com.ltei.kunzmznzger.R
 import com.ltei.kunzmznzger.models.Expense
 import kotlinx.android.synthetic.main.activity_expense_info.*
+import kotlinx.android.synthetic.main.activity_group.*
 
 class ExpenseInfoActivity : AppCompatActivity() {
 
@@ -17,7 +17,12 @@ class ExpenseInfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_expense_info)
 
-        val expense = intent.getSerializableExtra(HistoryActivity.EXTRAS_LIST) as Expense
+        val expense = intent.getSerializableExtra(EXTRAS_EXPENSE) as Expense
+
+        text_title.text = expense.description
+        text_amount.text = "spent ${expense.value}$ for"
+
+
 
         /*expense_info_listview_messages.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, expense.getMessages())
 
