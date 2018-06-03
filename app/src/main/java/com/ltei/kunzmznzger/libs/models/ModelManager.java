@@ -58,7 +58,7 @@ public abstract class ModelManager<T extends Model>
     public CompletableFuture<T> findLast(@NotNull UrlParametersMap parametersMap) {
         parametersMap = parametersMap.orderBy("-id").limit(1);
 
-        ApiQuery query = ApiQueryBuilder.create(getUrl()).params(parametersMap).getQuery();
+        ApiQuery query = ApiQueryBuilder.create(url()).params(parametersMap).getQuery();
         return query.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> {
             ArrayList<T> list = handleResponseList(apiResponse);
             if (list == null || list.isEmpty())
@@ -89,7 +89,7 @@ public abstract class ModelManager<T extends Model>
      * @return the record of this ID
      */
     public CompletableFuture<T> find(int id, @NotNull UrlParametersMap parametersMap) {
-        ApiQuery query = ApiQueryBuilder.create(getUrl() + "/" + id).params(parametersMap).getQuery();
+        ApiQuery query = ApiQueryBuilder.create(url() + "/" + id).params(parametersMap).getQuery();
         return query.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> handleResponseObject(apiResponse)));
     }
 
@@ -111,7 +111,7 @@ public abstract class ModelManager<T extends Model>
      * @return a list of record of this table
      */
     public CompletableFuture<ArrayList<T>> all(@NotNull UrlParametersMap parametersMap) {
-        ApiQuery q = ApiQueryBuilder.create(getUrl()).params(parametersMap).getQuery();
+        ApiQuery q = ApiQueryBuilder.create(url()).params(parametersMap).getQuery();
         return q.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> handleResponseList(apiResponse)));
     }
 
@@ -350,7 +350,7 @@ public abstract class ModelManager<T extends Model>
      *
      * @return the complete URL
      */
-    public String getUrl() {
+    public String url() {
         return ModelManager.API_URL + this.getNamespace();
     }
 
@@ -369,7 +369,7 @@ public abstract class ModelManager<T extends Model>
      * @return the created model
      */
     public CompletableFuture<T> create(Model<T> model) {
-        ApiQuery query = new ApiQueryBuilder(getUrl(), Http.POST).data(model.toJson()).getQuery();
+        ApiQuery query = new ApiQueryBuilder(url(), Http.POST).data(model.toJson()).getQuery();
         System.out.println(query);
         return query.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> this.handleResponseObject(apiResponse)));
     }
@@ -381,7 +381,7 @@ public abstract class ModelManager<T extends Model>
      * @return the updated model
      */
     public CompletableFuture<T> update(Model<T> model) {
-        ApiQuery query = new ApiQueryBuilder(getUrl() + "/" + model.getId(), Http.PUT).data(model.toJson()).getQuery();
+        ApiQuery query = new ApiQueryBuilder(url() + "/" + model.getId(), Http.PUT).data(model.toJson()).getQuery();
         return query.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> this.handleResponseObject(apiResponse)));
     }
 
@@ -392,7 +392,7 @@ public abstract class ModelManager<T extends Model>
      * @return true if everything was ok, false otherwise
      */
     public CompletableFuture<T> delete(Model<T> model) {
-        ApiQuery query = new ApiQueryBuilder(getUrl() + "/" + model.getId(), Http.DELETE).getQuery();
+        ApiQuery query = new ApiQueryBuilder(url() + "/" + model.getId(), Http.DELETE).getQuery();
         return query.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> handleResponseObject(apiResponse)));
     }
 
@@ -404,7 +404,7 @@ public abstract class ModelManager<T extends Model>
      * @return the parse model, or null
      */
     @Nullable
-    private T handleResponseObject(@NotNull ApiResponse apiResponse) {
+    protected T handleResponseObject(@NotNull ApiResponse apiResponse) {
         if (apiResponse.getCode() >= 300) {
             return null;
         }
@@ -467,7 +467,7 @@ public abstract class ModelManager<T extends Model>
     }
 
     private CompletableFuture<T> AttachDetachOrSync(Model left, Model right, JSONObject data, UrlParametersMap params, Http method) {
-        String url = getUrl() + "/" +
+        String url = url() + "/" +
                 left.getId() + "/" +
                 right.getManagerInstance().getNamespace() + "/" +
                 right.getId();

@@ -2,12 +2,8 @@ package com.ltei.kunzmznzger.libs.api;
 
 import com.ltei.kunzmznzger.libs.models.Model;
 import com.ltei.kunzmznzger.libs.models.ModelManager;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.concurrent.CompletableFuture;
+import org.json.simple.JSONObject;
 
 /**
  * @author Robin
@@ -27,7 +23,7 @@ public class ApiQueryBuilder<T extends Model>
 
     public ApiQueryBuilder (ModelManager modelManager)
     {
-        this(modelManager.getUrl());
+        this(modelManager.url());
         this.modelManager = modelManager;
     }
 

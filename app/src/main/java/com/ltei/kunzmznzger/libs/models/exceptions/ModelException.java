@@ -8,5 +8,7 @@ import org.jetbrains.annotations.NonNls;
  */
 public class ModelException extends Exception
 {
-
+    public ModelException(String message) {
+        super(message);
+    }
 }
