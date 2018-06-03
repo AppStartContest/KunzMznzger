@@ -26,16 +26,6 @@ import java.util.concurrent.CompletableFuture
 class MainActivity : AppCompatActivity() {
 
 
-
-    fun getHistorySort(): ArrayList<HistorySort> {
-        val result = ArrayList<HistorySort>()
-        result.add(HistorySort.biggestAmount())
-        result.add(HistorySort.lowestAmount())
-        result.add(HistorySort.mostRecentFirst())
-        result.add(HistorySort.mostRecentLast())
-        return result
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -48,14 +38,14 @@ class MainActivity : AppCompatActivity() {
             expenses.add(Expense())
             expenses.add(Expense())
             intent.putExtra(HistoryActivity.EXTRAS_LIST, expenses)
-            intent.putExtra(HistoryActivity.EXTRAS_SORT, getHistorySort())
             startActivity(intent)
         })
 
         main_button_dept.setOnClickListener({
+
+
             val intent = Intent(this, HistoryActivity::class.java)
             intent.putExtra(HistoryActivity.EXTRAS_LIST, ArrayList<Expense>())
-            intent.putExtra(HistoryActivity.EXTRAS_SORT, getHistorySort())
             startActivity(intent)
         })
 
@@ -94,12 +84,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if ( !LocalUserInfo.getInstance().isCreated(this) ) {
+        if (!LocalUserInfo.getInstance().isCreated(this)) {
             val intent = Intent(this, UserCreationActivity::class.java)
             startActivity(intent)
             finish()
         } else {
-            LocalUserInfo.getInstance().load(Runnable{
+            LocalUserInfo.getInstance().load(Runnable {
                 listlinearlayout.setArray(LocalUserInfo.getInstance().getGroups())
             })
         }

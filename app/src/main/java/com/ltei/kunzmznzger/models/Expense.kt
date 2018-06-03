@@ -1,13 +1,13 @@
 package com.ltei.kunzmznzger.models
 
-import com.ltei.kunzmznzger.libs.Helpers
 import com.ltei.kunzmznzger.libs.models.Model
 import com.ltei.kunzmznzger.libs.models.ModelManager
 import com.ltei.kunzmznzger.models.dao.ExpenseDAO
 import org.joda.time.DateTime
 import org.json.simple.JSONObject
+import java.io.Serializable
 
-class Expense : Model<Expense>(){
+class Expense : Model<Expense>(), Serializable {
     //var id = Int
     var user : User? = null
     var room : Room? = null
