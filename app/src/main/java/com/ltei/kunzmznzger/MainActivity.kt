@@ -1,36 +1,40 @@
 package com.ltei.kunzmznzger
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.AttributeSet
 import android.util.Log
-import android.widget.ArrayAdapter
-import android.widget.Toast
-import com.ltei.kunzmznzger.R.id.main_button_dept
-import com.ltei.kunzmznzger.R.id.main_button_earns
+import android.view.Gravity
+import android.widget.TextView
+import com.ltei.kunzmznzger.local.LocalUserInfo
 import com.ltei.kunzmznzger.models.Expense
 import com.ltei.kunzmznzger.models.Message
 import com.ltei.kunzmznzger.models.Room
 import com.ltei.kunzmznzger.models.User
 import com.ltei.kunzmznzger.models.dao.RoomDAO
 import com.ltei.kunzmznzger.models.dao.UserDAO
-import com.ltei.kunzmznzger.view.DialogEnterText
-import com.ltei.kunzmznzger.view.HistoryActivity
-import com.ltei.kunzmznzger.view.HistorySort
 import kotlinx.android.synthetic.main.activity_main.*
 import org.joda.time.DateTime
-import org.json.simple.JSONObject
 import java.util.concurrent.CompletableFuture
+import android.util.TypedValue
+import android.util.DisplayMetrics
+import android.view.View
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.Toast
+import com.ltei.kunzmznzger.local.LocalGroupInfo
+import com.ltei.kunzmznzger.view.*
+import java.io.Serializable
 
 
 class MainActivity : AppCompatActivity() {
 
 
     companion object {
-        const val RC_CREATE_USER = 0
         const val RC_CREATE_GROUP = 1
-        var MAIN_USER: User? = null
     }
 
 
@@ -66,8 +70,28 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         })
 
-        main_listview_groups.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1,
-                arrayOf("a", "b", "a", "b", "a", "b", "a", "b", "a", "b", "a", "b", "a", "b", "a", "b", "a", "b", "a", "b", "a", "b"))
+        val listItemLayoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+        listItemLayoutParams.bottomMargin = 1
+        //val displaymetrics = DisplayMetrics()
+        //val padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16f, displaymetrics).toInt()
+        //val textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12f, displaymetrics)
+        listlinearlayout.init(arrayListOf<LocalGroupInfo>(),
+                { item, _ ->
+                    val view = Button(this)
+                    view.gravity = Gravity.CENTER
+                    // /view.layout = getDrawable(android.R.layout.simple_list_item_1)
+                    view.background = getDrawable(R.color.colorListItemBackground)
+                    view.setPadding(16, 16, 16, 16)
+                    view.layoutParams = listItemLayoutParams
+                    view.text = item.toString()
+                    view.textSize = 12f
+                    view.setOnClickListener({
+                        val intent = Intent(this, GroupActivity::class.java)
+                        intent.putExtra(GroupActivity.EXTRAS_GROUP, item as Serializable)
+                        startActivity(intent)
+                    })
+                    view
+                })
 
         main_button_create_group.setOnClickListener({
             val dialog = DialogEnterText(this, "Enter a name for the new room")
@@ -79,80 +103,27 @@ class MainActivity : AppCompatActivity() {
         })
 
         // Initialize
-        if (!isUserCreated()) {
-
+        if (!LocalUserInfo.getInstance().isCreated(this)) {
+            val intent = Intent(this, UserCreationActivity::class.java)
+            startActivity(intent)
         } else {
-            reloadUser(getUserId()!!)
+            //TODO LocalUserInfo.getInstance().load(Runnable{ onResume() })
         }
 
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
-            RC_CREATE_USER -> { MAIN_USER!! }
             RC_CREATE_GROUP -> {
-                //TODO Refresh groups
+                //TODO listlinearlayout.setArray(LocalUserInfo.getInstance().getGroups())
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        //TODO Refresh groups
+        listlinearlayout.setArray(LocalUserInfo.getInstance().getGroups())
     }
-
-
-    fun isUserCreated(): Boolean {
-        return getUserName() != null
-    }
-    fun getUserName(): String? {
-        val key = getString(R.string.preference_item_user_pseudo)
-        return this.getSharedPreferences(getString(R.string.preference_file_id), Context.MODE_PRIVATE)
-                .getString(key, null)
-    }
-    fun getUserPassword(): String? {
-        val key = getString(R.string.preference_item_user_password)
-        return this.getSharedPreferences(getString(R.string.preference_file_id), Context.MODE_PRIVATE)
-                .getString(key, null)
-    }
-    fun getUserId(): Int? {
-        val key = getString(R.string.preference_item_user_id)
-        val result = this.getSharedPreferences(getString(R.string.preference_file_id), Context.MODE_PRIVATE)
-                .getInt(key, -1)
-        return if (result == -1) { null } else { result }
-    }
-
-    fun createUser(name: String, password: String) {
-        val newUser = User()
-        newUser.name = name
-        newUser.save().thenAccept {
-            Toast.makeText(this@MainActivity, "User created!", Toast.LENGTH_SHORT).show()
-            this.getSharedPreferences(getString(R.string.preference_file_id), Context.MODE_PRIVATE).edit()
-                    .putString(getString(R.string.preference_item_user_pseudo), name)
-                    .putString(getString(R.string.preference_item_user_password), password)
-                    .putInt(getString(R.string.preference_item_user_id), it.id)
-                    .apply()
-        }
-    }
-    fun reloadUser(id: Int) {
-        UserDAO().find(id).thenAccept { MAIN_USER = it }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

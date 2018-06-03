@@ -5,7 +5,7 @@
     <color name="colorLightGrey">#CCC</color>
 
     <color name="colorTextDark">#222</color>
-    <color name="colorTextLight">#DDD</color>
+    <color name="colorTextLight">@color/colorLightGrey</color>
 
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
@@ -13,5 +13,7 @@
 
     <color name="colorButtonDebt">#CC1111</color>
     <color name="colorButtonEarns">#11CC11</color>
+
+    <color name="colorListItemBackground">@color/colorLightGrey</color>
 
 </resources>
