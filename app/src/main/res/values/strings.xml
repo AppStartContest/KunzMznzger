@@ -1,12 +1,12 @@
 <resources>
 
     <string name="uninitialized">Uninitialized</string>
-
     <string name="app_name">KunaManager</string>
-
     <string name="history">History</string>
 
-
-
+    <string name="preference_file_id">comlteikonzummanagerPREFERENCIAS</string>
+    <string name="preference_item_user_id">preferenceitemuserid</string>
+    <string name="preference_item_user_pseudo">preferenceitemuserpseudo</string>
+    <string name="preference_item_user_password">preferenceitemuserpassword</string>
 
 </resources>

@@ -1,10 +1,12 @@
 package com.ltei.kunzmznzger
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import com.ltei.kunzmznzger.R.id.main_button_dept
 import com.ltei.kunzmznzger.R.id.main_button_earns
 import com.ltei.kunzmznzger.models.Expense
@@ -26,7 +28,9 @@ class MainActivity : AppCompatActivity() {
 
 
     companion object {
+        const val RC_CREATE_USER = 0
         const val RC_CREATE_GROUP = 1
+        var MAIN_USER: User? = null
     }
 
 
@@ -41,6 +45,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
 
         main_button_earns.setOnClickListener({
@@ -73,10 +78,18 @@ class MainActivity : AppCompatActivity() {
             dialog.show()
         })
 
+        // Initialize
+        if (!isUserCreated()) {
+
+        } else {
+            reloadUser(getUserId()!!)
+        }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
+            RC_CREATE_USER -> { MAIN_USER!! }
             RC_CREATE_GROUP -> {
                 //TODO Refresh groups
             }
@@ -87,6 +100,44 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         //TODO Refresh groups
     }
+
+
+    fun isUserCreated(): Boolean {
+        return getUserName() != null
+    }
+    fun getUserName(): String? {
+        val key = getString(R.string.preference_item_user_pseudo)
+        return this.getSharedPreferences(getString(R.string.preference_file_id), Context.MODE_PRIVATE)
+                .getString(key, null)
+    }
+    fun getUserPassword(): String? {
+        val key = getString(R.string.preference_item_user_password)
+        return this.getSharedPreferences(getString(R.string.preference_file_id), Context.MODE_PRIVATE)
+                .getString(key, null)
+    }
+    fun getUserId(): Int? {
+        val key = getString(R.string.preference_item_user_id)
+        val result = this.getSharedPreferences(getString(R.string.preference_file_id), Context.MODE_PRIVATE)
+                .getInt(key, -1)
+        return if (result == -1) { null } else { result }
+    }
+
+    fun createUser(name: String, password: String) {
+        val newUser = User()
+        newUser.name = name
+        newUser.save().thenAccept {
+            Toast.makeText(this@MainActivity, "User created!", Toast.LENGTH_SHORT).show()
+            this.getSharedPreferences(getString(R.string.preference_file_id), Context.MODE_PRIVATE).edit()
+                    .putString(getString(R.string.preference_item_user_pseudo), name)
+                    .putString(getString(R.string.preference_item_user_password), password)
+                    .putInt(getString(R.string.preference_item_user_id), it.id)
+                    .apply()
+        }
+    }
+    fun reloadUser(id: Int) {
+        UserDAO().find(id).thenAccept { MAIN_USER = it }
+    }
+
 
 
 
