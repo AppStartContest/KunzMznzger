@@ -75,8 +75,9 @@ class LocalUserInfo {
     fun getUser(): User {
         return user!!
     }
-    fun getGroups(): ArrayList<Room> {
-        return groups
+
+    fun getGroups(): MutableList<Room> {
+        return user!!.rooms
     }
 
 
