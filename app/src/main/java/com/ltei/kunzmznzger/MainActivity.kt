@@ -3,10 +3,12 @@ package com.ltei.kunzmznzger
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.AttributeSet
 import android.util.Log
 import android.view.Gravity
-import android.widget.TextView
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.Button
+import android.widget.LinearLayout
 import com.ltei.kunzmznzger.local.LocalUserInfo
 import com.ltei.kunzmznzger.models.Expense
 import com.ltei.kunzmznzger.models.Message
@@ -14,28 +16,15 @@ import com.ltei.kunzmznzger.models.Room
 import com.ltei.kunzmznzger.models.User
 import com.ltei.kunzmznzger.models.dao.RoomDAO
 import com.ltei.kunzmznzger.models.dao.UserDAO
+import com.ltei.kunzmznzger.view.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.dialog_enter_text.*
 import org.joda.time.DateTime
 import java.util.concurrent.CompletableFuture
-import android.util.TypedValue
-import android.util.DisplayMetrics
-import android.view.View
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.Toast
-import com.ltei.kunzmznzger.local.LocalGroupInfo
-import com.ltei.kunzmznzger.view.*
-import java.io.Serializable
 
 
 class MainActivity : AppCompatActivity() {
 
-
-    companion object {
-        const val RC_CREATE_GROUP = 1
-    }
 
 
     fun getHistorySort(): ArrayList<HistorySort> {
@@ -75,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         //val displaymetrics = DisplayMetrics()
         //val padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16f, displaymetrics).toInt()
         //val textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12f, displaymetrics)
-        listlinearlayout.init(arrayListOf<LocalGroupInfo>(),
+        listlinearlayout.init(arrayListOf<Room>(),
                 { item, _ ->
                     val view = Button(this)
                     view.gravity = Gravity.CENTER
@@ -85,19 +74,19 @@ class MainActivity : AppCompatActivity() {
                     view.layoutParams = listItemLayoutParams
                     view.text = item.toString()
                     view.textSize = 12f
-                    view.setOnClickListener({
-                        val intent = Intent(this, GroupActivity::class.java)
-                        intent.putExtra(GroupActivity.EXTRAS_GROUP, item as Serializable)
-                        startActivity(intent)
-                    })
+                    view.setOnClickListener({ gotoActivityGroup(item as Room) })
                     view
                 })
 
         main_button_create_group.setOnClickListener({
             val dialog = DialogEnterText(this, "Enter a name for the new room")
             dialog.setOnCancelListener({
-                //TODO Create room
-                //TODO Goto room
+                val name = dialog.edittext.text.toString()
+                val room = Room()
+                room.name = name
+                room.addUser(LocalUserInfo.getInstance().getUser())
+                room.save().thenAccept { LocalUserInfo.getInstance().load(Runnable { onResume() }) }
+                gotoActivityGroup(room) //TODO Maybe doesn't work
             })
             dialog.show()
         })
@@ -107,17 +96,9 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, UserCreationActivity::class.java)
             startActivity(intent)
         } else {
-            //TODO LocalUserInfo.getInstance().load(Runnable{ onResume() })
+            LocalUserInfo.getInstance().load(Runnable{ onResume() })
         }
 
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when (requestCode) {
-            RC_CREATE_GROUP -> {
-                //TODO listlinearlayout.setArray(LocalUserInfo.getInstance().getGroups())
-            }
-        }
     }
 
     override fun onResume() {
@@ -126,6 +107,11 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    fun gotoActivityGroup(groupInfo: Room) {
+        val intent = Intent(this, GroupActivity::class.java)
+        intent.putExtra(GroupActivity.EXTRAS_ROOM, groupInfo)
+        startActivity(intent)
+    }
 
 
 

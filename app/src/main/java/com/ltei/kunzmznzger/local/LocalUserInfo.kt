@@ -2,9 +2,8 @@ package com.ltei.kunzmznzger.local
 
 import android.content.Context
 import com.ltei.kunzmznzger.R
-import com.ltei.kunzmznzger.libs.time.Date
 import com.ltei.kunzmznzger.models.Room
-import com.ltei.kunzmznzger.models.dao.RoomDAO
+import com.ltei.kunzmznzger.models.User
 import com.ltei.kunzmznzger.models.dao.UserDAO
 
 class LocalUserInfo {
@@ -22,12 +21,9 @@ class LocalUserInfo {
         
     }
     
-    
-    private var id: Int? = null
-    private var username: String? = null
-    private var name: String? = null
-    private var password: String? = null
-    private val groups: ArrayList<LocalGroupInfo>  = ArrayList()
+
+    private var user: User? = null
+    private val groups: ArrayList<Room>  = ArrayList()
     
 
     fun isCreated(context: Context): Boolean {
@@ -38,28 +34,22 @@ class LocalUserInfo {
     fun create(username: String, name: String, password: String) {
         UserDAO().register(username, password).thenCompose { UserDAO().auth(username, password) }
                 .thenAccept {
-                    this.id = it!!.id
-                    this.username = username
-                    this.name = name
-                    this.password = password
+                    this.user = user
                 }
     }
     fun create(username: String, name: String, password: String, runnable: Runnable) {
         UserDAO().register(username, password).thenCompose { UserDAO().auth(username, password) }
                 .thenAccept {
-                    this.id = it!!.id
-                    this.username = username
-                    this.name = name
-                    this.password = password
+                    this.user = user
                 }.thenRun(runnable)
     }
-    /*fun load() {
+    fun load() {
         //TODO
     }
     fun load(runnable: Runnable) {
         //TODO
     }
-    fun getHistory(): Array<LocalExpenseInfo> {
+    /*fun getHistory(): Array<LocalExpenseInfo> {
         //TODO
     }
     fun getTotalDebts(): Int {
@@ -80,7 +70,11 @@ class LocalUserInfo {
     fun getTotalEarningsBefore(date: Date): Int {
         //TODO
     }*/
-    fun getGroups(): ArrayList<LocalGroupInfo> {
+
+    fun getUser(): User {
+        return user!!
+    }
+    fun getGroups(): ArrayList<Room> {
         return groups
     }
 

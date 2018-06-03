@@ -25,7 +25,7 @@ class DialogEnterText(context: Context, val title: String): Dialog(context) {
         dialog_enter_text_title.text = title
 
         dialog_enter_text_button.setOnClickListener({
-            if (dialog_enter_text_edittext.text.toString() != "") {
+            if (edittext.text.toString() != "") {
                 this@DialogEnterText.cancel()
             } else {
                 Toast.makeText(this.context, "You have to enter a something!", Toast.LENGTH_SHORT).show()

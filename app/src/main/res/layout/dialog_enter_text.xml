@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:background="@android:drawable/edit_text"
         android:gravity="center"
-        android:id="@+id/dialog_enter_text_edittext"/>
+        android:id="@+id/edittext"/>
 
     <Button
         android:layout_width="match_parent"

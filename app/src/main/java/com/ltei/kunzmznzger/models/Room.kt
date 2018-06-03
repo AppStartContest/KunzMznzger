@@ -1,13 +1,13 @@
 package com.ltei.kunzmznzger.models
 
-import com.ltei.kunzmznzger.libs.Helpers
 import com.ltei.kunzmznzger.libs.models.Model
 import com.ltei.kunzmznzger.libs.models.ModelManager
 import com.ltei.kunzmznzger.models.dao.RoomDAO
 import org.joda.time.DateTime
 import org.json.simple.JSONObject
+import java.io.Serializable
 
-class Room : Model<Room>() {
+class Room : Model<Room>(), Serializable {
 
     var name: String? = null
     var createdAt: DateTime? = null

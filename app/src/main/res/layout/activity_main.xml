@@ -63,7 +63,7 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Create group"
+                android:text="Create room"
                 android:id="@+id/main_button_create_group"/>
 
         </LinearLayout>
