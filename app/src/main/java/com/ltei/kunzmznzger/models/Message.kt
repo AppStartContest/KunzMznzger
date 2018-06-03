@@ -40,8 +40,8 @@ class Message() : Model<Message>() {
 
     override fun toJson(): JSONObject {
         val json = super.toJson()
-        json["user_id"] = this.user!!.id
-        json["room_id"] = this.room!!.id
+        json["user_id"] = this.user?.id
+        json["room_id"] = this.room?.id
         json["expense_id"] = this.expense!!.id
         json["content"] = this.content
 

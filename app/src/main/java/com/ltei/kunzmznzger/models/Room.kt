@@ -14,6 +14,7 @@ class Room : Model<Room>(), Serializable {
     var updatedAt: DateTime? = null
 
     var users: MutableList<User> = ArrayList()
+    var events : MutableList<Event> = ArrayList()
 
     override fun recopy(model: Room) {
         var copy = Room()
@@ -21,6 +22,7 @@ class Room : Model<Room>(), Serializable {
         copy.createdAt = model.createdAt
         copy.updatedAt = model.updatedAt
         copy.users = model.users
+        copy.events = model.events
     }
 
     override fun getManagerInstance(): ModelManager<Room> {
@@ -28,7 +30,7 @@ class Room : Model<Room>(), Serializable {
     }
 
     override fun toString(): String {
-        return "Room(id=${getId()} name=$name, createdAt=$createdAt, updatedAt=$updatedAt, users=$users)"
+        return "Room(id=${getId()} name=$name, createdAt=$createdAt, updatedAt=$updatedAt, users=$users, events=$events)"
     }
 
     fun addUser(user: User){
