@@ -1,5 +1,7 @@
 package com.ltei.kunzmznzger.libs.time;
 
+import com.ltei.kunzmznzger.libs.Helpers;
+
 import org.joda.time.DateTime;
 
 public class Time {
@@ -40,5 +42,10 @@ public class Time {
 
     public Time minusHours(int h){
         return this.plusHours(-h);
+    }
+
+    @Override
+    public String toString() {
+        return this.dateTime.toString(Helpers.getTimeFormatter());
     }
 }
