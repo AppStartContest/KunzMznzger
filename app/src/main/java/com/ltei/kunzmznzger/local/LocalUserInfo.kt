@@ -7,40 +7,41 @@ import com.ltei.kunzmznzger.models.User
 import com.ltei.kunzmznzger.models.dao.UserDAO
 
 class LocalUserInfo {
-    
+
     companion object {
-        
-        private var globalInstance: LocalUserInfo? = null
-        
+
+        private var globalInstance: LocalUserInfo = LocalUserInfo()
+
         fun getInstance(): LocalUserInfo {
-            if (globalInstance == null) {
-                globalInstance = LocalUserInfo()
-            }
-            return globalInstance!!
+            return globalInstance
         }
-        
+
     }
-    
+
 
     private var user: User? = null
     private val groups: ArrayList<Room>  = ArrayList()
-    
+
 
     fun isCreated(context: Context): Boolean {
-        val key =  context.getString(R.string.preference_item_user_pseudo)
+        val key =  context.getString(R.string.preference_file_id)
         return context.getSharedPreferences(context.getString(R.string.preference_file_id), Context.MODE_PRIVATE)
-                .getString(key, null) != null
+                .getInt(key, -1) != -1
     }
-    fun create(username: String, name: String, password: String) {
+    fun create(context: Context, username: String, name: String, password: String) {
         UserDAO().register(username, password).thenCompose { UserDAO().auth(username, password) }
                 .thenAccept {
-                    this.user = user
+                    this.user = it
+                    val preferences = context.getSharedPreferences(context.getString(R.string.preference_file_id), Context.MODE_PRIVATE)
+                    preferences.edit().putInt(context.getString(R.string.preference_item_user_id), user!!.id).apply()
                 }
     }
-    fun create(username: String, name: String, password: String, runnable: Runnable) {
+    fun create(context: Context, username: String, name: String, password: String, runnable: Runnable) {
         UserDAO().register(username, password).thenCompose { UserDAO().auth(username, password) }
                 .thenAccept {
-                    this.user = user
+                    this.user = it
+                    val preferences = context.getSharedPreferences(context.getString(R.string.preference_file_id), Context.MODE_PRIVATE)
+                    preferences.edit().putInt(context.getString(R.string.preference_item_user_id), user!!.id).apply()
                 }.thenRun(runnable)
     }
     fun load() {
@@ -114,6 +115,6 @@ class LocalUserInfo {
     fun reloadUser(id: Int) {
         UserDAO().find(id).thenAccept { MAIN_USER = it }
     }*/
-    
-    
+
+
 }
