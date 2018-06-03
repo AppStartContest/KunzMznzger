@@ -27,20 +27,24 @@ class LocalUserInfo {
     
 
     fun isCreated(context: Context): Boolean {
-        val key =  context.getString(R.string.preference_item_user_pseudo)
+        val key =  context.getString(R.string.preference_file_id)
         return context.getSharedPreferences(context.getString(R.string.preference_file_id), Context.MODE_PRIVATE)
-                .getString(key, null) != null
+                .getInt(key, -1) != -1
     }
-    fun create(username: String, name: String, password: String) {
+    fun create(context: Context, username: String, name: String, password: String) {
         UserDAO().register(username, password).thenCompose { UserDAO().auth(username, password) }
                 .thenAccept {
-                    this.user = user
+                    this.user = it
+                    val preferences = context.getSharedPreferences(context.getString(R.string.preference_file_id), Context.MODE_PRIVATE)
+                    preferences.edit().putInt(context.getString(R.string.preference_item_user_id), user!!.id).apply()
                 }
     }
-    fun create(username: String, name: String, password: String, runnable: Runnable) {
+    fun create(context: Context, username: String, name: String, password: String, runnable: Runnable) {
         UserDAO().register(username, password).thenCompose { UserDAO().auth(username, password) }
                 .thenAccept {
-                    this.user = user
+                    this.user = it
+                    val preferences = context.getSharedPreferences(context.getString(R.string.preference_file_id), Context.MODE_PRIVATE)
+                    preferences.edit().putInt(context.getString(R.string.preference_item_user_id), user!!.id).apply()
                 }.thenRun(runnable)
     }
     fun load() {

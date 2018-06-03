@@ -1,8 +1,10 @@
 package com.ltei.kunzmznzger.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
+import com.ltei.kunzmznzger.MainActivity
 import com.ltei.kunzmznzger.R
 import com.ltei.kunzmznzger.local.LocalUserInfo
 import kotlinx.android.synthetic.main.activity_user_creation.*
@@ -27,6 +29,8 @@ class UserCreationActivity : AppCompatActivity() {
                         Toast.makeText(this@UserCreationActivity, "Your password must be at least 6 characters long", Toast.LENGTH_SHORT).show()
                     } else {
                         LocalUserInfo.getInstance().create(pseudo, name, password)
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
                         this@UserCreationActivity.finish()
                     }
                 }

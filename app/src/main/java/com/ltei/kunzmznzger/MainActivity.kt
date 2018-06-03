@@ -86,24 +86,32 @@ class MainActivity : AppCompatActivity() {
                 room.name = name
                 room.addUser(LocalUserInfo.getInstance().getUser())
                 room.save().thenAccept { LocalUserInfo.getInstance().load(Runnable { onResume() }) }
-                gotoActivityGroup(room) //TODO Maybe doesn't work
+                gotoActivityGroup(room)
             })
             dialog.show()
         })
 
-        // Initialize
+        /*// Initialize
         if (!LocalUserInfo.getInstance().isCreated(this)) {
             val intent = Intent(this, UserCreationActivity::class.java)
             startActivity(intent)
         } else {
             LocalUserInfo.getInstance().load(Runnable{ onResume() })
-        }
+        }*/
 
     }
 
     override fun onResume() {
         super.onResume()
-        listlinearlayout.setArray(LocalUserInfo.getInstance().getGroups())
+        if (!LocalUserInfo.getInstance().isCreated(this)) {
+            val intent = Intent(this, UserCreationActivity::class.java)
+            startActivity(intent)
+            finish()
+        } else {
+            LocalUserInfo.getInstance().load(Runnable{
+                listlinearlayout.setArray(LocalUserInfo.getInstance().getGroups())
+            })
+        }
     }
 
 
