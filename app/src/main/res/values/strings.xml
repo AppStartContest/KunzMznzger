@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">TestAndroid</string>
+
+    <string name="uninitialized">Uninitialized</string>
+
+    <string name="app_name">KunaManager</string>
+
+    <string name="history">History</string>
+
+
+
+
 </resources>

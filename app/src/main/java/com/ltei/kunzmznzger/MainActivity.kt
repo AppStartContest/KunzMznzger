@@ -1,13 +1,22 @@
 package com.ltei.kunzmznzger
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.widget.ArrayAdapter
+import com.ltei.kunzmznzger.R.id.main_button_dept
+import com.ltei.kunzmznzger.R.id.main_button_earns
+import com.ltei.kunzmznzger.models.Expense
 import com.ltei.kunzmznzger.models.Message
 import com.ltei.kunzmznzger.models.Room
 import com.ltei.kunzmznzger.models.User
 import com.ltei.kunzmznzger.models.dao.RoomDAO
 import com.ltei.kunzmznzger.models.dao.UserDAO
+import com.ltei.kunzmznzger.view.DialogEnterText
+import com.ltei.kunzmznzger.view.HistoryActivity
+import com.ltei.kunzmznzger.view.HistorySort
+import kotlinx.android.synthetic.main.activity_main.*
 import org.joda.time.DateTime
 import org.json.simple.JSONObject
 import java.util.concurrent.CompletableFuture
@@ -15,11 +24,93 @@ import java.util.concurrent.CompletableFuture
 
 class MainActivity : AppCompatActivity() {
 
+
+    companion object {
+        const val RC_CREATE_GROUP = 1
+    }
+
+
+    fun getHistorySort(): ArrayList<HistorySort> {
+        val result = ArrayList<HistorySort>()
+        result.add(HistorySort.biggestAmount())
+        result.add(HistorySort.lowestAmount())
+        result.add(HistorySort.mostRecentFirst())
+        result.add(HistorySort.mostRecentLast())
+        return result
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        // Example of GET request
+        main_button_earns.setOnClickListener({
+            val intent = Intent(this, HistoryActivity::class.java)
+            val expenses = ArrayList<Expense>()
+            expenses.add(Expense())
+            expenses.add(Expense())
+            expenses.add(Expense())
+            intent.putExtra(HistoryActivity.EXTRAS_LIST, expenses)
+            intent.putExtra(HistoryActivity.EXTRAS_SORT, getHistorySort())
+            startActivity(intent)
+        })
+
+        main_button_dept.setOnClickListener({
+            val intent = Intent(this, HistoryActivity::class.java)
+            intent.putExtra(HistoryActivity.EXTRAS_LIST, ArrayList<Expense>())
+            intent.putExtra(HistoryActivity.EXTRAS_SORT, getHistorySort())
+            startActivity(intent)
+        })
+
+        main_listview_groups.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1,
+                arrayOf("a", "b", "a", "b", "a", "b", "a", "b", "a", "b", "a", "b", "a", "b", "a", "b", "a", "b", "a", "b", "a", "b"))
+
+        main_button_create_group.setOnClickListener({
+            val dialog = DialogEnterText(this, "Enter a name for the new room")
+            dialog.setOnCancelListener({
+                //TODO Create room
+                //TODO Goto room
+            })
+            dialog.show()
+        })
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            RC_CREATE_GROUP -> {
+                //TODO Refresh groups
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        //TODO Refresh groups
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    fun robinTest() {
+        //        // Example of GET request
 //        UserDAO().all(UrlParametersMap().orderBy("-id").with("rooms")) // Get all users, order by 'id' DESC, and their rooms
 //                .thenAccept({ users -> debug(users) }) // Getting the response, printing it
 //                .thenCompose { UserDAO().find(4) } // Then execute a new GET request: Find the user with ID 4
@@ -78,8 +169,7 @@ class MainActivity : AppCompatActivity() {
                 .thenCompose {
                     debug(it)
                     UserDAO().auth(username, pw) // Authentication example
-                }
-                .thenCompose {
+                }.thenCompose {
                     debug(it)
                     // Find last room to attach it to the user
                     RoomDAO().findLast().thenCompose { room: Room? ->
