@@ -192,4 +192,10 @@ public abstract class Model<T extends Model> implements Comparable<Model<T>>
         }
         return this.manager.sync(this, toSync, data, withoutDetaching);
     }
+
+    protected void putFkIfRelationDefined(JSONObject json, String key, Model model) {
+        if (model != null) {
+            json.put(key, model.id);
+        }
+    }
 }

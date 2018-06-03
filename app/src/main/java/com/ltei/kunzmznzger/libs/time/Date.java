@@ -1,5 +1,7 @@
 package com.ltei.kunzmznzger.libs.time;
 
+import com.ltei.kunzmznzger.libs.Helpers;
+
 import org.joda.time.DateTime;
 
 public class Date {
@@ -39,5 +41,10 @@ public class Date {
 
     public DateTime toDateTime(){
         return this.dateTime;
+    }
+
+    @Override
+    public String toString() {
+        return this.dateTime.toString(Helpers.getDateFormatter());
     }
 }

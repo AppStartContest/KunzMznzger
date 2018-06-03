@@ -7,22 +7,22 @@ import org.joda.time.DateTime
 import org.json.simple.JSONObject
 import java.io.Serializable
 
+
 class Expense : Model<Expense>(), Serializable {
-    //var id = Int
+
+    var name : String? = null
+    var value : Float? = null
+    var description : String? = null
+
+    var createdAt : DateTime? = null
+    var updatedAt : DateTime? = null
+    var deletedAt : DateTime? = null
+
+    var messages : MutableList<Message> = arrayListOf()
     var user : User? = null
     var room : Room? = null
 
-    var name : String? = null
-    var created_at : DateTime? = null
-    var updated_at : DateTime? = null
-    var deleted_at : DateTime? = null
-    var description : String? = null
-
-    var value : Float? = null
-
-    var messages : MutableList<Message> = arrayListOf<Message>()
-
-    fun add_message(message: Message){
+    fun addMessage(message: Message){
         messages.add(message)
     }
 
@@ -31,9 +31,9 @@ class Expense : Model<Expense>(), Serializable {
         copy.user = model.user
         copy.room = model.room
         copy.value = model.value
-        copy.created_at = model.created_at
-        copy.updated_at = model.updated_at
-        copy.deleted_at = model.deleted_at
+        copy.createdAt = model.createdAt
+        copy.updatedAt = model.updatedAt
+        copy.deletedAt = model.deletedAt
         copy.messages = model.messages
         copy.description = model.description
     }
@@ -43,18 +43,16 @@ class Expense : Model<Expense>(), Serializable {
     }
 
     override fun toString(): String {
-        return "Expense(id=${getId()} value=$value, createdAt=$created_at, updatedAt=$updated_at, user=$user, room=$room, message=$messages"
+        return "Expense(id=${getId()} value=$value, createdAt=$createdAt, updatedAt=$updatedAt, user=$user, room=$room, message=$messages"
 
     }
 
     override fun toJson(): JSONObject {
         val json = super.toJson()
-        json["user_id"] = this.user?.id
-        json["room_id"] = this.room?.id
+        this.putFkIfRelationDefined(json, "room_id", this.room)
+        this.putFkIfRelationDefined(json, "user_id", this.user)
         json["value"] = this.value
-        //json["message"] = this.message_list
 
         return json
     }
-
 }
