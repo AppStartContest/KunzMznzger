@@ -42,8 +42,6 @@ class MainActivity : AppCompatActivity() {
         })
 
         main_button_dept.setOnClickListener({
-
-
             val intent = Intent(this, HistoryActivity::class.java)
             intent.putExtra(HistoryActivity.EXTRAS_LIST, ArrayList<Expense>())
             startActivity(intent)
@@ -90,6 +88,7 @@ class MainActivity : AppCompatActivity() {
             finish()
         } else {
             LocalUserInfo.getInstance().load(Runnable {
+                LocalUserInfo.getInstance().load()
                 listlinearlayout.setArray(LocalUserInfo.getInstance().getGroups())
             })
         }

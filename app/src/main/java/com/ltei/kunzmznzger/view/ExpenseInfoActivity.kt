@@ -29,8 +29,8 @@ class ExpenseInfoActivity : AppCompatActivity() {
         val expense = intent.getSerializableExtra(EXTRAS_EXPENSE) as Expense
         text_title.text = expense.description
         text_amount.text = "spent ${expense.value}$ for"
-        //TODO listlinearlayout_receivers.init(expense.getReceivers(), { item, _ -> createExpenseItemView(item as Expense) })
-        listlinearlayout_messages.init(ArrayList(expense.message_list), { item, _ -> createMessageItemView(item as Message) })
+        //TODO listlinearlayout_receivers.init(expense.getReceivers(), { item, _ -> createReceiverItemView(item as Expense) })
+        listlinearlayout_messages.init(ArrayList(expense.messages), { item, _ -> createMessageItemView(item as Message) })
         button_add_message.setOnClickListener { onButtonAddMessageClickListener(expense) }
     }
 
