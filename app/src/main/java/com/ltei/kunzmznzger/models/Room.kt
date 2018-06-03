@@ -37,6 +37,10 @@ class Room : Model<Room>(), Serializable {
         this.users.add(user)
     }
 
+    fun addEvent(event: Event){
+        this.events.add(event)
+    }
+
     override fun toJson(): JSONObject {
         val json = JSONObject()
         json["name"] = this.name
