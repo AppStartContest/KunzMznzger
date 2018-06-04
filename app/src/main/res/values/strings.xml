@@ -4,6 +4,8 @@
     <string name="app_name">KunaManager</string>
     <string name="history">History</string>
 
+    <string name="dialog_void_input_error">You have to enter something!</string>
+
     <string name="preference_file_id">ascKonzumManagerPreferences</string>
     <string name="preference_item_user_id">preferenceitem_user_id</string>
 

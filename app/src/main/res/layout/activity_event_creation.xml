@@ -17,21 +17,30 @@
     </LinearLayout>
 
     <!-- FOOTER ALIGNED TO BOTTOM (AD) -->
-    <com.google.android.gms.ads.AdView
-        xmlns:ads="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
+        android:id="@+id/footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        ads:adSize="BANNER"
-        ads:adUnitId="@string/google_ad_banner_id"
-        android:id="@+id/ad_banner"/>
+        android:orientation="vertical">
+
+
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/google_ad_banner_id"
+            android:id="@+id/ad_banner"/>
+
+    </LinearLayout>
 
     <!-- CONTENT -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/ad_banner"
+        android:layout_above="@id/footer"
         android:layout_below="@id/header">
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,51 +53,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/app_name"
-                android:textSize="24sp"/>
-
-            <LinearLayout
+                android:text="Choose a name"
+                android:id="@+id/text_name"/>
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:gravity="center"
+                android:id="@+id/edittext_name"/>
 
-                <Button
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/uninitialized"
-                    android:backgroundTint="@color/colorButtonEarns"
-                    android:id="@+id/main_button_earns"/>
-
-                <Button
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/uninitialized"
-                    android:backgroundTint="@color/colorButtonDebt"
-                    android:id="@+id/main_button_dept"/>
-
-            </LinearLayout>
-
-            <com.ltei.kunzmznzger.view.ListLinearLayout
+            <DatePicker
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:id="@+id/listlinearlayout"/>
+                android:id="@+id/datepicker"/>
+
+            <TimePicker
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/timepicker"/>
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Create room"
-                android:id="@+id/main_button_create_group"/>
+                android:text="next"
+                android:id="@+id/button_next"/>
 
             <Button
-                android:id="@+id/button_TEST"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TEST : Use this to test a function/activity"/>
+                android:text="confirm"
+                android:id="@+id/button_confirm"/>
 
         </LinearLayout>
     </ScrollView>

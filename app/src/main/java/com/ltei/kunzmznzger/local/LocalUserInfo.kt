@@ -10,11 +10,12 @@ import com.ltei.kunzmznzger.models.dao.UserDAO
 import java.util.concurrent.CompletableFuture
 import kotlin.math.exp
 
+
 class LocalUserInfo {
 
     companion object {
 
-        var globalInstance: LocalUserInfo = LocalUserInfo()
+        val globalInstance: LocalUserInfo = LocalUserInfo()
 
         fun getInstance(): LocalUserInfo {
             return globalInstance
@@ -122,7 +123,10 @@ class LocalUserInfo {
      * @param room an existing room
      * @throws ModelException if the room is not valid (if it doesn't correspond to db entry)
      */
-    fun sendMessageToRoom(message: Message, room: Room): CompletableFuture<Message> {
+    fun sendMessageToRoom(content: String, room: Room): CompletableFuture<Message> {
+        val message = Message()
+        message.content = content
+
         throwIfInvalidModel(room)
         message.room = room
         return this.saveMessage(message).thenCompose({ m: Message ->
@@ -136,7 +140,10 @@ class LocalUserInfo {
      * @param expense an existing expense
      * @throws ModelException if the expense is not valid (if it doesn't correspond to db entry)
      */
-    fun sendMessageToExpense(message: Message, expense: Expense): CompletableFuture<Message> {
+    fun sendMessageToExpense(content: String, expense: Expense): CompletableFuture<Message> {
+        val message = Message()
+        message.content = content
+
         throwIfInvalidModel(expense)
         message.expense = expense
         return this.saveMessage(message).thenCompose({ m: Message ->
@@ -150,7 +157,10 @@ class LocalUserInfo {
      * @param event an existing event
      * @throws ModelException if the event is not valid (if it doesn't correspond to db entry)
      */
-    fun sendMessageToEvent(message: Message, event: Event): CompletableFuture<Message> {
+    fun sendMessageToEvent(content: String, event: Event): CompletableFuture<Message> {
+        val message = Message()
+        message.content = content
+
         throwIfInvalidModel(event)
         message.event = event
         return this.saveMessage(message).thenCompose({ m: Message ->
