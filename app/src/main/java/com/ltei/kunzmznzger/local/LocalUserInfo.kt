@@ -2,15 +2,16 @@ package com.ltei.kunzmznzger.local
 
 import android.content.Context
 import com.ltei.kunzmznzger.R
-import com.ltei.kunzmznzger.models.Room
-import com.ltei.kunzmznzger.models.User
+import com.ltei.kunzmznzger.models.*
 import com.ltei.kunzmznzger.models.dao.UserDAO
+import com.ltei.kunzmznzger.models.contracts.Messageable
+import java.util.concurrent.CompletableFuture
 
 class LocalUserInfo {
 
     companion object {
 
-        private var globalInstance: LocalUserInfo = LocalUserInfo()
+        var globalInstance: LocalUserInfo = LocalUserInfo()
 
         fun getInstance(): LocalUserInfo {
             return globalInstance
@@ -20,14 +21,15 @@ class LocalUserInfo {
 
 
     private var user: User? = null
-    private val groups: ArrayList<Room>  = ArrayList()
+    private val groups: ArrayList<Room> = ArrayList()
 
 
     fun isCreated(context: Context): Boolean {
-        val key =  context.getString(R.string.preference_file_id)
+        val key = context.getString(R.string.preference_file_id)
         return context.getSharedPreferences(context.getString(R.string.preference_file_id), Context.MODE_PRIVATE)
                 .getInt(key, -1) != -1
     }
+
     fun create(context: Context, username: String, name: String, password: String) {
         UserDAO().register(username, password).thenCompose { UserDAO().auth(username, password) }
                 .thenAccept {
@@ -36,6 +38,7 @@ class LocalUserInfo {
                     preferences.edit().putInt(context.getString(R.string.preference_item_user_id), user!!.id).apply()
                 }
     }
+
     fun create(context: Context, username: String, name: String, password: String, runnable: Runnable) {
         UserDAO().register(username, password).thenCompose { UserDAO().auth(username, password) }
                 .thenAccept {
@@ -44,9 +47,11 @@ class LocalUserInfo {
                     preferences.edit().putInt(context.getString(R.string.preference_item_user_id), user!!.id).apply()
                 }.thenRun(runnable)
     }
+
     fun load() {
         //TODO
     }
+
     fun load(runnable: Runnable) {
         //TODO
     }
@@ -76,10 +81,47 @@ class LocalUserInfo {
         return user!!
     }
 
-    fun getGroups(): MutableList<Room> {
-        return user!!.rooms
+    fun getGroups(): ArrayList<Room> {
+        return user!!.rooms as ArrayList<Room>
     }
 
+    fun getRooms(): ArrayList<Room> {
+        return getGroups()
+    }
+
+    fun createRoom(name: String): CompletableFuture<User> {
+        val room = Room()
+        room.name = name
+        return room.save().thenCompose { room: Room ->
+            this.user!!.attach(room)
+        }
+    }
+
+    fun createGroup(name: String): CompletableFuture<User> {
+        return createRoom(name)
+    }
+
+    fun sendMessageToRoom(message: Message, room: Room): CompletableFuture<Message> {
+        message.room = room
+        return this.saveMessage(message)
+    }
+
+    fun sendMessageToExpense(message: Message, expense: Expense): CompletableFuture<Message> {
+        message.expense = expense
+        return this.saveMessage(message)
+    }
+
+    fun sendMessageToEvent(message: Message, event: Event): CompletableFuture<Message> {
+        message.event = event
+        return this.saveMessage(message)
+    }
+
+    private fun saveMessage(message: Message): CompletableFuture<Message> {
+        message.user = this.user!!
+        return message.save()
+    }
+
+//    fun addExpenseToRoom(e)
 
     /*fun isUserCreated(): Boolean {
         return getUserName() != null

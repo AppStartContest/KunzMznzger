@@ -3,10 +3,11 @@ package com.ltei.kunzmznzger.models
 import com.ltei.kunzmznzger.libs.models.Model
 import com.ltei.kunzmznzger.libs.models.ModelManager
 import com.ltei.kunzmznzger.models.dao.ExpenseDAO
+import com.ltei.kunzmznzger.models.contracts.Messageable
 import org.joda.time.DateTime
 import org.json.simple.JSONObject
 
-class Expense : Model<Expense>(){
+class Expense : Model<Expense>(), Messageable{
 
     var name : String? = null
     var value : Float? = null

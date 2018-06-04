@@ -1,16 +1,14 @@
 package com.ltei.kunzmznzger.models
 
-import com.ltei.kunzmznzger.libs.Helpers
 import com.ltei.kunzmznzger.libs.models.Model
 import com.ltei.kunzmznzger.libs.models.ModelManager
 import com.ltei.kunzmznzger.libs.time.Date
 import com.ltei.kunzmznzger.libs.time.Time
 import com.ltei.kunzmznzger.models.dao.EventDAO
-import org.joda.time.DateTime
+import com.ltei.kunzmznzger.models.contracts.Messageable
 import org.json.simple.JSONObject
 
-class Event : Model<Event>() {
-
+class Event : Model<Event>(), Messageable {
 
     var createdAt : String? = null
     var updatedAt : String? = null

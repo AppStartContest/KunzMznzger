@@ -3,11 +3,12 @@ package com.ltei.kunzmznzger.models
 import com.ltei.kunzmznzger.libs.models.Model
 import com.ltei.kunzmznzger.libs.models.ModelManager
 import com.ltei.kunzmznzger.models.dao.RoomDAO
+import com.ltei.kunzmznzger.models.contracts.Messageable
 import org.joda.time.DateTime
 import org.json.simple.JSONObject
 import java.io.Serializable
 
-class Room : Model<Room>(), Serializable {
+class Room : Model<Room>(), Serializable, Messageable {
 
     var name: String? = null
     var createdAt: DateTime? = null

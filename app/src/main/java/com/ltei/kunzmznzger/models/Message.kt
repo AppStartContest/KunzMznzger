@@ -15,8 +15,10 @@ class Message() : Model<Message>() {
     var deletedAt : DateTime? = null
 
     var user : User? = null
+
     var room : Room? = null
     var expense : Expense? = null
+    var event: Event? = null
 
     override fun recopy(model: Message) {
         var copy = Message()
@@ -44,6 +46,7 @@ class Message() : Model<Message>() {
         this.putFkIfRelationDefined(json, "user_id", this.user)
         this.putFkIfRelationDefined(json, "room_id", this.room)
         this.putFkIfRelationDefined(json, "expense_id", this.expense)
+        this.putFkIfRelationDefined(json, "event_id", this.event)
 
         return json
     }
