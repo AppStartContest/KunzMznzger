@@ -2,6 +2,8 @@ package com.ltei.kunzmznzger.local
 
 import android.content.Context
 import com.ltei.kunzmznzger.R
+import com.ltei.kunzmznzger.libs.models.Model
+import com.ltei.kunzmznzger.libs.models.exceptions.ModelException
 import com.ltei.kunzmznzger.models.*
 import com.ltei.kunzmznzger.models.dao.UserDAO
 import java.util.concurrent.CompletableFuture
@@ -100,17 +102,35 @@ class LocalUserInfo {
         return createRoom(name)
     }
 
+    /**
+     * @param message
+     * @param room an existing room
+     * @throws ModelException if the room is not valid (if it doesn't correspond to db entry)
+     */
     fun sendMessageToRoom(message: Message, room: Room): CompletableFuture<Message> {
+        throwIfInvalidModel(room)
         message.room = room
         return this.saveMessage(message)
     }
 
+    /**
+     * @param message
+     * @param expense an existing expense
+     * @throws ModelException if the expense is not valid (if it doesn't correspond to db entry)
+     */
     fun sendMessageToExpense(message: Message, expense: Expense): CompletableFuture<Message> {
+        throwIfInvalidModel(expense)
         message.expense = expense
         return this.saveMessage(message)
     }
 
+    /**
+     * @param message
+     * @param event an existing event
+     * @throws ModelException if the event is not valid (if it doesn't correspond to db entry)
+     */
     fun sendMessageToEvent(message: Message, event: Event): CompletableFuture<Message> {
+        throwIfInvalidModel(event)
         message.event = event
         return this.saveMessage(message)
     }
@@ -118,6 +138,22 @@ class LocalUserInfo {
     private fun saveMessage(message: Message): CompletableFuture<Message> {
         message.user = this.user!!
         return message.save()
+    }
+
+    /**
+     * @param event
+     * @param room an existing room
+     * @throws ModelException if the room is not valid (if it doesn't correspond to db entry)
+     */
+    fun createEvent(event: Event, room: Room): CompletableFuture<Event>? {
+        throwIfInvalidModel(room)
+        event.room = room
+        return event.save()
+    }
+
+    private fun throwIfInvalidModel(model: Model<*>) {
+        if (!model.isValid())
+            throw ModelException("The model should exist in the database (have an ID > 0)")
     }
 
 //    fun addExpenseToRoom(e)

@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
  */
 public abstract class Model<T extends Model> implements Comparable<Model<T>>
 {
-    protected int id;
+    public int id;
 
     protected ModelManager<T> manager;
 
@@ -44,6 +44,10 @@ public abstract class Model<T extends Model> implements Comparable<Model<T>>
     public CompletableFuture<Boolean> existsInDatabase() {
         // We shouldn't have to check the database. The id can't be changed outside this package.
         return CompletableFuture.completedFuture(getId() > 0);
+    }
+
+    public boolean isValid(){
+        return id > 0;
     }
 
 
