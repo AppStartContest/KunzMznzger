@@ -12,6 +12,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
+import com.ltei.kunzmznzger.libs.Helpers
 import com.ltei.kunzmznzger.local.LocalUserInfo
 import com.ltei.kunzmznzger.models.Expense
 import com.ltei.kunzmznzger.models.Message
@@ -32,7 +33,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Toast.makeText(this,"caca",Toast.LENGTH_LONG)
+
+        val user = User()
+        user.id = 81
+        user.load("rooms", "events", "expenses", "users.rooms.expenses  ").thenAccept { user ->
+            Helpers.log(user)
+        }
+
+
+        Toast.makeText(this, "caca", Toast.LENGTH_LONG)
         // Initialize globals
         MobileAds.initialize(this, getString(R.string.google_ad_banner_id))
         val adRequest = AdRequest.Builder().build()
@@ -81,12 +90,13 @@ class MainActivity : AppCompatActivity() {
                 val room = Room()
                 room.name = name
                 room.addUser(LocalUserInfo.getInstance().getUser())
-                room.save().thenAccept { LocalUserInfo.getInstance().load(this ,Runnable { onResume() }) }
+                room.save().thenAccept { LocalUserInfo.getInstance().load(this, Runnable { onResume() }) }
                 gotoActivityGroup(room)
             })
             dialog.show()
         })
     }
+
 
     override fun onResume() {
         super.onResume()
@@ -95,7 +105,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         } else {
-            LocalUserInfo.getInstance().load(this, Runnable{
+            LocalUserInfo.getInstance().load(this, Runnable {
                 listlinearlayout.setArray(LocalUserInfo.getInstance().getGroups())
             })
         }

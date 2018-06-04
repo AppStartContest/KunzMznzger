@@ -5,6 +5,7 @@ import com.ltei.kunzmznzger.libs.models.exceptions.RelationException;
 
 import org.json.simple.JSONObject;
 
+import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -66,6 +67,7 @@ public abstract class Model<T extends Model> implements Comparable<Model<T>>
 
     /**
      * Load a relation to this. The relation name is the name of the attribute but in snake_case.
+     *
      * @param relation The relation name which is the name of the attribute but in snake_case
      * @return updated this in a CompletableFuture
      */
@@ -73,6 +75,32 @@ public abstract class Model<T extends Model> implements Comparable<Model<T>>
         return getManagerInstance().find(this.id, new UrlParametersMap().with(relation))
                 .thenCompose((T t) -> CompletableFuture.supplyAsync(() -> this.copyRelation(relation, t)));
     }
+
+    /**
+     * Load a relation to this. The relation name is the name of the attribute but in snake_case.
+     *
+     * @param relation        The relation name which is the name of the attribute but in snake_case
+     * @param nestedRelations additional parameters
+     * @return updated this in a CompletableFuture
+     */
+    public CompletableFuture<T> load(String relation, String... nestedRelations) {
+        UrlParametersMap params = new UrlParametersMap().with(relation);
+        for (String nested : nestedRelations) {
+            params.with(relation + '.' + nested);
+        }
+
+        return getManagerInstance().find(this.id, params.with(relation))
+                .thenCompose((T t) -> CompletableFuture.supplyAsync(() -> this.copyRelation(relation, t)));
+    }
+
+//    /**
+//     * @param relations list of arraylist. <br/>
+//     *                  For each arrayList, <code>[0]</code> => <b>primary relation</b>, <code>[1..n]</code> => <b>nested</b>
+//     * @return
+//     */
+//    public CompletableFuture<T> load(ArrayList<String>... relations) {
+//
+//    }
 
     protected abstract T copyRelation(String relation, T model);
 
