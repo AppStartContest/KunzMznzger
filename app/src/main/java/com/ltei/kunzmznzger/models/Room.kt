@@ -16,6 +16,7 @@ class Room : Model<Room>(), Serializable {
     var users: ArrayList<User> = ArrayList()
     var events: ArrayList<Event> = ArrayList()
     var messages: ArrayList<Message> = ArrayList()
+    var expenses: ArrayList<Expense> = ArrayList()
 
     override fun recopy(model: Room) {
         var copy = Room()
@@ -46,6 +47,10 @@ class Room : Model<Room>(), Serializable {
         this.messages.add(message)
     }
 
+    fun addExpense(expense: Expense) {
+        this.expenses.add(expense)
+    }
+
     override fun toJson(): JSONObject {
         val json = JSONObject()
         json["name"] = this.name
@@ -59,5 +64,28 @@ class Room : Model<Room>(), Serializable {
             "events" -> this.events = room.events
         }
         return this
+    }
+
+    // --- Helpers
+
+    /**
+     * Note: The room should have its expenses already loaded
+     */
+    fun calcUserExpenseStatus(user: User): Double {
+        // Expenses in this room of this user
+        val filtered = this.expenses.filter { it.user!!.id == user.id }
+
+        val spentByLoggedUser = filtered.stream().mapToDouble { it.value!! }.sum()
+        val roomAvg = this.calcExpenseAverage()
+
+        return spentByLoggedUser - roomAvg
+    }
+
+    /**
+     * Note: The room should have its expenses already loaded
+     */
+    fun calcExpenseAverage(): Double {
+        val total = this.expenses.stream().mapToDouble { it.value!! }.sum()
+        return total / this.expenses.size
     }
 }
