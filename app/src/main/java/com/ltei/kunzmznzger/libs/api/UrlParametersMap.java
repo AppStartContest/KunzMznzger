@@ -220,7 +220,10 @@ public class UrlParametersMap extends HashMap<String, Object>
      * @return this
      */
     public UrlParametersMap withAllRelations() {
-        return set(KW_WITH, Arrays.asList(KW_WITH_ALL));
+        ArrayList<String> list = new ArrayList<>();
+        list.add(KW_WITH_ALL);
+        this.set(KW_WITH, list);
+        return this;
     }
 
     /**
