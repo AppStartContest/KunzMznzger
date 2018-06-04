@@ -8,7 +8,6 @@ import com.ltei.kunzmznzger.libs.models.exceptions.ModelException
 import com.ltei.kunzmznzger.models.*
 import com.ltei.kunzmznzger.models.dao.UserDAO
 import java.util.concurrent.CompletableFuture
-import kotlin.math.exp
 
 class LocalUserInfo {
 
@@ -26,7 +25,7 @@ class LocalUserInfo {
     private val groups: ArrayList<Room> = ArrayList()
 
     fun isCreated(context: Context): Boolean {
-        val key =  context.getString(R.string.preference_item_user_id)
+        val key = context.getString(R.string.preference_item_user_id)
         return context.getSharedPreferences(context.getString(R.string.preference_file_id), Context.MODE_PRIVATE)
                 .getInt(key, Int.MAX_VALUE) != Int.MAX_VALUE
     }
@@ -50,19 +49,19 @@ class LocalUserInfo {
     }
 
     fun load(context: Context) {
-        val key =  context.getString(R.string.preference_item_user_id)
+        val key = context.getString(R.string.preference_item_user_id)
         val id = context.getSharedPreferences(context.getString(R.string.preference_file_id), Context.MODE_PRIVATE)
                 .getInt(key, Int.MAX_VALUE)
 
-        UserDAO().find(id , UrlParametersMap().withAllRelations()).thenAccept { this.user = it }
+        UserDAO().find(id, UrlParametersMap().withAllRelations()).thenAccept { this.user = it }
     }
 
-    fun load(context: Context , runnable: Runnable) {
-        val key =  context.getString(R.string.preference_item_user_id)
+    fun load(context: Context, runnable: Runnable) {
+        val key = context.getString(R.string.preference_item_user_id)
         val id = context.getSharedPreferences(context.getString(R.string.preference_file_id), Context.MODE_PRIVATE)
                 .getInt(key, Int.MAX_VALUE)
 
-        UserDAO().find(id , UrlParametersMap().withAllRelations()).thenAccept { this.user = it }
+        UserDAO().find(id, UrlParametersMap().withAllRelations()).thenAccept { this.user = it }
                 .thenRun(runnable)
     }
 
@@ -87,6 +86,16 @@ class LocalUserInfo {
     fun getTotalEarningsBefore(date: Date): Int {
         //TODO
     }*/
+
+
+    /**
+     * @param room the room
+     *
+     * Note: The room should have its expenses already loaded
+     */
+    fun calcExpenseStatusInRoom(room: Room) : Double{
+        return room.calcUserExpenseStatus(this.user!!)
+    }
 
     fun getUser(): User {
         return user!!
