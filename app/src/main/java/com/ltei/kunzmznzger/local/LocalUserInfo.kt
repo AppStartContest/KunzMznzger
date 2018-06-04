@@ -7,6 +7,7 @@ import com.ltei.kunzmznzger.libs.models.exceptions.ModelException
 import com.ltei.kunzmznzger.models.*
 import com.ltei.kunzmznzger.models.dao.UserDAO
 import java.util.concurrent.CompletableFuture
+import kotlin.math.exp
 
 class LocalUserInfo {
 
@@ -20,10 +21,8 @@ class LocalUserInfo {
 
     }
 
-
     private var user: User? = null
     private val groups: ArrayList<Room> = ArrayList()
-
 
     fun isCreated(context: Context): Boolean {
         val key = context.getString(R.string.preference_file_id)
@@ -83,7 +82,7 @@ class LocalUserInfo {
     }
 
     fun getGroups(): ArrayList<Room> {
-        return user!!.rooms as ArrayList<Room>
+        return user!!.rooms
     }
 
     fun getRooms(): ArrayList<Room> {
@@ -93,9 +92,14 @@ class LocalUserInfo {
     fun createRoom(name: String): CompletableFuture<User> {
         val room = Room()
         room.name = name
-        return room.save().thenCompose { room: Room ->
-            this.user!!.attach(room)
-        }
+        return room.save()
+                .thenCompose { room: Room ->
+                    this.user!!.attach(room)
+                }
+                .thenCompose({ u: User ->
+                    this.user!!.rooms = u.rooms
+                    CompletableFuture.supplyAsync({ this.user!! })
+                })
     }
 
     fun createGroup(name: String): CompletableFuture<User> {
@@ -110,7 +114,10 @@ class LocalUserInfo {
     fun sendMessageToRoom(message: Message, room: Room): CompletableFuture<Message> {
         throwIfInvalidModel(room)
         message.room = room
-        return this.saveMessage(message)
+        return this.saveMessage(message).thenCompose({ m: Message ->
+            room.addMessage(m)
+            CompletableFuture.supplyAsync({ m })
+        })
     }
 
     /**
@@ -121,7 +128,10 @@ class LocalUserInfo {
     fun sendMessageToExpense(message: Message, expense: Expense): CompletableFuture<Message> {
         throwIfInvalidModel(expense)
         message.expense = expense
-        return this.saveMessage(message)
+        return this.saveMessage(message).thenCompose({ m: Message ->
+            expense.addMessage(m)
+            CompletableFuture.supplyAsync({ m })
+        })
     }
 
     /**
@@ -132,7 +142,10 @@ class LocalUserInfo {
     fun sendMessageToEvent(message: Message, event: Event): CompletableFuture<Message> {
         throwIfInvalidModel(event)
         message.event = event
-        return this.saveMessage(message)
+        return this.saveMessage(message).thenCompose({ m: Message ->
+            event.addMessage(m)
+            CompletableFuture.supplyAsync({ m })
+        })
     }
 
     private fun saveMessage(message: Message): CompletableFuture<Message> {
@@ -148,7 +161,10 @@ class LocalUserInfo {
     fun createEvent(event: Event, room: Room): CompletableFuture<Event>? {
         throwIfInvalidModel(room)
         event.room = room
-        return event.save()
+        return event.save().thenCompose({ e: Event ->
+            room.addEvent(e)
+            CompletableFuture.supplyAsync({ e })
+        })
     }
 
     private fun throwIfInvalidModel(model: Model<*>) {

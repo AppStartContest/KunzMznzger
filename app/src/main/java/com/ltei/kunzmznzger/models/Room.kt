@@ -14,7 +14,8 @@ class Room : Model<Room>(), Serializable {
     var updatedAt: DateTime? = null
 
     var users: ArrayList<User> = ArrayList()
-    var events : ArrayList<Event> = ArrayList()
+    var events: ArrayList<Event> = ArrayList()
+    var messages: ArrayList<Message> = ArrayList()
 
     override fun recopy(model: Room) {
         var copy = Room()
@@ -33,12 +34,16 @@ class Room : Model<Room>(), Serializable {
         return "Room(id=${getId()} name=$name, createdAt=$createdAt, updatedAt=$updatedAt, users=$users, events=$events)"
     }
 
-    fun addUser(user: User){
+    fun addUser(user: User) {
         this.users.add(user)
     }
 
-    fun addEvent(event: Event){
+    fun addEvent(event: Event) {
         this.events.add(event)
+    }
+
+    fun addMessage(message: Message) {
+        this.messages.add(message)
     }
 
     override fun toJson(): JSONObject {
@@ -49,7 +54,7 @@ class Room : Model<Room>(), Serializable {
     }
 
     override fun copyRelation(relation: String, room: Room): Room {
-        when(relation){
+        when (relation) {
             "users" -> this.users = room.users
             "events" -> this.events = room.events
         }
