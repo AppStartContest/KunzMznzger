@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Toast.makeText(this,"caca",Toast.LENGTH_LONG)
+
         // Initialize globals
         MobileAds.initialize(this, getString(R.string.google_ad_banner_id))
         val adRequest = AdRequest.Builder().build()
