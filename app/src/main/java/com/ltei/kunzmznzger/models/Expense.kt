@@ -5,8 +5,9 @@ import com.ltei.kunzmznzger.libs.models.ModelManager
 import com.ltei.kunzmznzger.models.dao.ExpenseDAO
 import org.joda.time.DateTime
 import org.json.simple.JSONObject
+import java.io.Serializable
 
-class Expense : Model<Expense>() {
+class Expense : Model<Expense>(), Serializable {
 
     var name: String? = null
     var value: Float? = null

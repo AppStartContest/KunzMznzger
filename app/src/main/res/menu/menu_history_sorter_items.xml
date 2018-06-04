@@ -4,23 +4,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/dropdown_menu1"
+        android:id="@+id/menu_item_sorter_biggestfirst"
         app:showAsAction="ifRoom"
         android:title="Biggest first"
         android:visible="true" />
     <item
-        android:id="@+id/dropdown_menu2"
+        android:id="@+id/menu_item_sorter_smallestfirst"
         app:showAsAction="ifRoom|withText"
         android:title="Smallest first"
         android:visible="true" />
     <item
-        android:id="@+id/dropdown_menu3"
+        android:id="@+id/menu_item_sorter_recentfirst"
         app:showAsAction="ifRoom"
         android:title="Recent first"
         android:visible="true" />
 
     <item
-        android:id="@+id/dropdown_menu4"
+        android:id="@+id/menu_item_sorter_recentlast"
         app:showAsAction="ifRoom"
         android:title="Recent last"
         android:visible="true" />

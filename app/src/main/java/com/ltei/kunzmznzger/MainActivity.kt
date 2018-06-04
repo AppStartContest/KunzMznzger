@@ -9,6 +9,8 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.Button
 import android.widget.LinearLayout
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.ltei.kunzmznzger.local.LocalUserInfo
 import com.ltei.kunzmznzger.models.Expense
 import com.ltei.kunzmznzger.models.Message
@@ -26,24 +28,14 @@ import java.util.concurrent.CompletableFuture
 class MainActivity : AppCompatActivity() {
 
 
-
-    fun getHistorySort(): ArrayList<HistorySort> {
-        val result = ArrayList<HistorySort>()
-        result.add(HistorySort.biggestAmount())
-        result.add(HistorySort.lowestAmount())
-        result.add(HistorySort.mostRecentFirst())
-        result.add(HistorySort.mostRecentLast())
-        return result
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_main)
 
-        UserDAO().find(82)
-                .thenCompose { it.load("rooms") }
-                .thenAccept(::debug)
+        // Initialize globals
+        MobileAds.initialize(this, getString(R.string.google_ad_banner_id))
+        val adRequest = AdRequest.Builder().build()
+        ad_banner.loadAd(adRequest)
 
 
         main_button_earns.setOnClickListener({
@@ -53,14 +45,12 @@ class MainActivity : AppCompatActivity() {
             expenses.add(Expense())
             expenses.add(Expense())
             intent.putExtra(HistoryActivity.EXTRAS_LIST, expenses)
-            intent.putExtra(HistoryActivity.EXTRAS_SORT, getHistorySort())
             startActivity(intent)
         })
 
         main_button_dept.setOnClickListener({
             val intent = Intent(this, HistoryActivity::class.java)
             intent.putExtra(HistoryActivity.EXTRAS_LIST, ArrayList<Expense>())
-            intent.putExtra(HistoryActivity.EXTRAS_SORT, getHistorySort())
             startActivity(intent)
         })
 
@@ -95,15 +85,6 @@ class MainActivity : AppCompatActivity() {
             })
             dialog.show()
         })
-
-        /*// Initialize
-        if (!LocalUserInfo.getInstance().isCreated(this)) {
-            val intent = Intent(this, UserCreationActivity::class.java)
-            startActivity(intent)
-        } else {
-            LocalUserInfo.getInstance().load(Runnable{ onResume() })
-        }*/
-
     }
 
     override fun onResume() {
@@ -113,120 +94,15 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         } else {
-            LocalUserInfo.getInstance().load(this ,Runnable{
+            LocalUserInfo.getInstance().load(this, Runnable{
                 listlinearlayout.setArray(LocalUserInfo.getInstance().getGroups())
             })
         }
     }
 
-
     fun gotoActivityGroup(groupInfo: Room) {
-        val intent = Intent(this, GroupActivity::class.java)
-        intent.putExtra(GroupActivity.EXTRAS_ROOM, groupInfo)
+        val intent = Intent(this, RoomActivity::class.java)
+        intent.putExtra(RoomActivity.EXTRAS_ROOM, groupInfo)
         startActivity(intent)
-    }
-
-
-
-
-
-    fun robinTest() {
-        //        // Example of GET request
-//        UserDAO().all(UrlParametersMap().orderBy("-id").with("rooms")) // Get all users, order by 'id' DESC, and their rooms
-//                .thenAccept({ users -> debug(users) }) // Getting the response, printing it
-//                .thenCompose { UserDAO().find(4) } // Then execute a new GET request: Find the user with ID 4
-//                .thenAccept(::debug) // then call our debug() function
-//
-
-
-//        // Example of attachment of two models
-//        val newUser = User() // Create the new user and setting an arbitrary name and phone
-//        newUser.name = "UserBala"
-//        newUser.phone = DateTime.now().toString("MMddHHmmss")
-//        newUser.save() // Create the user
-//                .thenCompose({ user: User ->
-//                    // Find the last room
-//                    RoomDAO().findLast().thenCompose { room: Room ->
-//                        // Attach this room to the user we just created
-//                        user.attach(room)
-//                    }
-//                })
-//                .thenAccept(::debug)
-
-
-        // Example of detachment of two models
-//        UserDAO().findLast()
-//                .thenCompose { user: User ->
-//                    RoomDAO().findLast().thenCompose { room: Room ->
-//                        user.detach(room)
-//                    }
-//                }
-//                .thenAccept(::debug)
-//
-//        // Example of sync of two models
-//        UserDAO().findLast()
-//                .thenCompose { user: User ->
-//                    RoomDAO().findLast().thenCompose { room: Room ->
-//                        user.sync(room) // Sync this room to this user. It will detach other rooms already attached to this user
-////                        user.sync(room, true) // Sync this room to this user WITHOUT detaching other rooms already attached to this user
-////                        user.sync(room, JSONObject()) // Sync this room to this user with additional data (empty here)
-////                        user.sync(room, JSONObject(), true) // Sync this room to this user with additional data (empty here)
-//                        // and without other rooms already attached to this user
-//                    }
-//                }
-//                .thenAccept(::debug)
-
-//        UserDAO().register("Register${DateTime.now().toString("MMddHHmmss")}", "testpw")
-//                .thenCompose {
-//                    debug(it)
-//                        UserDAO().auth(it!!.username!!, "testpw")
-//                }
-//                .thenAccept(::debug)
-
-        val username = "Register" + DateTime.now().toString("MMddHHmmss") // Unique username
-        val pw = "testpw"
-
-        UserDAO().register(username, pw) // Registration example
-                .thenCompose {
-                    debug(it)
-                    UserDAO().auth(username, pw) // Authentication example
-                }.thenCompose {
-                    debug(it)
-                    // Find last room to attach it to the user
-                    RoomDAO().findLast().thenCompose { room: Room? ->
-                        debug(room)
-                        it?.attach(room)
-                    }
-                }
-                .thenAccept(::debug)
-    }
-
-    fun debug(arg: Any?) {
-        Log.d("[CONSOLE]", "$arg")
-    }
-
-    fun update(user: User): CompletableFuture<User> {
-        debug(user)
-        user.name = "A brand new name" // Change the name
-        return user.save() // return the CompletableFuture returned by save().
-        // Since it has a valid ID, it will update it instead of creating a new one
-    }
-
-    fun update(message: Message): CompletableFuture<Message> {
-        debug(message)
-        return message.save() // return the CompletableFuture returned by save().
-        // Since it has a valid ID, it will update it instead of creating a new one
-    }
-
-    fun update(room: Room): CompletableFuture<Room> {
-        debug(room)
-        //room.name = "A brand new name" // Change the name
-        return room.save() // return the CompletableFuture returned by save().
-        // Since it has a valid ID, it will update it instead of creating a new one
-    }
-
-    fun delete(user: User): CompletableFuture<User> {
-        debug(user)
-        return user.delete() // return the CompletableFuture returned by delete()
     }
 }

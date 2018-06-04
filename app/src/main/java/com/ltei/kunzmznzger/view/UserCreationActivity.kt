@@ -28,10 +28,11 @@ class UserCreationActivity : AppCompatActivity() {
                     if (password.length < 6) {
                         Toast.makeText(this@UserCreationActivity, "Your password must be at least 6 characters long", Toast.LENGTH_SHORT).show()
                     } else {
-                        LocalUserInfo.getInstance().create(this, pseudo, name, password)
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
-                        this@UserCreationActivity.finish()
+                        LocalUserInfo.getInstance().create(this, pseudo, name, password, Runnable {
+                            val intent = Intent(this, MainActivity::class.java)
+                            startActivity(intent)
+                            this@UserCreationActivity.finish()
+                        })
                     }
                 }
             }
