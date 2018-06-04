@@ -41,6 +41,11 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
+        UserDAO().find(82)
+                .thenCompose { it.load("rooms") }
+                .thenAccept(::debug)
+
+
         main_button_earns.setOnClickListener({
             val intent = Intent(this, HistoryActivity::class.java)
             val expenses = ArrayList<Expense>()

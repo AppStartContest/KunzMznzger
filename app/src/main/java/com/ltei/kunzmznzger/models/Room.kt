@@ -47,4 +47,12 @@ class Room : Model<Room>(), Serializable {
 
         return json
     }
+
+    override fun copyRelation(relation: String, room: Room): Room {
+        when(relation){
+            "users" -> this.users = room.users
+            "events" -> this.events = room.events
+        }
+        return this
+    }
 }

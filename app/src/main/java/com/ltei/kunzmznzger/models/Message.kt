@@ -1,23 +1,22 @@
 package com.ltei.kunzmznzger.models
 
-import com.ltei.kunzmznzger.libs.Helpers
 import com.ltei.kunzmznzger.libs.models.Model
 import com.ltei.kunzmznzger.libs.models.ModelManager
 import com.ltei.kunzmznzger.models.dao.MessageDAO
 import org.joda.time.DateTime
 import org.json.simple.JSONObject
 
-class Message() : Model<Message>() {
-    var content : String? = null
+class Message : Model<Message>() {
+    var content: String? = null
 
-    var createdAt : DateTime? = null
-    var updatedAt : DateTime? = null
-    var deletedAt : DateTime? = null
+    var createdAt: DateTime? = null
+    var updatedAt: DateTime? = null
+    var deletedAt: DateTime? = null
 
-    var user : User? = null
+    var user: User? = null
 
-    var room : Room? = null
-    var expense : Expense? = null
+    var room: Room? = null
+    var expense: Expense? = null
     var event: Event? = null
 
     override fun recopy(model: Message) {
@@ -49,6 +48,15 @@ class Message() : Model<Message>() {
         this.putFkIfRelationDefined(json, "event_id", this.event)
 
         return json
+    }
+
+    override fun copyRelation(relation: String, message: Message): Message {
+        when(relation){
+            "room" -> this.room = message.room
+            "expense" -> this.expense = message.expense
+            "event" -> this.event = message.event
+        }
+        return this
     }
 
 }

@@ -66,4 +66,13 @@ class User : Model<User>() {
 
         return super.save()
     }
+
+    override fun copyRelation(relation: String, user: User): User {
+        when(relation){
+            "rooms" -> this.rooms = user.rooms
+            "messages" -> this.messages = user.messages
+            "expenses" -> this.expenses = user.expenses
+        }
+        return this
+    }
 }

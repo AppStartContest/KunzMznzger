@@ -8,20 +8,19 @@ import com.ltei.kunzmznzger.models.dao.EventDAO
 import org.json.simple.JSONObject
 
 class Event : Model<Event>() {
+    var createdAt: String? = null
+    var updatedAt: String? = null
+    var deletedAt: String? = null
 
-    var createdAt : String? = null
-    var updatedAt : String? = null
-    var deletedAt : String? = null
+    var name: String? = null
+    var description: String? = null
+    var date: Date? = null
+    var time: Time? = null
 
-    var name : String? = null
-    var description : String? = null
-    var date : Date? = null
-    var time : Time? = null
+    var messages: ArrayList<Message> = ArrayList()
+    var room: Room? = null
 
-    var messages : ArrayList<Message> = ArrayList()
-    var room : Room? = null
-
-    fun addMessage(message: Message){
+    fun addMessage(message: Message) {
         messages.add(message)
     }
 
@@ -59,4 +58,12 @@ class Event : Model<Event>() {
         return json
     }
 
+    override fun copyRelation(relation: String, event: Event): Event {
+        when (relation) {
+            "messages" -> this.messages = event.messages
+            "room" -> this.room = event.room
+        }
+
+        return this
+    }
 }

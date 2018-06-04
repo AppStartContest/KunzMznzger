@@ -1,12 +1,10 @@
 package com.ltei.kunzmznzger.libs.models;
 
+import com.ltei.kunzmznzger.libs.api.UrlParametersMap;
 import com.ltei.kunzmznzger.libs.models.exceptions.RelationException;
 
 import org.json.simple.JSONObject;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -46,7 +44,7 @@ public abstract class Model<T extends Model> implements Comparable<Model<T>>
         return CompletableFuture.completedFuture(getId() > 0);
     }
 
-    public boolean isValid(){
+    public boolean isValid() {
         return id > 0;
     }
 
@@ -65,6 +63,18 @@ public abstract class Model<T extends Model> implements Comparable<Model<T>>
                         return getManagerInstance().create(this);
                 });
     }
+
+    /**
+     * Load a relation to this. The relation name is the name of the attribute but in snake_case.
+     * @param relation The relation name which is the name of the attribute but in snake_case
+     * @return updated this in a CompletableFuture
+     */
+    public CompletableFuture<T> load(String relation) {
+        return getManagerInstance().find(this.id, new UrlParametersMap().with(relation))
+                .thenCompose((T t) -> CompletableFuture.supplyAsync(() -> this.copyRelation(relation, t)));
+    }
+
+    protected abstract T copyRelation(String relation, T model);
 
     public CompletableFuture<T> delete() {
         return getManagerInstance().delete(this);

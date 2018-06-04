@@ -1,5 +1,7 @@
 package com.ltei.kunzmznzger.libs;
 
+import android.util.Log;
+
 import com.ltei.kunzmznzger.libs.models.Model;
 
 import org.jetbrains.annotations.NotNull;
@@ -157,5 +159,13 @@ public class Helpers
 
     public static boolean isModel(Class<?> clazz) {
         return Model.class.isAssignableFrom(clazz);
+    }
+
+    public static void log(String msg) {
+        Helpers.log(msg, "[DEBUG]");
+    }
+
+    public static void log(String msg, String tag) {
+        Log.d(tag, msg);
     }
 }

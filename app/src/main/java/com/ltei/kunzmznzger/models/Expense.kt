@@ -8,24 +8,24 @@ import org.json.simple.JSONObject
 
 class Expense : Model<Expense>() {
 
-    var name : String? = null
-    var value : Float? = null
-    var description : String? = null
+    var name: String? = null
+    var value: Float? = null
+    var description: String? = null
 
-    var createdAt : DateTime? = null
-    var updatedAt : DateTime? = null
-    var deletedAt : DateTime? = null
+    var createdAt: DateTime? = null
+    var updatedAt: DateTime? = null
+    var deletedAt: DateTime? = null
 
-    var messages : ArrayList<Message> = ArrayList()
-    var users : ArrayList<User> = ArrayList()
-    var user : User? = null
-    var room : Room? = null
+    var messages: ArrayList<Message> = ArrayList()
+    var users: ArrayList<User> = ArrayList()
+    var user: User? = null
+    var room: Room? = null
 
-    fun addMessage(message: Message){
+    fun addMessage(message: Message) {
         messages.add(message)
     }
 
-    fun addUser(user: User){
+    fun addUser(user: User) {
         users.add(user)
     }
 
@@ -57,5 +57,15 @@ class Expense : Model<Expense>() {
         json["value"] = this.value
 
         return json
+    }
+
+    override fun copyRelation(relation: String, expense: Expense): Expense {
+        when (relation) {
+            "messages" -> this.messages = expense.messages
+            "users" -> this.users = expense.users
+            "user" -> this.user = expense.user
+            "room" -> this.room = expense.room
+        }
+        return this
     }
 }
