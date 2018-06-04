@@ -12,9 +12,9 @@ class User : Model<User>() {
     var name: String? = null
     var username: String? = null
 
-    var rooms: MutableList<Room> = mutableListOf()
-    var messages : MutableList<Message> = mutableListOf()
-    var expenses : MutableList<Expense> = mutableListOf()
+    var rooms: ArrayList<Room> = ArrayList()
+    var messages : ArrayList<Message> = ArrayList()
+    var expenses : ArrayList<Expense> = ArrayList()
 
     override fun recopy(model: User) {
         val copy = User()

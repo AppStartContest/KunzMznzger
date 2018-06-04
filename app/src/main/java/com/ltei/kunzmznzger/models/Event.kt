@@ -5,10 +5,9 @@ import com.ltei.kunzmznzger.libs.models.ModelManager
 import com.ltei.kunzmznzger.libs.time.Date
 import com.ltei.kunzmznzger.libs.time.Time
 import com.ltei.kunzmznzger.models.dao.EventDAO
-import com.ltei.kunzmznzger.models.contracts.Messageable
 import org.json.simple.JSONObject
 
-class Event : Model<Event>(), Messageable {
+class Event : Model<Event>() {
 
     var createdAt : String? = null
     var updatedAt : String? = null
@@ -19,7 +18,7 @@ class Event : Model<Event>(), Messageable {
     var date : Date? = null
     var time : Time? = null
 
-    var messages : MutableList<Message> = arrayListOf()
+    var messages : ArrayList<Message> = ArrayList()
     var room : Room? = null
 
     fun addMessage(message: Message){

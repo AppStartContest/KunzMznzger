@@ -3,11 +3,10 @@ package com.ltei.kunzmznzger.models
 import com.ltei.kunzmznzger.libs.models.Model
 import com.ltei.kunzmznzger.libs.models.ModelManager
 import com.ltei.kunzmznzger.models.dao.ExpenseDAO
-import com.ltei.kunzmznzger.models.contracts.Messageable
 import org.joda.time.DateTime
 import org.json.simple.JSONObject
 
-class Expense : Model<Expense>(), Messageable{
+class Expense : Model<Expense>() {
 
     var name : String? = null
     var value : Float? = null
@@ -17,7 +16,7 @@ class Expense : Model<Expense>(), Messageable{
     var updatedAt : DateTime? = null
     var deletedAt : DateTime? = null
 
-    var messages : MutableList<Message> = arrayListOf()
+    var messages : ArrayList<Message> = ArrayList()
     var user : User? = null
     var room : Room? = null
 

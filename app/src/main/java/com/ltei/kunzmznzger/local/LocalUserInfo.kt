@@ -4,7 +4,6 @@ import android.content.Context
 import com.ltei.kunzmznzger.R
 import com.ltei.kunzmznzger.models.*
 import com.ltei.kunzmznzger.models.dao.UserDAO
-import com.ltei.kunzmznzger.models.contracts.Messageable
 import java.util.concurrent.CompletableFuture
 
 class LocalUserInfo {
