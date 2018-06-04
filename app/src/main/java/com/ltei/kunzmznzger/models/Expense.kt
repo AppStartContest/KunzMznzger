@@ -17,11 +17,16 @@ class Expense : Model<Expense>() {
     var deletedAt : DateTime? = null
 
     var messages : ArrayList<Message> = ArrayList()
+    var users : ArrayList<User> = ArrayList()
     var user : User? = null
     var room : Room? = null
 
     fun addMessage(message: Message){
         messages.add(message)
+    }
+
+    fun addUser(user: User){
+        users.add(user)
     }
 
     override fun recopy(model: Expense) {
