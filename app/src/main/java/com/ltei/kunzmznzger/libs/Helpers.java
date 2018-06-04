@@ -161,11 +161,11 @@ public class Helpers
         return Model.class.isAssignableFrom(clazz);
     }
 
-    public static void log(String msg) {
+    public static void log(Object msg) {
         Helpers.log(msg, "[DEBUG]");
     }
 
-    public static void log(String msg, String tag) {
-        Log.d(tag, msg);
+    public static void log(Object msg, String tag) {
+        Log.d(tag, msg.toString());
     }
 }

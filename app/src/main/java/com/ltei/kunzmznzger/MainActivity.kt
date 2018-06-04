@@ -9,7 +9,6 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.Toast
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.ltei.kunzmznzger.local.LocalUserInfo
@@ -72,6 +71,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     override fun onResume() {
         super.onResume()
         if (!LocalUserInfo.getInstance().isCreated(this)) {
@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         } else {
-            LocalUserInfo.getInstance().load(this, Runnable{
+            LocalUserInfo.getInstance().load(this, Runnable {
                 listlinearlayout.init(LocalUserInfo.getInstance().getRooms(), roomListItemViewCreator)
             })
         }
