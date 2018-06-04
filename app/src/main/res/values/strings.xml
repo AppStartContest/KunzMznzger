@@ -7,4 +7,11 @@
     <string name="preference_file_id">ascKonzumManagerPreferences</string>
     <string name="preference_item_user_id">preferenceitem_user_id</string>
 
+    <string name="google_ad_banner_id">ca-app-pub-3940256099942544/6300978111</string>
+
+
+    <!-- Test
+    <string name="google_ad_banner_id">ca-app-pub-5760621526193065/5544698630</string>
+    -->
+
 </resources>

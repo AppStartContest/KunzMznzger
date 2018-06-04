@@ -9,6 +9,8 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.Button
 import android.widget.LinearLayout
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.ltei.kunzmznzger.local.LocalUserInfo
 import com.ltei.kunzmznzger.models.Expense
 import com.ltei.kunzmznzger.models.Message
@@ -28,8 +30,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_main)
+
+
+
+        // Initialize globals
+        MobileAds.initialize(this, getString(R.string.google_ad_banner_id))
+        val adRequest = AdRequest.Builder().build()
+        ad_banner.loadAd(adRequest)
+
+
 
         main_button_earns.setOnClickListener({
             val intent = Intent(this, HistoryActivity::class.java)
@@ -89,14 +99,14 @@ class MainActivity : AppCompatActivity() {
         } else {
             LocalUserInfo.getInstance().load(Runnable {
                 LocalUserInfo.getInstance().load()
-                listlinearlayout.setArray(LocalUserInfo.getInstance().getGroups())
+                listlinearlayout.setArray(ArrayList(LocalUserInfo.getInstance().getRooms()))
             })
         }
     }
 
     fun gotoActivityGroup(groupInfo: Room) {
-        val intent = Intent(this, GroupActivity::class.java)
-        intent.putExtra(GroupActivity.EXTRAS_ROOM, groupInfo)
+        val intent = Intent(this, RoomActivity::class.java)
+        intent.putExtra(RoomActivity.EXTRAS_ROOM, groupInfo)
         startActivity(intent)
     }
 

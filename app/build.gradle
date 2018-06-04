@@ -39,6 +39,9 @@ dependencies {
     implementation 'com.android.volley:volley:1.0.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    // GOOGLE
+    implementation 'com.google.android.gms:play-services-ads:15.0.1'
 }
 repositories {
     mavenCentral()

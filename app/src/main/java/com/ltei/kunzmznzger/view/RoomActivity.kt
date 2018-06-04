@@ -6,10 +6,10 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import com.ltei.kunzmznzger.R
 import com.ltei.kunzmznzger.models.Room
-import kotlinx.android.synthetic.main.activity_group.*
+import kotlinx.android.synthetic.main.activity_room.*
 
 
-class GroupActivity : AppCompatActivity() {
+class RoomActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRAS_ROOM = "GROUP_ACTIVITY_EXTRAS_GROUP"
@@ -17,7 +17,7 @@ class GroupActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_group)
+        setContentView(R.layout.activity_room)
 
         var room = intent.getSerializableExtra(EXTRAS_ROOM) as Room
 

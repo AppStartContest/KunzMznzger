@@ -14,7 +14,7 @@ import com.ltei.kunzmznzger.models.Message
 import com.ltei.kunzmznzger.models.Room
 import com.ltei.kunzmznzger.models.User
 import kotlinx.android.synthetic.main.activity_expense_info.*
-import kotlinx.android.synthetic.main.activity_group.*
+import kotlinx.android.synthetic.main.activity_room.*
 
 class ExpenseInfoActivity : AppCompatActivity() {
 
