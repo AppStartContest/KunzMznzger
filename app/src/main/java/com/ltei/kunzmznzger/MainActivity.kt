@@ -13,10 +13,7 @@ import android.widget.Toast
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.ltei.kunzmznzger.local.LocalUserInfo
-import com.ltei.kunzmznzger.models.Expense
-import com.ltei.kunzmznzger.models.Message
-import com.ltei.kunzmznzger.models.Room
-import com.ltei.kunzmznzger.models.User
+import com.ltei.kunzmznzger.models.*
 import com.ltei.kunzmznzger.models.dao.RoomDAO
 import com.ltei.kunzmznzger.models.dao.UserDAO
 import com.ltei.kunzmznzger.view.*
@@ -33,6 +30,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Toast.makeText(this,"caca",Toast.LENGTH_LONG)
+
+        val room = generateDummy()
+        val depts = room.computeDepts()
+
         // Initialize globals
         MobileAds.initialize(this, getString(R.string.google_ad_banner_id))
         val adRequest = AdRequest.Builder().build()
