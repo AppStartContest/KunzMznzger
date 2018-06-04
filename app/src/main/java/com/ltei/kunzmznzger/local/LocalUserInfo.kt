@@ -246,7 +246,7 @@ class LocalUserInfo {
      * @param room an existing room
      * @throws ModelException if the room is not valid (if it doesn't correspond to db entry)
      */
-     fun createEvent(name: String,description: String,date: Date , time: Time, room: Room): CompletableFuture<Event>? {
+    fun createEvent(name: String,description: String,date: Date , time: Time, room: Room): CompletableFuture<Event> {
         throwIfInvalidModel(room)
         var event = Event()
         event.name = name
@@ -269,7 +269,7 @@ class LocalUserInfo {
      * @param room an existing room
      * @throws ModelException if the room is not valid (if it doesn't correspond to db entry)
      */
-    fun createExpense(name: String , value : Double , description: String , room: Room) : CompletableFuture<Expense>?
+    fun createExpense(name: String , value : Double , description: String , room: Room) : CompletableFuture<Expense>
     {
         throwIfInvalidModel(room)
         var expense = Expense()
@@ -311,7 +311,6 @@ class LocalUserInfo {
                 .getInt(key, -1)
         return if (result == -1) { null } else { result }
     }
-
     fun createUser(name: String, password: String) {
         val newUser = User()
         newUser.name = name

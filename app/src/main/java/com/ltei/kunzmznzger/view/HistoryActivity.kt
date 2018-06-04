@@ -27,7 +27,8 @@ class HistoryActivity : AppCompatActivity() {
 
         list = intent.getSerializableExtra(EXTRAS_LIST) as ArrayList<Expense>
         history_button_sort.setOnClickListener({ onSortButtonClickListener() })
-        history_list_view.onItemClickListener = AdapterView.OnItemClickListener({ _, _, position, _ -> onHistoryItemClickListener(position) })
+        history_list_view.onItemClickListener = AdapterView.OnItemClickListener(
+                { _, _, position, _ -> onHistoryItemClickListener(position) })
     }
 
     override fun onResume() {
