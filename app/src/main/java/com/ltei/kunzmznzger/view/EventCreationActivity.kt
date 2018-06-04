@@ -5,13 +5,21 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
 import com.ltei.kunzmznzger.R
+import com.ltei.kunzmznzger.libs.time.Date
+import com.ltei.kunzmznzger.libs.time.Time
 import com.ltei.kunzmznzger.local.LocalUserInfo
+import com.ltei.kunzmznzger.models.Room
 import kotlinx.android.synthetic.main.activity_event_creation.*
+import org.joda.time.DateTime
 
 class EventCreationActivity: AppCompatActivity() {
 
+    companion object {
+        const val EXTRAS_ROOM = "EVENT_CREATION_ACTIVITY_EXTRAS_ROOM"
+    }
 
 
+    var room: Room? = null
     var viewIdx = 0
 
     private var buttonNextClickListener1 = View.OnClickListener{
@@ -27,13 +35,29 @@ class EventCreationActivity: AppCompatActivity() {
         onViewIdxChange()
     }
     private var buttonConfirmClickListener = View.OnClickListener {
-        LocalUserInfo.getInstance().createEvent()
+        val datetime = DateTime(
+                datepicker.year,
+                datepicker.month,
+                datepicker.dayOfMonth,
+                timepicker.hour,
+                timepicker.minute,
+                0, 0)
+
+        LocalUserInfo.getInstance().createEvent(
+                edittext_name.text.toString(),
+                edittext_description.text.toString(),
+                Date(datetime),
+                Time(datetime),
+                room!!).thenRun {
+            finish()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event_creation)
 
+        room = intent.getSerializableExtra(EXTRAS_ROOM) as Room
         onViewIdxChange()
     }
 
@@ -50,12 +74,16 @@ class EventCreationActivity: AppCompatActivity() {
     private fun showView0() {
         text_name.visibility = View.VISIBLE
         edittext_name.visibility = View.VISIBLE
+        text_description.visibility = View.VISIBLE
+        edittext_description.visibility = View.VISIBLE
         button_next.visibility = View.VISIBLE
         button_next.setOnClickListener(buttonNextClickListener1)
     }
     private fun hideView0() {
         text_name.visibility = View.GONE
         edittext_name.visibility = View.GONE
+        text_description.visibility = View.GONE
+        edittext_description.visibility = View.GONE
         button_next.visibility = View.GONE
     }
 

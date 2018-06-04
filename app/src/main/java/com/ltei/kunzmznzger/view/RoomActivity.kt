@@ -24,6 +24,8 @@ class RoomActivity : AppCompatActivity() {
 
         val room = intent.getSerializableExtra(EXTRAS_ROOM) as Room
 
+        Toast.makeText(this, "$room", Toast.LENGTH_LONG).show()
+
         button_menu.setOnClickListener({
             val dropDown = PopupMenu(applicationContext, button_menu)
             dropDown.menuInflater.inflate(R.menu.menu_group_items, dropDown.menu)
@@ -52,8 +54,8 @@ class RoomActivity : AppCompatActivity() {
     fun onButtonAddMessagePressed(room: Room) {
         val dialog = DialogEnterText(this, "Write a message")
         dialog.dialog_enter_text_button.setOnClickListener({
-            if (dialog.edittext.text.toString() != "") {
-                LocalUserInfo.globalInstance.sendMessageToRoom(edittext.text.toString(), room).thenRun {
+            if (dialog.dialog_enter_text_edittext.text.toString() != "") {
+                LocalUserInfo.globalInstance.sendMessageToRoom(dialog_enter_text_edittext.text.toString(), room).thenRun {
                     dialog.cancel()
                 }
             } else {

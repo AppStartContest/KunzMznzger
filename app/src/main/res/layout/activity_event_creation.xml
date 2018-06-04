@@ -61,6 +61,18 @@
                 android:gravity="center"
                 android:id="@+id/edittext_name"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Choose a description (optional)"
+                android:id="@+id/text_description"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:id="@+id/edittext_description"/>
+
             <DatePicker
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

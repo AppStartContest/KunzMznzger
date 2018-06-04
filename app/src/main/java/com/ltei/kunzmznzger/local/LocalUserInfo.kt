@@ -15,12 +15,11 @@ import com.ltei.kunzmznzger.models.dao.UserDAO
 import java.util.concurrent.CompletableFuture
 import kotlin.math.exp
 
-
 class LocalUserInfo {
 
     companion object {
 
-        val globalInstance: LocalUserInfo = LocalUserInfo()
+        var globalInstance: LocalUserInfo = LocalUserInfo()
 
         fun getInstance(): LocalUserInfo {
             return globalInstance
@@ -138,10 +137,7 @@ class LocalUserInfo {
      * @param room an existing room
      * @throws ModelException if the room is not valid (if it doesn't correspond to db entry)
      */
-    fun sendMessageToRoom(content: String, room: Room): CompletableFuture<Message> {
-        val message = Message()
-        message.content = content
-
+    fun sendMessageToRoom(message: Message, room: Room): CompletableFuture<Message> {
         throwIfInvalidModel(room)
         message.room = room
         message.user = this.user
@@ -173,10 +169,7 @@ class LocalUserInfo {
      * @param expense an existing expense
      * @throws ModelException if the expense is not valid (if it doesn't correspond to db entry)
      */
-    fun sendMessageToExpense(content: String, expense: Expense): CompletableFuture<Message> {
-        val message = Message()
-        message.content = content
-
+    fun sendMessageToExpense(message: Message, expense: Expense): CompletableFuture<Message> {
         throwIfInvalidModel(expense)
         message.expense = expense
         return this.saveMessage(message).thenCompose({ m: Message ->
@@ -207,10 +200,7 @@ class LocalUserInfo {
      * @param event an existing event
      * @throws ModelException if the event is not valid (if it doesn't correspond to db entry)
      */
-    fun sendMessageToEvent(content: String, event: Event): CompletableFuture<Message> {
-        val message = Message()
-        message.content = content
-
+    fun sendMessageToEvent(message: Message, event: Event): CompletableFuture<Message> {
         throwIfInvalidModel(event)
         message.event = event
         return this.saveMessage(message).thenCompose({ m: Message ->
@@ -256,7 +246,7 @@ class LocalUserInfo {
      * @param room an existing room
      * @throws ModelException if the room is not valid (if it doesn't correspond to db entry)
      */
-     fun createEvent(name: String,description: String,date: Date , time: Time, room: Room): CompletableFuture<Event>? {
+    fun createEvent(name: String,description: String,date: Date , time: Time, room: Room): CompletableFuture<Event> {
         throwIfInvalidModel(room)
         var event = Event()
         event.name = name
@@ -279,7 +269,7 @@ class LocalUserInfo {
      * @param room an existing room
      * @throws ModelException if the room is not valid (if it doesn't correspond to db entry)
      */
-    fun createExpense(name: String , value : Double , description: String , room: Room) : CompletableFuture<Expense>?
+    fun createExpense(name: String , value : Double , description: String , room: Room) : CompletableFuture<Expense>
     {
         throwIfInvalidModel(room)
         var expense = Expense()
@@ -321,7 +311,6 @@ class LocalUserInfo {
                 .getInt(key, -1)
         return if (result == -1) { null } else { result }
     }
-
     fun createUser(name: String, password: String) {
         val newUser = User()
         newUser.name = name
