@@ -5,9 +5,10 @@ import com.ltei.kunzmznzger.libs.models.ModelManager
 import com.ltei.kunzmznzger.libs.models.exceptions.ModelException
 import com.ltei.kunzmznzger.models.dao.UserDAO
 import org.json.simple.JSONObject
+import java.io.Serializable
 import java.util.concurrent.CompletableFuture
 
-class User : Model<User>() {
+class User : Model<User>(), Serializable {
 
     var name: String? = null
     var username: String? = null

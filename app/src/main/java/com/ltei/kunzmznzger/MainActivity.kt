@@ -9,6 +9,7 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.Toast
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.ltei.kunzmznzger.local.LocalUserInfo
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         view.background = getDrawable(R.color.colorListItemBackground)
         view.setPadding(16, 16, 16, 16)
         view.layoutParams = listItemLayoutParams
-        view.text = item.toString()
+        view.text = item.toString() //(item as Room).name
         view.textSize = 12f
         view.setOnClickListener({ gotoActivityGroup(item as Room) })
         view
@@ -67,6 +68,7 @@ class MainActivity : AppCompatActivity() {
         // TEST
         button_TEST.setOnClickListener {
             val intent = Intent(this, EventCreationActivity::class.java)
+            intent.putExtra(EventCreationActivity.EXTRAS_ROOM, LocalUserInfo.getInstance().getGroups().last())
             startActivity(intent)
         }
     }
@@ -80,7 +82,9 @@ class MainActivity : AppCompatActivity() {
             finish()
         } else {
             LocalUserInfo.getInstance().load(this, Runnable {
-                listlinearlayout.init(LocalUserInfo.getInstance().getRooms(), roomListItemViewCreator)
+                this.runOnUiThread {
+                    listlinearlayout.init(LocalUserInfo.getInstance().getRooms(), roomListItemViewCreator)
+                }
             })
         }
     }

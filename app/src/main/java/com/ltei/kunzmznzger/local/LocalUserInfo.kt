@@ -67,8 +67,9 @@ class LocalUserInfo {
         val id = context.getSharedPreferences(context.getString(R.string.preference_file_id), Context.MODE_PRIVATE)
                 .getInt(key, Int.MAX_VALUE)
 
-        UserDAO().find(id, UrlParametersMap().withAllRelations()).thenAccept { this.user = it }
-                .thenRun(runnable)
+        UserDAO().find(id, UrlParametersMap().withAllRelations()).thenCompose {
+            it.load("rooms", "events", "expenses", "users.rooms.expenses")
+        }.thenAccept { this.user = it  }.thenRun(runnable)
     }
 
     /*fun getHistory(): Array<LocalExpenseInfo> {

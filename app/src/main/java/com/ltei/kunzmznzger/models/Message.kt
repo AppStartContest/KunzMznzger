@@ -5,8 +5,9 @@ import com.ltei.kunzmznzger.libs.models.ModelManager
 import com.ltei.kunzmznzger.models.dao.MessageDAO
 import org.joda.time.DateTime
 import org.json.simple.JSONObject
+import java.io.Serializable
 
-class Message : Model<Message>() {
+class Message : Model<Message>(), Serializable {
     var content: String? = null
 
     var createdAt: DateTime? = null
