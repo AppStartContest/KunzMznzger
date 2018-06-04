@@ -2,6 +2,7 @@ package com.ltei.kunzmznzger.local
 
 import android.content.Context
 import com.ltei.kunzmznzger.R
+import com.ltei.kunzmznzger.libs.api.UrlParametersMap
 import com.ltei.kunzmznzger.libs.models.Model
 import com.ltei.kunzmznzger.libs.models.exceptions.ModelException
 import com.ltei.kunzmznzger.models.*
@@ -48,12 +49,21 @@ class LocalUserInfo {
                 }.thenRun(runnable)
     }
 
-    fun load() {
-        //TODO
+    fun load(context: Context) {
+        val key =  context.getString(R.string.preference_item_user_id)
+        val id = context.getSharedPreferences(context.getString(R.string.preference_file_id), Context.MODE_PRIVATE)
+                .getInt(key, Int.MAX_VALUE)
+
+        UserDAO().find(id , UrlParametersMap().withAllRelations()).thenAccept { this.user = it }
     }
 
-    fun load(runnable: Runnable) {
-        //TODO
+    fun load(context: Context , runnable: Runnable) {
+        val key =  context.getString(R.string.preference_item_user_id)
+        val id = context.getSharedPreferences(context.getString(R.string.preference_file_id), Context.MODE_PRIVATE)
+                .getInt(key, Int.MAX_VALUE)
+
+        UserDAO().find(id , UrlParametersMap().withAllRelations()).thenAccept { this.user = it }
+                .thenRun(runnable)
     }
     /*fun getHistory(): Array<LocalExpenseInfo> {
         //TODO

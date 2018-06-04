@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
                 val room = Room()
                 room.name = name
                 room.addUser(LocalUserInfo.getInstance().getUser())
-                room.save().thenAccept { LocalUserInfo.getInstance().load(Runnable { onResume() }) }
+                room.save().thenAccept { LocalUserInfo.getInstance().load(this ,Runnable { onResume() }) }
                 gotoActivityGroup(room)
             })
             dialog.show()
@@ -113,7 +113,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         } else {
-            LocalUserInfo.getInstance().load(Runnable{
+            LocalUserInfo.getInstance().load(this ,Runnable{
                 listlinearlayout.setArray(LocalUserInfo.getInstance().getGroups())
             })
         }
