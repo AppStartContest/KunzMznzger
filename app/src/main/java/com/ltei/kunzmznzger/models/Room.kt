@@ -101,10 +101,8 @@ class Room : Model<Room>(), Serializable {
             averages[user] = -avg + this.expenses.stream().filter { it.user!!.id == user.id }.mapToDouble { it.value!! }.sum()
         }
 
-        var positives = averages.filter { it.value > 0 } as HashMap<User, Double>
-        var negatives = averages.filter { it.value < 0 } as HashMap<User, Double>
-
-        var totalToTransfert = positives.values.sum()
+        val positives = averages.filter { it.value > 0 } as HashMap<User, Double>
+        val negatives = averages.filter { it.value < 0 } as HashMap<User, Double>
 
         // Direct correspondence
         for ((puser, pvalue) in positives) {
@@ -117,12 +115,14 @@ class Room : Model<Room>(), Serializable {
             }
         }
 
-        while (totalToTransfert != 0.0) {
+        var totalToTransfer = positives.values.sum()
+
+        while (totalToTransfer != 0.0) {
             var maxPosUser = positives.keys.first()
             var maxPosValue = -1.0
 
-            var minNegUser: User
-            var minNegValue = 1.0
+            var minNegUser = negatives.keys.first()
+            var minNegValue = 0.0
 
             // Looking for the max positive
             for ((puser, pvalue) in positives) {
@@ -137,14 +137,33 @@ class Room : Model<Room>(), Serializable {
             for ((nuser, nvalue) in negatives) {
                 if (nvalue == 0.0) continue
                 // If the nvalue is lower than the lowest so far AND ...
-                if ( nvalue < minNegValue && -1 * nvalue < maxPosValue){
+                if (nvalue < minNegValue && -1 * nvalue < maxPosValue) {
                     minNegValue = nvalue
                     minNegUser = nuser
                 }
             }
 
+            // Need to split the debts
+            if (minNegValue == 0.0) {
+                for ((nuser, nvalue) in negatives) {
+                    if (nvalue == 0.0) continue
+                    // This time, looking for the user who owes the max
+                    if (nvalue > minNegValue) {
+                        minNegValue = nvalue
+                        minNegUser = nuser
+                    }
+                }
+                // But it's too much, we only take -'maxPosValue'
+                minNegValue = -maxPosValue
+            }
+
             // Update the maps, register the dept and update the total
-            positives[maxPosUser] += minNegValue
+            positives[maxPosUser] = positives[maxPosUser]!! + minNegValue
+            negatives[minNegUser] = negatives[minNegUser]!! - minNegValue
+
+            debts.add(Debt(minNegUser, minNegValue, maxPosUser))
+
+            totalToTransfer += minNegValue
         }
 
         return arrayListOf()
