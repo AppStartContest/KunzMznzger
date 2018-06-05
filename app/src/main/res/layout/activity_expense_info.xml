@@ -73,15 +73,30 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/uninitialized"
+                android:textSize="22sp"
+                android:textColor="@color/greyDarkest"
+                android:layout_marginBottom="15dp"
+                android:id="@+id/text_amount"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:textColor="@color/greyDarker"
+                android:layout_marginBottom="15dp"
+                android:text="@string/uninitialized"
                 android:id="@+id/text_sender"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:textSize="18sp"
+                android:textColor="@color/greyDarker"
+                android:layout_marginBottom="15dp"
                 android:text="@string/uninitialized"
-                android:id="@+id/text_amount"
-                android:layout_marginBottom="16dp"/>
+                android:id="@+id/text_when"/>
 
             <TextView
                 android:layout_width="match_parent"

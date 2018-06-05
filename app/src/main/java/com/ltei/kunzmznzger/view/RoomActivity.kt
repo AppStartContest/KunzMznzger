@@ -65,8 +65,12 @@ class RoomActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+
+        val messages = getRoom().messages
+        messages.sortWith(Comparator { m1, m2 -> m2.createdAt!!.compareTo(m1.createdAt) })
+
         userlistview.setArray(getRoom().users)
-        messengerview.setArray(getRoom().messages)
+        messengerview.setArray(messages)
         eventlistview.init(getRoom().events, roomIdx!!)
     }
 
