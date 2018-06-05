@@ -115,7 +115,7 @@ class Room : Model<Room>(), Serializable {
         //  'debt' is the positive value of a negative float. (The difference between how much he paid and the room average)
         //  'spent' is the amount spent
 
-        while (totalToTransfer != 0.0) {
+        while (totalToTransfer > 0.0) {
             var maxPosUser = positives.keys.first()
             var maxPosValue = -1.0
 

@@ -17,7 +17,7 @@ class UserListView: ListLinearLayout {
             val layout = LinearLayout(context)
             View.inflate(context, R.layout.layout_user_list_item, layout)
 
-            layout.list_item.text = (item as User).name
+            layout.list_item.text = (item as User).username
 
             layout
         })

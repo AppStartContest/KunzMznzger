@@ -119,9 +119,11 @@ class RoomActivity : AppCompatActivity() {
             dialog.dialog_enter_text_button.setOnClickListener({
                 if (dialog.dialog_enter_text_edittext.text.toString() != "") {
                     LocalUserInfo.globalInstance.addUserToRoom(dialog.dialog_enter_text_edittext.text.toString(), getRoom()).thenRun {
-                        this.runOnUiThread {
-                            userlistview.setArray(getRoom().users)
-                            dialog.dismiss()
+                        LocalUserInfo.getInstance().load(this).thenRun {
+                            this.runOnUiThread {
+                                userlistview.setArray(getRoom().users)
+                                dialog.dismiss()
+                            }
                         }
                     }
                 } else {
