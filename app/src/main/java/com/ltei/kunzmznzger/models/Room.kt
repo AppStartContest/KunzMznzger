@@ -8,6 +8,7 @@ import org.joda.time.DateTime
 import org.json.simple.JSONObject
 import java.io.Serializable
 import kotlin.math.max
+import kotlin.math.round
 
 class Room : Model<Room>(), Serializable {
 
@@ -95,11 +96,12 @@ class Room : Model<Room>(), Serializable {
 
     fun computeDepts(): ArrayList<Debt> {
         val debts = arrayListOf<Debt>()
-        val avg = this.calcExpenseAverage()
+        var avg = this.calcExpenseAverage()
         val averages = hashMapOf<User, Double>()
 
         for (user in this.users) {
-            averages[user] = -avg + this.expenses.stream().filter { it.user!!.id == user.id }.mapToDouble { it.value!! }.sum()
+            val sum = this.expenses.stream().filter { it.user!!.id == user.id }.mapToDouble { it.value!! }.sum()
+            averages[user] = sum - avg
         }
 
         val positives = averages.filter { it.value > 0 } as HashMap<User, Double>
@@ -114,8 +116,7 @@ class Room : Model<Room>(), Serializable {
         //  The amount of money is: (-1 * min(debt, spent))
         //  'debt' is the positive value of a negative float. (The difference between how much he paid and the room average)
         //  'spent' is the amount spent
-
-        while (totalToTransfer > 0.0) {
+        while (totalToTransfer > 0.001) {
             var maxPosUser = positives.keys.first()
             var maxPosValue = -1.0
 
@@ -164,7 +165,7 @@ class Room : Model<Room>(), Serializable {
             positives[maxPosUser] = positives[maxPosUser]!! + minNegValue
             negatives[minNegUser] = negatives[minNegUser]!! - minNegValue
 
-            debts.add(Debt(minNegUser, -minNegValue , maxPosUser))
+            debts.add(Debt(minNegUser, -minNegValue, maxPosUser))
 
             totalToTransfer += minNegValue
         }

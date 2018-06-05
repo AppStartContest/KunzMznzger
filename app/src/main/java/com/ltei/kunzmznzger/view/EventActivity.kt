@@ -43,8 +43,9 @@ class EventActivity : AppCompatActivity() {
         val event = getEvent()
         text_title.text = "Event : ${event.name}"
         text_description.text = event.description
-        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        text_datetime.text = sdf.format(event.date!!.toDateTime().toDate())
+
+        text_datetime.text = "${event.date!!} at ${event.time}"
+
         messengerview.setArray(event.messages)
         button_add_message.setOnClickListener { onButtonAddMessagePressed(event) }
     }
