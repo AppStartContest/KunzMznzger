@@ -43,9 +43,9 @@ abstract class HistorySort: Serializable {
                     if (it1.value!! == it2.value!!) {
                         0
                     } else if (it1.value!! < it2.value!!) {
-                        1
-                    } else {
                         -1
+                    } else {
+                        1
                     }
                 })
                 return ArrayList(expenses.sortedWith(comparator))
@@ -59,9 +59,9 @@ abstract class HistorySort: Serializable {
                     if (it1.createdAt!!.isEqual(it2.createdAt!!)) {
                         0
                     } else if (it1.createdAt!!.isAfter(it2.createdAt!!)) {
-                        1
-                    } else {
                         -1
+                    } else {
+                        1
                     }
                 })
                 return ArrayList(expenses.sortedWith(comparator))
@@ -75,9 +75,9 @@ abstract class HistorySort: Serializable {
                     if (it1.createdAt!!.isEqual(it2.createdAt!!)) {
                         0
                     } else if (it1.createdAt!!.isAfter(it2.createdAt!!)) {
-                        -1
-                    } else {
                         1
+                    } else {
+                        -1
                     }
                 })
                 return ArrayList(expenses.sortedWith(comparator))

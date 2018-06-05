@@ -1,7 +1,7 @@
 <resources>
 
     <string name="uninitialized">Uninitialized</string>
-    <string name="app_name">KunaManager</string>
+    <string name="app_name">Espenshare</string>
     <string name="history">History</string>
 
     <string name="dialog_void_input_error">You have to enter something!</string>
@@ -10,8 +10,6 @@
     <string name="preference_item_user_id">preferenceitem_user_id</string>
 
     <string name="google_ad_banner_id">ca-app-pub-3940256099942544/6300978111</string>
-
-
     <!-- Test
     <string name="google_ad_banner_id">ca-app-pub-5760621526193065/5544698630</string>
     -->

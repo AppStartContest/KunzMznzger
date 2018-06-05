@@ -80,23 +80,23 @@
 
 
     <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#00CC00</color>
+    <color name="colorPrimaryDark">#1C3D5A</color>
+    <color name="colorAccent">#2779BD</color>
     <color name="colorAccentDark">#005500</color>
 
     <color name="colorListItemBackground">@color/colorLightGrey</color>
 
 
     <!-- Change this to change the app -->
-    <color name="colorHeader">@color/colorPrimaryDark</color>
+    <color name="colorHeader">#1C3D5A</color>
     <color name="colorTextTitle">#FFF</color>
     <color name="colorButtonDefault">@color/colorLightGrey</color>
     <color name="colorButtonBar">@color/colorLightGrey</color>
     <color name="colorButtonText">#444</color>
-    <color name="colorRoomList">@color/colorPrimary</color>
-    <color name="colorMessenger">@color/colorPrimary</color>
-    <color name="colorEventList">@color/colorAccent</color>
-    <color name="colorUserListList">@color/colorAccent</color>
+    <color name="colorRoomList">#2779BD</color>
+    <color name="colorMessenger">#8795A1</color>
+    <color name="colorEventList">#8795A1</color>
+    <color name="colorUserListList">#2779BD</color>
 
 
 </resources>

@@ -71,8 +71,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Your rooms"/>
+                android:text="Your rooms"
+                android:layout_marginBottom="16dp"/>
 
             <com.ltei.kunzmznzger.view.listlinearlayout.RoomListView
                 android:layout_width="match_parent"
