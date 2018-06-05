@@ -1,18 +1,17 @@
-package com.ltei.kunzmznzger.view
+package com.ltei.kunzmznzger.view.listlinearlayout
 
 import android.content.Context
 import android.content.Intent
 import android.util.AttributeSet
 import android.view.Gravity
-import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.ltei.kunzmznzger.R
-import com.ltei.kunzmznzger.models.Room
-import com.ltei.kunzmznzger.models.User
+import com.ltei.kunzmznzger.models.Event
+import com.ltei.kunzmznzger.view.RoomActivity
 
-class RoomListView: ListLinearLayout {
+class EventListView: ListLinearLayout {
 
 
     init {
@@ -25,7 +24,7 @@ class RoomListView: ListLinearLayout {
             view.background = context.getDrawable(R.color.colorListItemBackground)
             view.setPadding(16, 16, 16, 16)
             view.layoutParams = listItemLayoutParams
-            view.text = (item as Room).name
+            view.text = (item as Event).name
             view.textSize = 12f
             view.setOnClickListener {
                 val intent = Intent(context, RoomActivity::class.java)

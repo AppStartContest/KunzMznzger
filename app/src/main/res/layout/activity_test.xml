@@ -80,7 +80,7 @@
 
             </LinearLayout>
 
-            <com.ltei.kunzmznzger.view.ListLinearLayout
+            <com.ltei.kunzmznzger.view.listlinearlayout.ListLinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"

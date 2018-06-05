@@ -3,12 +3,13 @@ package com.ltei.kunzmznzger.view
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.Gravity
 import android.view.MenuItem
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.PopupMenu
+import android.view.ViewGroup
+import android.widget.*
 import com.ltei.kunzmznzger.R
 import com.ltei.kunzmznzger.models.Expense
+import com.ltei.kunzmznzger.models.Room
 import kotlinx.android.synthetic.main.activity_history.*
 
 
@@ -21,19 +22,37 @@ class HistoryActivity : AppCompatActivity() {
     }
 
 
+    private val list = ArrayList<Expense>()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
 
-        list = intent.getSerializableExtra(EXTRAS_LIST) as ArrayList<Expense>
+        list.addAll( intent.getSerializableExtra(EXTRAS_LIST) as ArrayList<Expense>)
         history_button_sort.setOnClickListener({ onSortButtonClickListener() })
-        history_list_view.onItemClickListener = AdapterView.OnItemClickListener(
-                { _, _, position, _ -> onHistoryItemClickListener(position) })
+
+        listlinearlayout.init(list, {
+            item, idx ->
+            val listItemLayoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            listItemLayoutParams.bottomMargin = 1
+            val view = TextView(this)
+            view.gravity = Gravity.CENTER
+            view.background = this.getDrawable(R.color.colorListItemBackground)
+            view.setPadding(16, 16, 16, 16)
+            view.layoutParams = listItemLayoutParams
+            view.text = (item as Expense).description
+            view.textSize = 12f
+            view.setOnClickListener {
+                onHistoryItemClickListener(idx)
+            }
+            view
+        })
     }
 
     override fun onResume() {
         super.onResume()
-        onListChanged()
+        listlinearlayout.notifyArrayChange()
     }
 
 
@@ -54,16 +73,12 @@ class HistoryActivity : AppCompatActivity() {
             R.id.menu_item_sorter_recentlast -> HistorySort.mostRecentLast().sort(list!!)
             else -> throw IllegalStateException()
         }
-        history_list_view.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, list)
+        listlinearlayout.notifyArrayChange()
     }
     private fun onHistoryItemClickListener(position: Int) {
         val intent = Intent(this, ExpenseInfoActivity::class.java)
         intent.putExtra(ExpenseInfoActivity.EXTRAS_EXPENSE, list!![position])
         startActivity(intent)
-    }
-
-    private fun onListChanged() {
-        history_list_view.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, list)
     }
 
 

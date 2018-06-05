@@ -1,14 +1,18 @@
-package com.ltei.kunzmznzger.view
+package com.ltei.kunzmznzger.view.listlinearlayout
 
 import android.content.Context
+import android.content.Intent
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.ltei.kunzmznzger.R
+import com.ltei.kunzmznzger.models.Room
+import com.ltei.kunzmznzger.view.RoomActivity
 
-class MessengerView: ListLinearLayout {
+class RoomListView: ListLinearLayout {
+
 
     init {
         setViewCreator({
@@ -20,8 +24,13 @@ class MessengerView: ListLinearLayout {
             view.background = context.getDrawable(R.color.colorListItemBackground)
             view.setPadding(16, 16, 16, 16)
             view.layoutParams = listItemLayoutParams
-            view.text = item.toString() //(item as Room).name
+            view.text = (item as Room).name
             view.textSize = 12f
+            view.setOnClickListener {
+                val intent = Intent(context, RoomActivity::class.java)
+                intent.putExtra(RoomActivity.EXTRAS_ROOM_IDX, idx)
+                context.startActivity(intent)
+            }
             view
         })
     }
@@ -33,5 +42,3 @@ class MessengerView: ListLinearLayout {
     }
 
 }
-
-

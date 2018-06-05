@@ -1,4 +1,4 @@
-package com.ltei.kunzmznzger.view
+package com.ltei.kunzmznzger.view.listlinearlayout
 
 import android.content.Context
 import android.util.AttributeSet

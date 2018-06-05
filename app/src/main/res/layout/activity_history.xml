@@ -47,22 +47,13 @@
         android:layout_height="match_parent"
         android:layout_above="@id/footer"
         android:layout_below="@id/header">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center|top"
+
+        <com.ltei.kunzmznzger.view.listlinearlayout.ListLinearLayout
+            android:id="@+id/listlinearlayout"
             android:orientation="vertical"
-            android:padding="12dp">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-            <ListView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:id="@+id/history_list_view"/>
-
-        </LinearLayout>
     </ScrollView>
 
 </RelativeLayout>

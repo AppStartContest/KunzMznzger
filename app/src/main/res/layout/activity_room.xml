@@ -94,17 +94,17 @@
 
             </LinearLayout>
 
-            <com.ltei.kunzmznzger.view.UserListView
+            <com.ltei.kunzmznzger.view.listlinearlayout.UserListView
                 android:id="@+id/userlistview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <com.ltei.kunzmznzger.view.MessengerView
+            <com.ltei.kunzmznzger.view.listlinearlayout.MessengerView
                 android:id="@+id/messengerview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <com.ltei.kunzmznzger.view.ListLinearLayout
+            <com.ltei.kunzmznzger.view.listlinearlayout.ListLinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
