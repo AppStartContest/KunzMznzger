@@ -81,13 +81,6 @@
                 android:text="@string/uninitialized"
                 android:id="@+id/text_amount"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/uninitialized"
-                android:id="@+id/text_description"/>
-
             <com.ltei.kunzmznzger.view.listlinearlayout.MessengerView
                 android:id="@+id/messagesview"
                 android:layout_width="match_parent"

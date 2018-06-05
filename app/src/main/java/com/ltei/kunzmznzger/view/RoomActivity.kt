@@ -54,7 +54,7 @@ class RoomActivity : AppCompatActivity() {
 
         userlistview.setArray(getRoom().users)
         messengerview.setArray(getRoom().messages)
-
+        eventlistview.setArray(getRoom().events)
     }
 
 
@@ -85,8 +85,12 @@ class RoomActivity : AppCompatActivity() {
             dialog.dialog_enter_text_title.text = "Enter username to add:"
             dialog.dialog_enter_text_button.setOnClickListener({
                 if (dialog.dialog_enter_text_edittext.text.toString() != "") {
-                    LocalUserInfo.globalInstance.addUserToRoom(dialog.dialog_enter_text_edittext.text.toString(), getRoom())
-                    this.runOnUiThread { userlistview.setArray(getRoom().users) }
+                    LocalUserInfo.globalInstance.addUserToRoom(dialog.dialog_enter_text_edittext.text.toString(), getRoom()).thenRun {
+                        this.runOnUiThread {
+                            userlistview.setArray(getRoom().users)
+                            dialog.dismiss()
+                        }
+                    }
                 } else {
                     Toast.makeText(this, getText(R.string.dialog_void_input_error), Toast.LENGTH_SHORT).show()
                 }

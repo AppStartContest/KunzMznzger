@@ -30,9 +30,8 @@ class ExpenseInfoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_expense_info)
 
         expense = intent.getSerializableExtra(EXTRAS_EXPENSE) as Expense
-        text_title.text = expense!!.name
+        text_title.text = expense!!.description
         text_amount.text = "spent ${expense!!.value}$"
-        text_description.text = expense!!.description
         messagesview.setArray(ArrayList(expense!!.messages))
         button_add_message.setOnClickListener { onButtonAddMessageClickListener() }
     }

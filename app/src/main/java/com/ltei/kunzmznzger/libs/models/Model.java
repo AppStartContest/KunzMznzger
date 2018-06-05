@@ -59,12 +59,16 @@ public abstract class Model<T extends Model> implements Comparable<Model<T>>
      * @return the updated/created model
      */
     public CompletableFuture<T> save() {
+        return this.save(null);
+    }
+
+    public CompletableFuture<T> save(UrlParametersMap params) {
         return this.existsInDatabase()
                 .thenComposeAsync(exists -> {
                     if (exists)
-                        return getManagerInstance().update(this);
+                        return getManagerInstance().update(this, params);
                     else
-                        return getManagerInstance().create(this);
+                        return getManagerInstance().create(this, params);
                 });
     }
 

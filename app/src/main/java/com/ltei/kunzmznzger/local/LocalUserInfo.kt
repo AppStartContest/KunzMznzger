@@ -226,15 +226,17 @@ open class LocalUserInfo {
     fun addUserToRoom(username: String, room: Room): CompletableFuture<Room> {
         throwIfInvalidModel(room)
 
-
         return UserDAO().all(UrlParametersMap().withAllRelations().where("username", username)).thenCompose {
             it[0].addRoom(room)
-            it[0].save()
+            it[0].save(UrlParametersMap().withAllRelations())
         }
                 .thenCompose {
-                    room.addUser(it)
-                    room.save()
+                    room.attach(it)
                 }
+              /*  .thenCompose {
+                    it.name ="ff"
+                    it.save()
+                }*/
 
     }
 
@@ -290,7 +292,6 @@ open class LocalUserInfo {
     {
         throwIfInvalidModel(room)
         var expense = Expense()
-        expense.name = name
         expense.value = value
         expense.description = description
         expense.room = room
