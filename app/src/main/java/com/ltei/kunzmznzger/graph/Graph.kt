@@ -99,7 +99,7 @@ class Graph() {
             val entry_list : ArrayList<ArrayList<Entry>> = ArrayList()
             val name_list : ArrayList<String?> = ArrayList()
 
-            var sortedList = expense_list.sortedWith(compareBy({ it.user!!.id }))
+            var sortedList = expense_list.sortedWith(compareBy({ it.user!!.id } , {it.createdAt}))
 
             entry_list.add(arrayListOf())
             var j = 0
@@ -109,9 +109,10 @@ class Graph() {
 
                 if (id == sortedList[i].user!!.id){
                     var time_value = get_nb_day(sortedList[i].createdAt)
+                    var delta : Float = 0f
                     if (entry_list[j].isNotEmpty()){
-                        time_value += entry_list[j].last().x}
-                    entry_list[j].add(Entry(time_value,sortedList[i].value!!.toFloat()))
+                        delta = entry_list[j].last().y}
+                    entry_list[j].add(Entry(time_value,sortedList[i].value!!.toFloat()+delta))
                 }
                 else
                 {
@@ -119,9 +120,10 @@ class Graph() {
                     entry_list.add(arrayListOf())
                     j+=1
                     var time_value = get_nb_day(sortedList[i].createdAt)
+                    var delta : Float = 0f
                     if (entry_list[j].isNotEmpty()){
-                        time_value += entry_list[j].last().x}
-                    entry_list[j].add(Entry(time_value,sortedList[i].value!!.toFloat()))
+                        delta = entry_list[j].last().y}
+                    entry_list[j].add(Entry(time_value,sortedList[i].value!!.toFloat()+delta))
                     name_list.add(sortedList[i].user?.name)
                 }
 
