@@ -55,9 +55,14 @@ open class LocalUserInfo {
         val id = context.getSharedPreferences(context.getString(R.string.preference_file_id), Context.MODE_PRIVATE)
                 .getInt(key, Int.MAX_VALUE)
 
-        return UserDAO().find(id, UrlParametersMap().withAllRelations()).thenCompose {
-            it.load("rooms", "events", "expenses", "users.rooms.expenses")
-        }.thenAccept { this.user = it  }
+        val params = UrlParametersMap().with(
+                "rooms.events.messages.user",
+                "rooms.expenses.messages.user",
+                "rooms.users",
+                "rooms.messages.user")
+
+        return UserDAO().find(id, params)
+                .thenAccept { this.user = it }
     }
 
     /*fun load(context: Context, runnable: Runnable) {
