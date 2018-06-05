@@ -7,6 +7,78 @@
     <color name="colorTextDark">#222</color>
     <color name="colorTextLight">@color/colorLightGrey</color>
 
+    <color name="white">#FFFFFF</color>
+    <color name="greyLightest">#F8FAFC</color>
+    <color name="greyLighter">#F1F5F8</color>
+    <color name="greyLight">#DAE1E7</color>
+    <color name="grey">#B8C2CC</color>
+    <color name="greyDark">#8795A1</color>
+    <color name="greyDarker">#606F7B</color>
+    <color name="greyDarkest">#3D4852</color>
+
+
+    <color name="redLightest">#FCEBEA</color>
+    <color name="redLighter">#F9ACAA</color>
+    <color name="redLight">#EF5753</color>
+    <color name="red">#E3342F</color>
+    <color name="redDark">#CC1F1A</color>
+    <color name="redDarker">#621B18</color>
+    <color name="redDarkest">#3B0D0C</color>
+
+
+    <color name="tealLightest">#E8FFFE</color>
+    <color name="tealLighter">#A0F0ED</color>
+    <color name="tealLight">#64D5CA</color>
+    <color name="teal">#4DC0B5</color>
+    <color name="tealDark">#38A89D</color>
+    <color name="tealDarker">#20504F</color>
+    <color name="tealDarkest">#0D3331</color>
+
+    <color name="greenLightest">#E3FCEC</color>
+    <color name="greenLighter">#A2F5BF</color>
+    <color name="greenLight">#51D88A</color>
+    <color name="green">#38C172</color>
+    <color name="greenDark">#1F9D55</color>
+    <color name="greenDarker">#1A4731</color>
+    <color name="greenDarkest">#0F2F21</color>
+
+
+    <color name="blueLightest">#EFF8FF</color>
+    <color name="blueLighter">#BCDEFA</color>
+    <color name="blueLight">#6CB2EB</color>
+    <color name="blue">#3490DC</color>
+    <color name="blueDark">#2779BD</color>
+    <color name="blueDarker">#1C3D5A</color>
+    <color name="blueDarkest">#12283A</color>
+
+
+    <color name="indigoLightest">#E6E8FF</color>
+    <color name="indigoLighter">#B2B7FF</color>
+    <color name="indigoLight">#7886D7</color>
+    <color name="indigo">#6574CD</color>
+    <color name="indigoDark">#5661B3</color>
+    <color name="indigoDarker">#2F365F</color>
+    <color name="indigoDarkest">#191E38</color>
+
+
+    <color name="purpleLightest">#F3EBFF</color>
+    <color name="purpleLighter">#D6BBFC</color>
+    <color name="purpleLight">#A779E9</color>
+    <color name="purple">#9561E2</color>
+    <color name="purpleDark">#794ACF</color>
+    <color name="purpleDarker">#382B5F</color>
+    <color name="purpleDarkest">#21183C</color>
+
+
+    <color name="pinkLightest">#FFEBEF</color>
+    <color name="pinkLighter">#FFBBCA</color>
+    <color name="pinkLight">#FA7EA8</color>
+    <color name="pink">#F66D9B</color>
+    <color name="pinkDark">#EB5286</color>
+    <color name="pinkDarker">#6F213F</color>
+    <color name="pinkDarkest">#451225</color>
+
+
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#1C3D5A</color>
     <color name="colorAccent">#00CC00</color>

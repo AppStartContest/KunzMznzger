@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import com.google.android.gms.ads.AdRequest
 import com.ltei.kunzmznzger.R
+import com.ltei.kunzmznzger.libs.Helpers
 import com.ltei.kunzmznzger.local.LocalUserInfo
 import com.ltei.kunzmznzger.models.Expense
 import kotlinx.android.synthetic.main.activity_expense_info.*
@@ -37,8 +38,9 @@ class ExpenseInfoActivity : AppCompatActivity() {
         expenseIdxInRoom = intent.getIntExtra(EXTRAS_EXPENSE_IDX_IN_ROOM, -1)
 
         text_title.text = "Expense : ${getExpense().description}"
-        text_sender.text = getExpense().user!!.username
-        text_amount.text = "spent ${getExpense().value}$"
+        text_sender.text = "From " + getExpense().user!!.username
+        text_amount.text = getExpense().value.toString() + "$"
+        text_when.text = "Date: ${getExpense().createdAt?.toString(Helpers.getDatetimeFormatter())}"
         messagesview.setArray(ArrayList(getExpense().messages))
         button_add_message.setOnClickListener { onButtonAddMessageClickListener() }
     }
