@@ -9,7 +9,7 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/colorHeader"
         android:layout_alignParentTop="true"
         android:gravity="center"
         android:orientation="horizontal">
@@ -22,7 +22,8 @@
             android:text="@string/uninitialized"
             android:paddingStart="24dp"
             android:paddingLeft="24dp"
-            android:textSize="24sp"/>
+            android:textSize="24sp"
+            android:textColor="@color/colorTextTitle"/>
 
         <ImageButton
             android:id="@+id/button_menu"
@@ -52,15 +53,20 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 style="@android:style/ButtonBar"
-                android:layout_marginEnd="1px"
-                android:text="add message"/>
+                android:layout_marginEnd="2px"
+                android:text="add message"
+                android:backgroundTint="@color/colorButtonBar"
+                android:textColor="@color/colorButtonText"/>
             <Button
                 android:id="@+id/button_add_expense"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 style="@android:style/ButtonBar"
-                android:text="add expense"/>
+                android:layout_marginStart="2px"
+                android:text="add expense"
+                android:backgroundTint="@color/colorButtonBar"
+                android:textColor="@color/colorButtonText"/>
         </LinearLayout>
 
         <com.google.android.gms.ads.AdView

@@ -41,7 +41,7 @@ class EventActivity : AppCompatActivity() {
 
         val room = getRoom()
         val event = getEvent()
-        text_title.text = event.name
+        text_title.text = "Event : ${event.name}"
         text_description.text = event.description
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         text_datetime.text = sdf.format(event.date!!.toDateTime().toDate())

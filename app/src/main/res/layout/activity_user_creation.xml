@@ -6,19 +6,14 @@
     android:gravity="center|top"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:background="@color/colorPrimaryDark"
-        android:gravity="center|end">
-    </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center|top"
-        android:orientation="vertical"
-        android:padding="12dp">
+        android:layout_height="64dp"
+        android:background="@color/colorHeader"
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="match_parent"
@@ -26,7 +21,17 @@
             android:gravity="center"
             android:text="Create your profile"
             android:textSize="24sp"
-            android:paddingBottom="16dp"/>
+            android:textColor="@color/colorTextTitle"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center|top"
+        android:orientation="vertical"
+        android:padding="12dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -65,6 +70,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Confirm"
+            android:backgroundTint="@color/colorButtonDefault"
+            android:textColor="@color/colorButtonText"
             android:id="@+id/button_confirm"/>
 
     </LinearLayout>

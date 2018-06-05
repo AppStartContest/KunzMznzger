@@ -36,7 +36,7 @@ class ExpenseInfoActivity : AppCompatActivity() {
         roomIdx = intent.getIntExtra(EXTRAS_ROOM_IDX, -1)
         expenseIdxInRoom = intent.getIntExtra(EXTRAS_EXPENSE_IDX_IN_ROOM, -1)
 
-        text_title.text = getExpense().description
+        text_title.text = "Expense : ${getExpense().description}"
         text_sender.text = getExpense().user!!.username
         text_amount.text = "spent ${getExpense().value}$"
         messagesview.setArray(ArrayList(getExpense().messages))

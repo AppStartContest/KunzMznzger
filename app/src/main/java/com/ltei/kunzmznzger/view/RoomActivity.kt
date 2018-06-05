@@ -36,7 +36,7 @@ class RoomActivity : AppCompatActivity() {
 
 
         roomIdx = intent.getIntExtra(EXTRAS_ROOM_IDX, -1)
-        text_title.text = getRoom().name
+        text_title.text = "Room : ${getRoom().name}"
 
         button_menu.setOnClickListener({
             val dropDown = PopupMenu(applicationContext, button_menu)
