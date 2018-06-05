@@ -56,11 +56,11 @@ class EventActivity : AppCompatActivity() {
             dialog.dialog_enter_text_button.setOnClickListener({
                 if (dialog.dialog_enter_text_edittext.text.toString() != "") {
                     LocalUserInfo.globalInstance.sendMessageToEvent(dialog.dialog_enter_text_edittext.text.toString(), event).thenRun {
-                        this.runOnUiThread {
-                            dialog.cancel()
-                            var messages = getEvent().messages
-                            messengerview.setArray(getEvent().messages)
-                            var a = messages.size
+                        LocalUserInfo.getInstance().load(this).thenRun {
+                            this.runOnUiThread {
+                                dialog.cancel()
+                                messengerview.setArray(getEvent().messages)
+                            }
                         }
                     }
                 } else {

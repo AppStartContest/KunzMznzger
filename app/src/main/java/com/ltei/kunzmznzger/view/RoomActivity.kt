@@ -63,6 +63,13 @@ class RoomActivity : AppCompatActivity() {
         eventlistview.init(getRoom().events, roomIdx!!)
     }
 
+    override fun onResume() {
+        super.onResume()
+        userlistview.setArray(getRoom().users)
+        messengerview.setArray(getRoom().messages)
+        eventlistview.init(getRoom().events, roomIdx!!)
+    }
+
 
 
     fun onButtonCreateExpensePressed() {
@@ -115,9 +122,11 @@ class RoomActivity : AppCompatActivity() {
             dialog.dialog_enter_text_title.text = "Write a message"
             dialog.dialog_enter_text_button.setOnClickListener({
                 if (dialog.dialog_enter_text_edittext.text.toString() != "") {
-                    LocalUserInfo.globalInstance.sendMessageToRoom(dialog.dialog_enter_text_edittext.text.toString(), getRoom()).thenRun {
-                        dialog.dismiss()
-                        this.runOnUiThread { messengerview.setArray(getRoom().messages) }
+                    LocalUserInfo.getInstance().sendMessageToRoom(dialog.dialog_enter_text_edittext.text.toString(), getRoom()).thenRun {
+                        LocalUserInfo.getInstance().load(this).thenRun {
+                            dialog.dismiss()
+                            this.runOnUiThread { messengerview.setArray(getRoom().messages) }
+                        }
                     }
                 } else {
                     Toast.makeText(this, getText(R.string.dialog_void_input_error), Toast.LENGTH_SHORT).show()
