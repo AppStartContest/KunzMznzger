@@ -2,6 +2,7 @@ package com.ltei.kunzmznzger.local
 
 import android.content.Context
 import com.ltei.kunzmznzger.R
+import com.ltei.kunzmznzger.libs.Helpers
 import com.ltei.kunzmznzger.libs.api.UrlParametersMap
 import com.ltei.kunzmznzger.libs.models.Model
 import com.ltei.kunzmznzger.libs.models.exceptions.ModelException
@@ -41,13 +42,23 @@ open class LocalUserInfo {
                 }
     }
 
-    fun create(context: Context, username: String, name: String, password: String, runnable: Runnable) {
-        UserDAO().register(username, password).thenCompose { UserDAO().auth(username, password) }
-                .thenAccept {
-                    this.user = it
-                    val preferences = context.getSharedPreferences(context.getString(R.string.preference_file_id), Context.MODE_PRIVATE)
-                    preferences.edit().putInt(context.getString(R.string.preference_item_user_id), user!!.id).apply()
-                }.thenRun(runnable)
+    fun create(context: Context, username: String, name: String, password: String, resolve: Runnable, reject: Runnable) {
+        UserDAO().findByUsername(username)
+                .thenCompose { user ->
+                    if (user != null) {
+                        CompletableFuture.runAsync(reject)
+                    } else {
+                        UserDAO().register(username, password, name)
+                                .thenCompose { UserDAO().auth(username, password) }
+                                .thenAccept {
+                                    Helpers.log("Authenticated: $it")
+                                    this.user = it
+                                    val preferences = context.getSharedPreferences(context.getString(R.string.preference_file_id), Context.MODE_PRIVATE)
+                                    preferences.edit().putInt(context.getString(R.string.preference_item_user_id), this.user!!.getId()).apply()
+                                    CompletableFuture.runAsync(resolve)
+                                }
+                    }
+                }
     }
 
     fun load(context: Context): CompletableFuture<Void> {
@@ -104,7 +115,7 @@ open class LocalUserInfo {
      *
      * Note: The room should have its expenses already loaded
      */
-    fun calcExpenseStatusInRoom(room: Room) : Double{
+    fun calcExpenseStatusInRoom(room: Room): Double {
         return room.calcUserExpenseStatus(this.user!!)
     }
 
@@ -157,7 +168,7 @@ open class LocalUserInfo {
      * @param room an existing room
      * @throws ModelException if the room is not valid (if it doesn't correspond to db entry)
      */
-    fun sendMessageToRoom(content : String, room: Room): CompletableFuture<Message> {
+    fun sendMessageToRoom(content: String, room: Room): CompletableFuture<Message> {
         throwIfInvalidModel(room)
         var message = Message()
         message.user = this.user
@@ -189,7 +200,7 @@ open class LocalUserInfo {
      * @param expense an existing expense
      * @throws ModelException if the room is not valid (if it doesn't correspond to db entry)
      */
-    fun sendMessageToExpense(content : String, expense: Expense): CompletableFuture<Message> {
+    fun sendMessageToExpense(content: String, expense: Expense): CompletableFuture<Message> {
         throwIfInvalidModel(expense)
         var message = Message()
         message.user = this.user
@@ -216,7 +227,7 @@ open class LocalUserInfo {
         })
     }
 
-    fun sendMessageToEvent(content : String, event: Event): CompletableFuture<Message> {
+    fun sendMessageToEvent(content: String, event: Event): CompletableFuture<Message> {
         throwIfInvalidModel(event)
         var message = Message()
         message.user = this.user
@@ -239,10 +250,10 @@ open class LocalUserInfo {
                 .thenCompose {
                     room.attach(it)
                 }
-              /*  .thenCompose {
-                    it.name ="ff"
-                    it.save()
-                }*/
+        /*  .thenCompose {
+              it.name ="ff"
+              it.save()
+          }*/
 
     }
 
@@ -271,7 +282,7 @@ open class LocalUserInfo {
      * @param room an existing room
      * @throws ModelException if the room is not valid (if it doesn't correspond to db entry)
      */
-    fun createEvent(name: String,description: String,date: Date , time: Time, room: Room): CompletableFuture<Event> {
+    fun createEvent(name: String, description: String, date: Date, time: Time, room: Room): CompletableFuture<Event> {
         throwIfInvalidModel(room)
         var event = Event()
         event.name = name
@@ -294,8 +305,7 @@ open class LocalUserInfo {
      * @param room an existing room
      * @throws ModelException if the room is not valid (if it doesn't correspond to db entry)
      */
-    fun createExpense(name: String , value : Double , description: String , room: Room) : CompletableFuture<Expense>
-    {
+    fun createExpense(name: String, value: Double, description: String, room: Room): CompletableFuture<Expense> {
         throwIfInvalidModel(room)
         var expense = Expense()
         expense.value = value

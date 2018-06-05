@@ -36,7 +36,9 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textEmailAddress|textEmailSubject"
             android:gravity="center"
+            android:layout_marginBottom="25dp"
             android:id="@+id/edittext_name" />
 
         <TextView
@@ -48,6 +50,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_marginBottom="25dp"
+            android:inputType="text|textEmailAddress"
             android:id="@+id/edittext_pseudo" />
 
         <TextView
@@ -59,7 +63,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_marginBottom="25dp"
+            android:inputType="textPassword"
             android:id="@+id/edittext_password"/>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Confirm your password"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:inputType="textPassword"
+            android:layout_marginBottom="25dp"
+            android:id="@+id/edittext_confirm_password"
+            android:imeOptions="actionDone" />
 
         <Button
             android:layout_width="match_parent"

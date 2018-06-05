@@ -5,9 +5,9 @@
 
     <item
         android:id="@+id/menu_item_sorter_biggestfirst"
-        app:showAsAction="ifRoom"
         android:title="Biggest first"
-        android:visible="true" />
+        android:visible="true"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menu_item_sorter_smallestfirst"
         app:showAsAction="ifRoom|withText"
