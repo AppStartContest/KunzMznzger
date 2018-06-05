@@ -65,20 +65,6 @@ public abstract class ModelManager<T extends Model>
                 return null;
             return list.get(0);
         }));
-//                    handleResponseList(apiResponse);
-//                    JSONArray json = apiResponse.getJson();
-//
-//                    ArrayList<T> list = new ArrayList<>();
-//                    for (Object obj : json) {
-//                        try {
-//                            list.add(this.buildFromJson(((JSONObject) obj)));
-//                        } catch (ReflectiveOperationException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//
-//                    return list.isEmpty() ? null : list.get(0);
-//                }));
     }
 
     /**
@@ -372,8 +358,31 @@ public abstract class ModelManager<T extends Model>
      * @return the created model
      */
     public CompletableFuture<T> create(Model<T> model) {
-        ApiQuery query = new ApiQueryBuilder(url(), Http.POST).data(model.toJson()).getQuery();
-        System.out.println(query);
+        return this.create(model, null);
+    }
+
+    /**
+     * Create a model in the database
+     *
+     * @param model the new model to create
+     * @param params additional parameters
+     * @return the created model
+     */
+    public CompletableFuture<T> create(Model<T> model, UrlParametersMap params) {
+        ApiQuery query = new ApiQueryBuilder(url(), Http.POST).params(params).data(model.toJson()).getQuery();
+        return query.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> this.handleResponseObject(apiResponse)));
+    }
+
+
+    /**
+     * Update a model in the database
+     *
+     * @param model  the model to update
+     * @param params additional parameters
+     * @return the updated model
+     */
+    public CompletableFuture<T> update(Model<T> model, UrlParametersMap params) {
+        ApiQuery query = new ApiQueryBuilder(url() + "/" + model.getId(), Http.PUT).params(params).data(model.toJson()).getQuery();
         return query.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> this.handleResponseObject(apiResponse)));
     }
 
@@ -384,8 +393,7 @@ public abstract class ModelManager<T extends Model>
      * @return the updated model
      */
     public CompletableFuture<T> update(Model<T> model) {
-        ApiQuery query = new ApiQueryBuilder(url() + "/" + model.getId(), Http.PUT).data(model.toJson()).getQuery();
-        return query.execute().thenCompose(apiResponse -> CompletableFuture.supplyAsync(() -> this.handleResponseObject(apiResponse)));
+        return this.update(model, null);
     }
 
     /**
