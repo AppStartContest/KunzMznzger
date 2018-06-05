@@ -14,6 +14,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.ltei.kunzmznzger.local.LocalUserInfo
 import com.ltei.kunzmznzger.models.Room
+import com.ltei.kunzmznzger.models.generateDummy
 import com.ltei.kunzmznzger.view.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_enter_text.*
@@ -62,6 +63,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Toast.makeText(this,"caca",Toast.LENGTH_LONG)
 
         // Initialize globals
         MobileAds.initialize(this, getString(R.string.google_ad_banner_id))
