@@ -56,6 +56,7 @@ class Message : Model<Message>(), Serializable {
             "room" -> this.room = message.room
             "expense" -> this.expense = message.expense
             "event" -> this.event = message.event
+            //"user" -> this.user = expense!!.user
         }
         return this
     }

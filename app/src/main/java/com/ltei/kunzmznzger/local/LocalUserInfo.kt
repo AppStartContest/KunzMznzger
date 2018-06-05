@@ -188,6 +188,7 @@ open class LocalUserInfo {
         var message = Message()
         message.user = this.user
         message.expense = expense
+        message.content = content
 
         return this.saveMessage(message).thenCompose({ m: Message ->
             expense.addMessage(m)
@@ -214,6 +215,7 @@ open class LocalUserInfo {
         var message = Message()
         message.user = this.user
         message.event = event
+        message.content = content
 
         return this.saveMessage(message).thenCompose({ m: Message ->
             event.addMessage(m)

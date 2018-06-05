@@ -47,7 +47,7 @@ class Expense : Model<Expense>(), Serializable {
     }
 
     override fun toString(): String {
-        return "Expense(id=${getId()} value=$value, createdAt=$createdAt, updatedAt=$updatedAt, user=$user, room=$room, message=$messages"
+        return "Expense(id=${getId()} value=$value, description=$description createdAt=$createdAt, updatedAt=$updatedAt, user=$user, room=$room, message=$messages"
 
     }
 
