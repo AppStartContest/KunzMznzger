@@ -26,4 +26,10 @@
         android:title="Graph"
         android:visible="true" />
 
+    <item
+        android:id="@+id/menu_group_items_info"
+        app:showAsAction="ifRoom"
+        android:title="Info"
+        android:visible="true" />
+
 </menu>

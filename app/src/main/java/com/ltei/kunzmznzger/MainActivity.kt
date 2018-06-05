@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
         ad_banner.loadAd(adRequest)
 
         main_button_create_group.setOnClickListener(buttonCreateRoomClickListener)
+
     }
 
 
@@ -73,6 +74,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             LocalUserInfo.getInstance().load(this).thenRun {
                 this.runOnUiThread {
+                    text_title.text = "Welcome, ${LocalUserInfo.getInstance().getUser().username}"
                     roomlistview.setArray(LocalUserInfo.getInstance().getRooms())
                 }
             }

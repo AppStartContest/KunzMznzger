@@ -19,7 +19,6 @@ abstract class HistorySort: Serializable {
         fun mostRecentLast(): HistorySort {
             return MostRecentLast()
         }
-        //TODO Implement everything
         class BiggestAmount(): HistorySort() {
             override fun toString(): String { return "Biggest amount" }
             override fun sorted(expenses: ArrayList<Expense>): ArrayList<Expense> {

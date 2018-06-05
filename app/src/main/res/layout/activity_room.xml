@@ -8,11 +8,22 @@
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:background="@color/colorPrimaryDark"
+        android:layout_height="64dp"
+        android:background="@color/colorHeader"
         android:layout_alignParentTop="true"
-        android:gravity="center|end"
+        android:gravity="center"
         android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/uninitialized"
+            android:paddingStart="24dp"
+            android:paddingLeft="24dp"
+            android:textSize="24sp"
+            android:textColor="@color/colorTextTitle"/>
 
         <ImageButton
             android:id="@+id/button_menu"
@@ -42,15 +53,20 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 style="@android:style/ButtonBar"
-                android:layout_marginEnd="1px"
-                android:text="add message"/>
+                android:layout_marginEnd="2px"
+                android:text="add message"
+                android:backgroundTint="@color/colorButtonBar"
+                android:textColor="@color/colorButtonText"/>
             <Button
                 android:id="@+id/button_add_expense"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 style="@android:style/ButtonBar"
-                android:text="add expense"/>
+                android:layout_marginStart="2px"
+                android:text="add expense"
+                android:backgroundTint="@color/colorButtonBar"
+                android:textColor="@color/colorButtonText"/>
         </LinearLayout>
 
         <com.google.android.gms.ads.AdView
@@ -77,30 +93,28 @@
             android:padding="12dp">
 
             <TextView
-                android:id="@+id/text_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/uninitialized"
-                android:paddingBottom="16dp"
-                android:textSize="24sp"/>
-
-            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Users"/>
             <HorizontalScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp">
+                android:layout_height="wrap_content">
                 <com.ltei.kunzmznzger.view.listlinearlayout.UserListView
                     android:id="@+id/userlistview"
                     android:paddingTop="16dp"
                     android:paddingBottom="16dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"/>
             </HorizontalScrollView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/colorAccentDark"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -110,9 +124,15 @@
             <com.ltei.kunzmznzger.view.listlinearlayout.EventListView
                 android:id="@+id/eventlistview"
                 android:paddingTop="16dp"
-                android:layout_marginBottom="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/colorAccentDark"/>
 
             <TextView
                 android:layout_width="match_parent"

@@ -12,8 +12,7 @@ import com.ltei.kunzmznzger.models.Room
 import kotlinx.android.synthetic.main.activity_room.*
 import kotlinx.android.synthetic.main.dialog_create_expense.*
 import kotlinx.android.synthetic.main.dialog_enter_text.*
-
-
+import kotlinx.android.synthetic.main.dialog_room_info.*
 
 
 class RoomActivity : AppCompatActivity() {
@@ -37,7 +36,7 @@ class RoomActivity : AppCompatActivity() {
 
 
         roomIdx = intent.getIntExtra(EXTRAS_ROOM_IDX, -1)
-        text_title.text = getRoom().name
+        text_title.text = "Room : ${getRoom().name}"
 
         button_menu.setOnClickListener({
             val dropDown = PopupMenu(applicationContext, button_menu)
@@ -48,6 +47,7 @@ class RoomActivity : AppCompatActivity() {
                     R.id.menu_group_items_add_event -> { onButtonAddEventPressed() }
                     R.id.menu_group_items_history -> { onButtonHistoryPressed() }
                     R.id.menu_group_items_graph -> { onButtonGraphPressed() }
+                    R.id.menu_group_items_info -> { onButtonInfoPressed() }
                     else -> throw IllegalStateException()
                 }
                 true
@@ -58,6 +58,13 @@ class RoomActivity : AppCompatActivity() {
         button_add_message.setOnClickListener { onButtonAddMessagePressed() }
         button_add_expense.setOnClickListener { onButtonCreateExpensePressed() }
 
+        userlistview.setArray(getRoom().users)
+        messengerview.setArray(getRoom().messages)
+        eventlistview.init(getRoom().events, roomIdx!!)
+    }
+
+    override fun onResume() {
+        super.onResume()
         userlistview.setArray(getRoom().users)
         messengerview.setArray(getRoom().messages)
         eventlistview.init(getRoom().events, roomIdx!!)
@@ -77,7 +84,11 @@ class RoomActivity : AppCompatActivity() {
                             dialog.edittext_amount.text.toString().toDouble(),
                             dialog.edittext_description.text.toString(),
                             getRoom()
-                    ).thenRun { dialog.dismiss() }
+                    ).thenRun {
+                        LocalUserInfo.getInstance().load(this).thenRun {
+                            dialog.dismiss()
+                        }
+                    }
                 }
             }
         }
@@ -111,9 +122,11 @@ class RoomActivity : AppCompatActivity() {
             dialog.dialog_enter_text_title.text = "Write a message"
             dialog.dialog_enter_text_button.setOnClickListener({
                 if (dialog.dialog_enter_text_edittext.text.toString() != "") {
-                    LocalUserInfo.globalInstance.sendMessageToRoom(dialog.dialog_enter_text_edittext.text.toString(), getRoom()).thenRun {
-                        dialog.dismiss()
-                        this.runOnUiThread { messengerview.setArray(getRoom().messages) }
+                    LocalUserInfo.getInstance().sendMessageToRoom(dialog.dialog_enter_text_edittext.text.toString(), getRoom()).thenRun {
+                        LocalUserInfo.getInstance().load(this).thenRun {
+                            dialog.dismiss()
+                            this.runOnUiThread { messengerview.setArray(getRoom().messages) }
+                        }
                     }
                 } else {
                     Toast.makeText(this, getText(R.string.dialog_void_input_error), Toast.LENGTH_SHORT).show()
@@ -136,9 +149,25 @@ class RoomActivity : AppCompatActivity() {
     }
 
     fun onButtonGraphPressed() {
-        val intent = Intent(this, GraphActivity::class.java)
-        intent.putExtra(GraphActivity.EXTRAS_ROOM_IDX, roomIdx)
-        startActivity(intent)
+        if (getRoom().users.size == 1) {
+            Toast.makeText(this, "There is no info as your are alone in this room", Toast.LENGTH_SHORT).show()
+        } else {
+            val intent = Intent(this, GraphActivity::class.java)
+            intent.putExtra(GraphActivity.EXTRAS_ROOM_IDX, roomIdx)
+            startActivity(intent)
+        }
+    }
+
+    fun onButtonInfoPressed() {
+        if (getRoom().users.size == 1) {
+            Toast.makeText(this, "There is no info as your are alone in this room", Toast.LENGTH_SHORT).show()
+        } else {
+            val dialog = DialogRoomInfo(this)
+            dialog.runOnCreate = Runnable {
+                dialog.roomdebtsinfolistview.setArray(getRoom().computeDepts())
+            }
+            dialog.show()
+        }
     }
 
 }
