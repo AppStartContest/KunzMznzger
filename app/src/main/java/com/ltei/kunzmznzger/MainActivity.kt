@@ -48,21 +48,21 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Toast.makeText(this,"caca",Toast.LENGTH_LONG)
 
-        // Initialize globals
+        // Initialize admob
         MobileAds.initialize(this, getString(R.string.google_ad_banner_id))
+
+        // Initialize activity ad
         val adRequest = AdRequest.Builder().build()
         ad_banner.loadAd(adRequest)
-
-
-        main_button_earns.setOnClickListener({ onButtonEarnsClicked() })
-        main_button_dept.setOnClickListener({ onButtonDeptsClicked() })
 
         main_button_create_group.setOnClickListener(buttonCreateRoomClickListener)
     }
 
 
+    override fun onPause() {
+        super.onPause()
+    }
     override fun onResume() {
         super.onResume()
         if (!LocalUserInfo.getInstance().isCreated(this)) {
@@ -78,17 +78,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-    private fun onButtonEarnsClicked() {
-        val intent = Intent(this, HistoryActivity::class.java)
-        intent.putExtra(HistoryActivity.EXTRAS_LIST, LocalUserInfo.getInstance().getUser().expenses)
-        startActivity(intent)
-    }
-    private fun onButtonDeptsClicked() {
-        val intent = Intent(this, HistoryActivity::class.java)
-        intent.putExtra(HistoryActivity.EXTRAS_LIST, LocalUserInfo.getInstance().getUser().expenses)
-        startActivity(intent)
-    }
     fun gotoActivityGroup(roomIdx: Int) {
         val intent = Intent(this, RoomActivity::class.java)
         intent.putExtra(RoomActivity.EXTRAS_ROOM_IDX, roomIdx)

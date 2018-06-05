@@ -2,17 +2,11 @@ package com.ltei.kunzmznzger.view
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.Toast
+import com.google.android.gms.ads.AdRequest
 import com.ltei.kunzmznzger.R
 import com.ltei.kunzmznzger.local.LocalUserInfo
 import com.ltei.kunzmznzger.models.Expense
-import com.ltei.kunzmznzger.models.Message
-import com.ltei.kunzmznzger.models.User
 import kotlinx.android.synthetic.main.activity_expense_info.*
 import kotlinx.android.synthetic.main.dialog_enter_text.*
 
@@ -28,6 +22,12 @@ class ExpenseInfoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_expense_info)
+
+        // Initialize activity ad
+        val adRequest = AdRequest.Builder().build()
+        ad_banner.loadAd(adRequest)
+
+
 
         expense = intent.getSerializableExtra(EXTRAS_EXPENSE) as Expense
         text_title.text = expense!!.description

@@ -7,6 +7,7 @@ import android.view.Gravity
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.*
+import com.google.android.gms.ads.AdRequest
 import com.ltei.kunzmznzger.R
 import com.ltei.kunzmznzger.models.Expense
 import com.ltei.kunzmznzger.models.Room
@@ -18,7 +19,6 @@ class HistoryActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRAS_LIST = "GROUP_ACTIVITY_EXTRAS_LIST"
-        private var list: ArrayList<Expense>? = null
     }
 
 
@@ -28,6 +28,11 @@ class HistoryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
+
+        // Initialize activity ad
+        val adRequest = AdRequest.Builder().build()
+        ad_banner.loadAd(adRequest)
+
 
         list.addAll( intent.getSerializableExtra(EXTRAS_LIST) as ArrayList<Expense>)
         history_button_sort.setOnClickListener({ onSortButtonClickListener() })
