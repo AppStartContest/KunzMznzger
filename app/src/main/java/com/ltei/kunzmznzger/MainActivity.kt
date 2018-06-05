@@ -3,20 +3,14 @@ package com.ltei.kunzmznzger
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.Toast
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
-import com.ltei.kunzmznzger.graph.Graph
 import com.ltei.kunzmznzger.local.LocalUserInfo
-import com.ltei.kunzmznzger.models.Room
-import com.ltei.kunzmznzger.models.generateDummy
-import com.ltei.kunzmznzger.view.*
+import com.ltei.kunzmznzger.view.DialogEnterText
+import com.ltei.kunzmznzger.view.RoomActivity
+import com.ltei.kunzmznzger.view.UserCreationActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_enter_text.*
 

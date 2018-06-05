@@ -8,6 +8,7 @@ import android.widget.Toast
 import com.google.android.gms.ads.AdRequest
 import com.ltei.kunzmznzger.R
 import com.ltei.kunzmznzger.local.LocalUserInfo
+import com.ltei.kunzmznzger.models.Message
 import com.ltei.kunzmznzger.models.Room
 import kotlinx.android.synthetic.main.activity_room.*
 import kotlinx.android.synthetic.main.dialog_create_expense.*
@@ -22,9 +23,10 @@ class RoomActivity : AppCompatActivity() {
     }
 
 
-
     private var roomIdx: Int? = null
-    private fun getRoom(): Room { return LocalUserInfo.getInstance().getRooms()[roomIdx!!] }
+    private fun getRoom(): Room {
+        return LocalUserInfo.getInstance().getRooms()[roomIdx!!]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,11 +45,21 @@ class RoomActivity : AppCompatActivity() {
             dropDown.menuInflater.inflate(R.menu.menu_group_items, dropDown.menu)
             dropDown.setOnMenuItemClickListener({
                 when (it.itemId) {
-                    R.id.menu_group_items_add_member -> { onButtonAddMemberPressed() }
-                    R.id.menu_group_items_add_event -> { onButtonAddEventPressed() }
-                    R.id.menu_group_items_history -> { onButtonHistoryPressed() }
-                    R.id.menu_group_items_graph -> { onButtonGraphPressed() }
-                    R.id.menu_group_items_info -> { onButtonInfoPressed() }
+                    R.id.menu_group_items_add_member -> {
+                        onButtonAddMemberPressed()
+                    }
+                    R.id.menu_group_items_add_event -> {
+                        onButtonAddEventPressed()
+                    }
+                    R.id.menu_group_items_history -> {
+                        onButtonHistoryPressed()
+                    }
+                    R.id.menu_group_items_graph -> {
+                        onButtonGraphPressed()
+                    }
+                    R.id.menu_group_items_info -> {
+                        onButtonInfoPressed()
+                    }
                     else -> throw IllegalStateException()
                 }
                 true
@@ -59,21 +71,22 @@ class RoomActivity : AppCompatActivity() {
         button_add_expense.setOnClickListener { onButtonCreateExpensePressed() }
 
         userlistview.setArray(getRoom().users)
-        messengerview.setArray(getRoom().messages)
+        messengerview.setArray(sortMessages(getRoom().messages))
         eventlistview.init(getRoom().events, roomIdx!!)
+    }
+
+    private fun sortMessages(messages: ArrayList<Message>): ArrayList<Message> {
+        messages.sortWith(Comparator { m1, m2 -> m2.createdAt!!.compareTo(m1.createdAt) })
+        return messages
     }
 
     override fun onResume() {
         super.onResume()
 
-        val messages = getRoom().messages
-        messages.sortWith(Comparator { m1, m2 -> m2.createdAt!!.compareTo(m1.createdAt) })
-
         userlistview.setArray(getRoom().users)
-        messengerview.setArray(messages)
+        messengerview.setArray(sortMessages(getRoom().messages))
         eventlistview.init(getRoom().events, roomIdx!!)
     }
-
 
 
     fun onButtonCreateExpensePressed() {
@@ -128,7 +141,9 @@ class RoomActivity : AppCompatActivity() {
                     LocalUserInfo.getInstance().sendMessageToRoom(dialog.dialog_enter_text_edittext.text.toString(), getRoom()).thenRun {
                         LocalUserInfo.getInstance().load(this).thenRun {
                             dialog.dismiss()
-                            this.runOnUiThread { messengerview.setArray(getRoom().messages) }
+                            this.runOnUiThread {
+                                messengerview.setArray(sortMessages(getRoom().messages))
+                            }
                         }
                     }
                 } else {
