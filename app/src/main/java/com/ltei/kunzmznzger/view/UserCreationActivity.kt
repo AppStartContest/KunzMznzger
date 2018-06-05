@@ -17,10 +17,6 @@ class UserCreationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_creation)
 
-        // Initialize activity ad
-        val adRequest = AdRequest.Builder().build()
-        ad_banner.loadAd(adRequest)
-
         button_confirm.setOnClickListener({
             val name = edittext_name.text.toString()
             if (name == "") {

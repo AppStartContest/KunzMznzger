@@ -50,7 +50,7 @@ class HistoryActivity : AppCompatActivity() {
             view.background = this.getDrawable(R.color.colorListItemBackground)
             view.setPadding(16, 16, 16, 16)
             view.layoutParams = listItemLayoutParams
-            view.text = (item as Expense).description
+            view.text = "${(item as Expense).description} (${item.value}$)"
             view.textSize = 12f
             view.setOnClickListener {
                 onHistoryItemClickListener(idx)
