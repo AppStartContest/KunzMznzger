@@ -23,14 +23,15 @@ class RoomActivity : AppCompatActivity() {
 
 
 
+    private var roomIdx: Int? = null
     private var room: Room? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_room)
 
-        val roomIdx = intent.getIntExtra(EXTRAS_ROOM_IDX, -1)
-        room = LocalUserInfo.getInstance().getRooms()[roomIdx]
+        roomIdx = intent.getIntExtra(EXTRAS_ROOM_IDX, -1)
+        room = LocalUserInfo.getInstance().getRooms()[roomIdx!!]
         text_title.text = room.toString()
 
         button_menu.setOnClickListener({
@@ -98,7 +99,7 @@ class RoomActivity : AppCompatActivity() {
 
     fun onButtonAddEventPressed() {
         val intent = Intent(this, EventCreationActivity::class.java)
-        intent.putExtra(EventCreationActivity.EXTRAS_ROOM, room)
+        intent.putExtra(EventCreationActivity.EXTRAS_ROOM_IDX, roomIdx)
         startActivity(intent)
         /*val dialog = DialogEnterText(this, "Enter the title")
         dialog.dialog_enter_text_button.setOnClickListener({
