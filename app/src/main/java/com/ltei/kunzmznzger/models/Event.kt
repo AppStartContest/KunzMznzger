@@ -6,8 +6,9 @@ import com.ltei.kunzmznzger.libs.time.Date
 import com.ltei.kunzmznzger.libs.time.Time
 import com.ltei.kunzmznzger.models.dao.EventDAO
 import org.json.simple.JSONObject
+import java.io.Serializable
 
-class Event : Model<Event>() {
+class Event : Model<Event>(), Serializable {
     var createdAt: String? = null
     var updatedAt: String? = null
     var deletedAt: String? = null

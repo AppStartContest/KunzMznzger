@@ -15,7 +15,7 @@ import org.joda.time.DateTime
 class EventCreationActivity: AppCompatActivity() {
 
     companion object {
-        const val EXTRAS_ROOM = "EVENT_CREATION_ACTIVITY_EXTRAS_ROOM"
+        const val EXTRAS_ROOM_IDX = "EVENT_CREATION_ACTIVITY_EXTRAS_ROOM_IDX"
     }
 
 
@@ -57,7 +57,7 @@ class EventCreationActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event_creation)
 
-        room = intent.getSerializableExtra(EXTRAS_ROOM) as Room
+        room = LocalUserInfo.getInstance().getRooms()[intent.getIntExtra(EXTRAS_ROOM_IDX, -1)]
         onViewIdxChange()
     }
 

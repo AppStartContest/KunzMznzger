@@ -1,10 +1,7 @@
 package com.ltei.kunzmznzger.local
 
-import android.content.ClipDescription
 import android.content.Context
-import android.widget.Toast
 import com.ltei.kunzmznzger.R
-import com.ltei.kunzmznzger.R.id.message
 import com.ltei.kunzmznzger.libs.api.UrlParametersMap
 import com.ltei.kunzmznzger.libs.models.Model
 import com.ltei.kunzmznzger.libs.models.exceptions.ModelException
@@ -13,9 +10,8 @@ import com.ltei.kunzmznzger.libs.time.Time
 import com.ltei.kunzmznzger.models.*
 import com.ltei.kunzmznzger.models.dao.UserDAO
 import java.util.concurrent.CompletableFuture
-import kotlin.math.exp
 
-class LocalUserInfo {
+open class LocalUserInfo {
 
     companion object {
 
@@ -54,22 +50,25 @@ class LocalUserInfo {
                 }.thenRun(runnable)
     }
 
-    fun load(context: Context) {
+    fun load(context: Context): CompletableFuture<Void> {
         val key = context.getString(R.string.preference_item_user_id)
         val id = context.getSharedPreferences(context.getString(R.string.preference_file_id), Context.MODE_PRIVATE)
                 .getInt(key, Int.MAX_VALUE)
 
-        UserDAO().find(id, UrlParametersMap().withAllRelations()).thenAccept { this.user = it }
+        return UserDAO().find(id, UrlParametersMap().withAllRelations()).thenCompose {
+            it.load("rooms", "events", "expenses", "users.rooms.expenses")
+        }.thenAccept { this.user = it  }
     }
 
-    fun load(context: Context, runnable: Runnable) {
+    /*fun load(context: Context, runnable: Runnable) {
         val key = context.getString(R.string.preference_item_user_id)
         val id = context.getSharedPreferences(context.getString(R.string.preference_file_id), Context.MODE_PRIVATE)
                 .getInt(key, Int.MAX_VALUE)
 
-        UserDAO().find(id, UrlParametersMap().withAllRelations()).thenAccept { this.user = it }
-                .thenRun(runnable)
-    }
+        UserDAO().find(id, UrlParametersMap().withAllRelations()).thenCompose {
+            it.load("rooms", "events", "expenses", "users.rooms.expenses")
+        }.thenAccept { this.user = it  }.thenRun(runnable)
+    }*/
 
     /*fun getHistory(): Array<LocalExpenseInfo> {
         //TODO
@@ -157,6 +156,7 @@ class LocalUserInfo {
         var message = Message()
         message.user = this.user
         message.room = room
+        message.content = content
 
         return this.saveMessage(message).thenCompose({ m: Message ->
             room.addMessage(m)
@@ -188,6 +188,7 @@ class LocalUserInfo {
         var message = Message()
         message.user = this.user
         message.expense = expense
+        message.content = content
 
         return this.saveMessage(message).thenCompose({ m: Message ->
             expense.addMessage(m)
@@ -214,6 +215,7 @@ class LocalUserInfo {
         var message = Message()
         message.user = this.user
         message.event = event
+        message.content = content
 
         return this.saveMessage(message).thenCompose({ m: Message ->
             event.addMessage(m)
