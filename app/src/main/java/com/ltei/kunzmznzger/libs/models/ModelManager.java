@@ -179,7 +179,10 @@ public abstract class ModelManager<T extends Model>
             try {
                 field = clazz.getDeclaredField(camelCaseKey);
             } catch (ReflectiveOperationException e) {
-                System.err.println(String.format("No field '%s' (for json field '%s') in model class %s", camelCaseKey, key, clazz.getSimpleName()));
+                Helpers.log(
+                        String.format("No field '%s' (for json field '%s') in model class %s", camelCaseKey, key, clazz.getSimpleName()),
+                        "BUILD_FROM_JSON"
+                );
                 continue;
             }
 
@@ -190,42 +193,42 @@ public abstract class ModelManager<T extends Model>
 
             if (fieldType.isAssignableFrom(Integer.class)) {
                 int v = Integer.valueOf(value.toString());
-                setter = clazz.getDeclaredMethod(setterName, int.class);
+                setter = clazz.getDeclaredMethod(setterName, Integer.class);
                 setter.invoke(instance, v);
             }
             else if (fieldType.isAssignableFrom(Long.class)) {
                 long v = Long.valueOf(value.toString());
-                setter = clazz.getDeclaredMethod(setterName, long.class);
+                setter = clazz.getDeclaredMethod(setterName, Long.class);
                 setter.invoke(instance, v);
             }
             else if (fieldType.isAssignableFrom(Float.class)) {
                 float v = Float.valueOf(value.toString());
-                setter = clazz.getDeclaredMethod(setterName, float.class);
+                setter = clazz.getDeclaredMethod(setterName, Float.class);
                 setter.invoke(instance, v);
             }
             else if (fieldType.isAssignableFrom(Short.class)) {
                 short v = Short.valueOf(value.toString());
-                setter = clazz.getDeclaredMethod(setterName, short.class);
+                setter = clazz.getDeclaredMethod(setterName, Short.class);
                 setter.invoke(instance, v);
             }
             else if (fieldType.isAssignableFrom(Double.class)) {
                 double v = Double.valueOf(value.toString());
-                setter = clazz.getDeclaredMethod(setterName, double.class);
+                setter = clazz.getDeclaredMethod(setterName, Double.class);
                 setter.invoke(instance, v);
             }
             else if (fieldType.isAssignableFrom(Boolean.class)) {
                 boolean v = Boolean.valueOf(value.toString());
-                setter = clazz.getDeclaredMethod(setterName, boolean.class);
+                setter = clazz.getDeclaredMethod(setterName, Boolean.class);
                 setter.invoke(instance, v);
             }
             else if (fieldType.isAssignableFrom(Byte.class)) {
                 byte v = Byte.valueOf(value.toString());
-                setter = clazz.getDeclaredMethod(setterName, byte.class);
+                setter = clazz.getDeclaredMethod(setterName, Byte.class);
                 setter.invoke(instance, v);
             }
             else if (fieldType.isAssignableFrom(Character.class)) {
                 char v = value.toString().charAt(0);
-                setter = clazz.getDeclaredMethod(setterName, char.class);
+                setter = clazz.getDeclaredMethod(setterName, Character.class);
                 setter.invoke(instance, v);
             }
             else if (fieldType.isAssignableFrom(String.class)) {
@@ -461,7 +464,7 @@ public abstract class ModelManager<T extends Model>
         return this.AttachDetachOrSync(left, right, null, params, Http.DELETE); // Sync = PUT request
     }
 
-    private UrlParametersMap buildAttachDetachOrSyncUrlParams(Model right){
+    private UrlParametersMap buildAttachDetachOrSyncUrlParams(Model right) {
         String rightNamespace = right.getManagerInstance().getNamespace();
         return new UrlParametersMap().with(rightNamespace);
     }

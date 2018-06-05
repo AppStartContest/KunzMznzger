@@ -1,6 +1,6 @@
 package com.ltei.kunzmznzger.models
 
-import com.ltei.kunzmznzger.libs.Dept
+import com.ltei.kunzmznzger.libs.Debt
 import com.ltei.kunzmznzger.libs.models.Model
 import com.ltei.kunzmznzger.libs.models.ModelManager
 import com.ltei.kunzmznzger.models.dao.RoomDAO
@@ -92,7 +92,8 @@ class Room : Model<Room>(), Serializable {
 
     // ----- Compute dept
 
-    fun computeDepts(): ArrayList<Dept> {
+    fun computeDepts(): ArrayList<Debt> {
+        val debts = arrayListOf<Debt>()
         val avg = this.calcExpenseAverage()
         val averages = hashMapOf<User, Double>()
 
@@ -100,8 +101,51 @@ class Room : Model<Room>(), Serializable {
             averages[user] = -avg + this.expenses.stream().filter { it.user!!.id == user.id }.mapToDouble { it.value!! }.sum()
         }
 
-        val positives = averages.filter { it.value > 0 }
-        val negatives = averages.filter { it.value < 0 }
+        var positives = averages.filter { it.value > 0 } as HashMap<User, Double>
+        var negatives = averages.filter { it.value < 0 } as HashMap<User, Double>
+
+        var totalToTransfert = positives.values.sum()
+
+        // Direct correspondence
+        for ((puser, pvalue) in positives) {
+            for ((nuser, nvalue) in negatives) {
+                if (pvalue != -nvalue) continue
+
+                debts.add(Debt(nuser, pvalue, nuser))
+                positives[puser] = 0.0
+                negatives[nuser] = 0.0
+            }
+        }
+
+        while (totalToTransfert != 0.0) {
+            var maxPosUser = positives.keys.first()
+            var maxPosValue = -1.0
+
+            var minNegUser: User
+            var minNegValue = 1.0
+
+            // Looking for the max positive
+            for ((puser, pvalue) in positives) {
+                if (pvalue == 0.0) continue
+                if (pvalue > maxPosValue) {
+                    maxPosValue = pvalue
+                    maxPosUser = puser
+                }
+            }
+
+            // Looking for the min negative such as maxNeg < (-1) * maxPos
+            for ((nuser, nvalue) in negatives) {
+                if (nvalue == 0.0) continue
+                // If the nvalue is lower than the lowest so far AND ...
+                if ( nvalue < minNegValue && -1 * nvalue < maxPosValue){
+                    minNegValue = nvalue
+                    minNegUser = nuser
+                }
+            }
+
+            // Update the maps, register the dept and update the total
+            positives[maxPosUser] += minNegValue
+        }
 
         return arrayListOf()
     }

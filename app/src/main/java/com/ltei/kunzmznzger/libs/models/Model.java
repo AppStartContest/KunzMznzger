@@ -5,6 +5,10 @@ import com.ltei.kunzmznzger.libs.models.exceptions.RelationException;
 
 import org.json.simple.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -66,12 +70,69 @@ public abstract class Model<T extends Model> implements Comparable<Model<T>>
 
     /**
      * Load a relation to this. The relation name is the name of the attribute but in snake_case.
+     *
      * @param relation The relation name which is the name of the attribute but in snake_case
      * @return updated this in a CompletableFuture
      */
     public CompletableFuture<T> load(String relation) {
         return getManagerInstance().find(this.id, new UrlParametersMap().with(relation))
                 .thenCompose((T t) -> CompletableFuture.supplyAsync(() -> this.copyRelation(relation, t)));
+    }
+
+    /**
+     * Load a relation to this. The relation name is the name of the attribute but in snake_case.
+     *
+     * @param relation        The relation name which is the name of the attribute but in snake_case
+     * @param nestedRelations additional parameters
+     * @return updated this in a CompletableFuture
+     */
+    public CompletableFuture<T> load(String relation, String... nestedRelations) {
+        UrlParametersMap params = new UrlParametersMap().with(relation);
+        for (String nested : nestedRelations) {
+            params.with(relation + '.' + nested);
+        }
+
+        return getManagerInstance().find(this.id, params.with(relation))
+                .thenCompose((T t) -> CompletableFuture.supplyAsync(() -> this.copyRelation(relation, t)));
+    }
+
+    /**
+     * <b>Kotlin example:</b><br/>
+     * <code>
+     * val map = hashMapOf(<br/>
+     * &nbsp; &nbsp; "rooms" to listOf("users", "events", "expenses.messages.user"),<br/>
+     * &nbsp; &nbsp; "expenses" to listOf("user", "room")<br/>
+     * )<br/>
+     * <br/>
+     * user.load(map).thenAccept { ... }
+     * </code>
+     *
+     * @param relationMap list of ArrayList. <br/>
+     *                    For each arrayList, <code>[0]</code> => <b>primary relation</b>, <code>[1..n]</code> => <b>nested</b>
+     * @return updated this in a CompletableFuture
+     */
+    public CompletableFuture<T> load(HashMap<String, List<String>> relationMap) {
+        UrlParametersMap params = new UrlParametersMap();
+        for (Map.Entry<String, List<String>> entry : relationMap.entrySet()) {
+            String primary = entry.getKey();
+            List<String> secondaries = entry.getValue();
+
+            if (secondaries.isEmpty()) {
+                params.with(primary);
+            }
+
+            for (String secondary : secondaries) {
+                params.with(primary + '.' + secondary);
+            }
+        }
+
+        return getManagerInstance().find(this.id, params)
+                .thenCompose((T fetched) -> CompletableFuture.supplyAsync(() -> {
+                    for (String relation : relationMap.keySet()) {
+                        this.copyRelation(relation, fetched);
+                    }
+                    return (T) this;
+                }));
     }
 
     protected abstract T copyRelation(String relation, T model);
