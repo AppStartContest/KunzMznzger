@@ -7,6 +7,14 @@
     <color name="colorTextDark">#222</color>
     <color name="colorTextLight">@color/colorLightGrey</color>
 
+    <color name="greyDarkest">#3D4852</color>
+    <color name="greyDarker">#606F7B</color>
+    <color name="greyDark">#8795A1</color>
+    <color name="grey">#B8C2CC</color>
+    <color name="greyLight">#DAE1E7</color>
+    <color name="greyLighter">#F1F5F8</color>
+    <color name="greyLightest">#F8FAFC</color>
+
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#00CC00</color>
