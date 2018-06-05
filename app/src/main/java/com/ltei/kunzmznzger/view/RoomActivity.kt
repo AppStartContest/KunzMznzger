@@ -7,10 +7,8 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import com.google.android.gms.ads.AdRequest
 import com.ltei.kunzmznzger.R
-import com.ltei.kunzmznzger.graph.Graph
 import com.ltei.kunzmznzger.local.LocalUserInfo
 import com.ltei.kunzmznzger.models.Room
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_room.*
 import kotlinx.android.synthetic.main.dialog_create_expense.*
 import kotlinx.android.synthetic.main.dialog_enter_text.*

@@ -9,10 +9,8 @@
 
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#0055AA</color>
-
-    <color name="colorButtonDebt">#CC1111</color>
-    <color name="colorButtonEarns">#11CC11</color>
+    <color name="colorAccent">#00CC00</color>
+    <color name="colorAccentDark">#005500</color>
 
     <color name="colorListItemBackground">@color/colorLightGrey</color>
 
