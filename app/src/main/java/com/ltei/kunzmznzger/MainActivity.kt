@@ -56,9 +56,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         Toast.makeText(this,"caca",Toast.LENGTH_LONG)
 
-        val room = generateDummy()
-        val depts = room.computeDepts()
-
         // Initialize globals
         MobileAds.initialize(this, getString(R.string.google_ad_banner_id))
         val adRequest = AdRequest.Builder().build()
