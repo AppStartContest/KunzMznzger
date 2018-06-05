@@ -83,6 +83,7 @@ class RoomActivity : AppCompatActivity() {
             dialog.dialog_enter_text_button.setOnClickListener({
                 if (dialog.dialog_enter_text_edittext.text.toString() != "") {
                     LocalUserInfo.globalInstance.addUserToRoom(dialog.dialog_enter_text_edittext.text.toString() ,room!!)
+                            .thenRun({dialog.dismiss()})
                 } else {
                     Toast.makeText(this, getText(R.string.dialog_void_input_error), Toast.LENGTH_SHORT).show()
                 }

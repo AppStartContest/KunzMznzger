@@ -9,7 +9,6 @@ import java.io.Serializable
 
 class Expense : Model<Expense>(), Serializable {
 
-    var name: String? = null
     var value: Double? = null
     var description: String? = null
 
