@@ -2,27 +2,26 @@ package com.ltei.kunzmznzger.view.listlinearlayout
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.Gravity
-import android.view.ViewGroup
+import android.view.View
 import android.widget.LinearLayout
-import android.widget.TextView
 import com.ltei.kunzmznzger.R
+import com.ltei.kunzmznzger.models.Message
+import kotlinx.android.synthetic.main.layout_messenger_message.view.*
 
 class MessengerView: ListLinearLayout {
 
     init {
         setViewCreator({
             item, idx ->
-            val listItemLayoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            listItemLayoutParams.bottomMargin = 1
-            val view = TextView(context)
-            view.gravity = Gravity.CENTER
-            view.background = context.getDrawable(R.color.colorListItemBackground)
-            view.setPadding(16, 16, 16, 16)
-            view.layoutParams = listItemLayoutParams
-            view.text = item.toString() //(item as Room).name
-            view.textSize = 12f
-            view
+            val item = item as Message
+            val layout = LinearLayout(context)
+            View.inflate(context, R.layout.layout_messenger_message, layout)
+
+            layout.text_user.text = item.user!!.username
+            layout.text_content.text = item.content
+            layout.text_datetime.text = item.createdAt.toString()
+
+            layout
         })
     }
     constructor(context: Context): super(context) {

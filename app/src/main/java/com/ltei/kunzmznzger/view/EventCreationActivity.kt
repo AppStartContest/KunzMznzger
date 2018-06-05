@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
+import com.google.android.gms.ads.AdRequest
 import com.ltei.kunzmznzger.R
 import com.ltei.kunzmznzger.libs.time.Date
 import com.ltei.kunzmznzger.libs.time.Time
@@ -64,6 +65,12 @@ class EventCreationActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event_creation)
+
+        // Initialize activity ad
+        val adRequest = AdRequest.Builder().build()
+        ad_banner.loadAd(adRequest)
+
+
 
         roomIdx = intent.getIntExtra(EXTRAS_ROOM_IDX, -1)
         room = LocalUserInfo.getInstance().getRooms()[roomIdx]

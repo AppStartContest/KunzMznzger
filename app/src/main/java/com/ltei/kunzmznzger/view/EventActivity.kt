@@ -3,6 +3,7 @@ package com.ltei.kunzmznzger.view
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
+import com.google.android.gms.ads.AdRequest
 import com.ltei.kunzmznzger.R
 import com.ltei.kunzmznzger.local.LocalUserInfo
 import com.ltei.kunzmznzger.models.Event
@@ -27,6 +28,12 @@ class EventActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event)
+
+        // Initialize activity ad
+        val adRequest = AdRequest.Builder().build()
+        ad_banner.loadAd(adRequest)
+
+
 
         roomIdx = intent.getIntExtra(EXTRAS_ROOM_IDX, -1)
         eventIdxInRoom = intent.getIntExtra(EXTRAS_EVENT_IDX_IN_ROOM, -1)

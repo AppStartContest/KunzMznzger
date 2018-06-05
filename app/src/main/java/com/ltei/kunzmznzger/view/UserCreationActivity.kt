@@ -4,9 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
+import com.google.android.gms.ads.AdRequest
 import com.ltei.kunzmznzger.MainActivity
 import com.ltei.kunzmznzger.R
 import com.ltei.kunzmznzger.local.LocalUserInfo
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_user_creation.*
 
 class UserCreationActivity : AppCompatActivity() {
@@ -14,6 +16,10 @@ class UserCreationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_creation)
+
+        // Initialize activity ad
+        val adRequest = AdRequest.Builder().build()
+        ad_banner.loadAd(adRequest)
 
         button_confirm.setOnClickListener({
             val name = edittext_name.text.toString()

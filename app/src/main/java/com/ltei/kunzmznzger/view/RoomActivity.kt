@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.PopupMenu
 import android.widget.Toast
+import com.google.android.gms.ads.AdRequest
 import com.ltei.kunzmznzger.R
 import com.ltei.kunzmznzger.graph.Graph
 import com.ltei.kunzmznzger.local.LocalUserInfo
@@ -31,6 +32,11 @@ class RoomActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_room)
+
+        // Initialize activity ad
+        val adRequest = AdRequest.Builder().build()
+        ad_banner.loadAd(adRequest)
+
 
         roomIdx = intent.getIntExtra(EXTRAS_ROOM_IDX, -1)
         text_title.text = getRoom().name
@@ -127,7 +133,7 @@ class RoomActivity : AppCompatActivity() {
 
     fun onButtonHistoryPressed() {
         val intent = Intent(this, HistoryActivity::class.java)
-        intent.putExtra(HistoryActivity.EXTRAS_LIST, LocalUserInfo.globalInstance.getUser().expenses)
+        intent.putExtra(HistoryActivity.EXTRAS_ROOM_IDX, roomIdx)
         startActivity(intent)
     }
 
