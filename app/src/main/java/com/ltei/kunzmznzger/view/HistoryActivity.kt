@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import android.widget.*
 import com.google.android.gms.ads.AdRequest
 import com.ltei.kunzmznzger.R
+import com.ltei.kunzmznzger.local.LocalUserInfo
 import com.ltei.kunzmznzger.models.Expense
-import com.ltei.kunzmznzger.models.Room
 import kotlinx.android.synthetic.main.activity_history.*
 
 
@@ -18,11 +18,14 @@ class HistoryActivity : AppCompatActivity() {
 
 
     companion object {
-        const val EXTRAS_LIST = "GROUP_ACTIVITY_EXTRAS_LIST"
+        const val EXTRAS_ROOM_IDX = "GROUP_ACTIVITY_EXTRAS_ROOM_IDX"
     }
 
 
-    private val list = ArrayList<Expense>()
+    private var roomIdx: Int = -1
+    private fun getList(): ArrayList<Expense> {
+        return LocalUserInfo.getInstance().getRooms()[roomIdx].expenses
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,10 +37,11 @@ class HistoryActivity : AppCompatActivity() {
         ad_banner.loadAd(adRequest)
 
 
-        list.addAll( intent.getSerializableExtra(EXTRAS_LIST) as ArrayList<Expense>)
+        roomIdx = intent.getIntExtra(EXTRAS_ROOM_IDX, -1)
+
         history_button_sort.setOnClickListener({ onSortButtonClickListener() })
 
-        listlinearlayout.init(list, {
+        listlinearlayout.init(getList(), {
             item, idx ->
             val listItemLayoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             listItemLayoutParams.bottomMargin = 1
@@ -72,17 +76,18 @@ class HistoryActivity : AppCompatActivity() {
     }
     private fun onSortItemClickListener(it: MenuItem) {
         when (it.itemId) {
-            R.id.menu_item_sorter_biggestfirst -> HistorySort.biggestAmount().sort(list!!)
-            R.id.menu_item_sorter_smallestfirst -> HistorySort.lowestAmount().sort(list!!)
-            R.id.menu_item_sorter_recentfirst -> HistorySort.mostRecentFirst().sort(list!!)
-            R.id.menu_item_sorter_recentlast -> HistorySort.mostRecentLast().sort(list!!)
+            R.id.menu_item_sorter_biggestfirst -> listlinearlayout.setArray(HistorySort.biggestAmount().sorted(getList()))
+            R.id.menu_item_sorter_smallestfirst -> listlinearlayout.setArray(HistorySort.lowestAmount().sorted(getList()))
+            R.id.menu_item_sorter_recentfirst -> listlinearlayout.setArray(HistorySort.mostRecentFirst().sorted(getList()))
+            R.id.menu_item_sorter_recentlast -> listlinearlayout.setArray(HistorySort.mostRecentLast().sorted(getList()))
             else -> throw IllegalStateException()
         }
         listlinearlayout.notifyArrayChange()
     }
     private fun onHistoryItemClickListener(position: Int) {
         val intent = Intent(this, ExpenseInfoActivity::class.java)
-        intent.putExtra(ExpenseInfoActivity.EXTRAS_EXPENSE, list!![position])
+        intent.putExtra(ExpenseInfoActivity.EXTRAS_ROOM_IDX, roomIdx)
+        intent.putExtra(ExpenseInfoActivity.EXTRAS_EXPENSE_IDX_IN_ROOM, position)
         startActivity(intent)
     }
 

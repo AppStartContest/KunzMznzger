@@ -22,22 +22,70 @@ abstract class HistorySort: Serializable {
         //TODO Implement everything
         class BiggestAmount(): HistorySort() {
             override fun toString(): String { return "Biggest amount" }
-            override fun sort(expenses: ArrayList<Expense>) { throw IllegalStateException("Not implemented!") }
+            override fun sorted(expenses: ArrayList<Expense>): ArrayList<Expense> {
+                val comparator = Comparator<Expense>({
+                    it1, it2 ->
+                    if (it1.value!! == it2.value!!) {
+                        0
+                    } else if (it1.value!! < it2.value!!) {
+                        -1
+                    } else {
+                        1
+                    }
+                })
+                return ArrayList(expenses.sortedWith(comparator))
+            }
         }
         class LowestAmount(): HistorySort() {
             override fun toString(): String { return "Lowest amount" }
-            override fun sort(expenses: ArrayList<Expense>) { throw IllegalStateException("Not implemented!") }
+            override fun sorted(expenses: ArrayList<Expense>): ArrayList<Expense> {
+                val comparator = Comparator<Expense>({
+                    it1, it2 ->
+                    if (it1.value!! == it2.value!!) {
+                        0
+                    } else if (it1.value!! < it2.value!!) {
+                        1
+                    } else {
+                        -1
+                    }
+                })
+                return ArrayList(expenses.sortedWith(comparator))
+            }
         }
         class MostRecentFirst(): HistorySort() {
             override fun toString(): String { return "Most recent first" }
-            override fun sort(expenses: ArrayList<Expense>) { throw IllegalStateException("Not implemented!") }
+            override fun sorted(expenses: ArrayList<Expense>): ArrayList<Expense> {
+                val comparator = Comparator<Expense>({
+                    it1, it2 ->
+                    if (it1.createdAt!!.isEqual(it2.createdAt!!)) {
+                        0
+                    } else if (it1.createdAt!!.isAfter(it2.createdAt!!)) {
+                        1
+                    } else {
+                        -1
+                    }
+                })
+                return ArrayList(expenses.sortedWith(comparator))
+            }
         }
         class MostRecentLast(): HistorySort() {
             override fun toString(): String { return "Most recent last" }
-            override fun sort(expenses: ArrayList<Expense>) { throw IllegalStateException("Not implemented!") }
+            override fun sorted(expenses: ArrayList<Expense>): ArrayList<Expense> {
+                val comparator = Comparator<Expense>({
+                    it1, it2 ->
+                    if (it1.createdAt!!.isEqual(it2.createdAt!!)) {
+                        0
+                    } else if (it1.createdAt!!.isAfter(it2.createdAt!!)) {
+                        -1
+                    } else {
+                        1
+                    }
+                })
+                return ArrayList(expenses.sortedWith(comparator))
+            }
         }
 
     }
 
-    abstract fun sort(expenses: ArrayList<Expense>)
+    abstract fun sorted(expenses: ArrayList<Expense>): ArrayList<Expense>
 }

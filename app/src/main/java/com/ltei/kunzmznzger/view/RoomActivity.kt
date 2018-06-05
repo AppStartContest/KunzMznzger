@@ -131,7 +131,7 @@ class RoomActivity : AppCompatActivity() {
 
     fun onButtonHistoryPressed() {
         val intent = Intent(this, HistoryActivity::class.java)
-        intent.putExtra(HistoryActivity.EXTRAS_LIST, LocalUserInfo.globalInstance.getUser().expenses)
+        intent.putExtra(HistoryActivity.EXTRAS_ROOM_IDX, roomIdx)
         startActivity(intent)
     }
 
