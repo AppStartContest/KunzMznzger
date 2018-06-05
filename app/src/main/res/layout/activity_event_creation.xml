@@ -9,8 +9,8 @@
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:background="@color/colorPrimaryDark"
+        android:layout_height="64dp"
+        android:background="@color/colorHeader"
         android:layout_alignParentTop="true"
         android:gravity="center|end"
         android:orientation="horizontal">
@@ -36,13 +36,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="next"
-                android:id="@+id/button_next"/>
+                android:id="@+id/button_next"
+                android:backgroundTint="@color/colorButtonDefault"
+                android:textColor="@color/colorButtonText"/>
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="confirm"
-                android:id="@+id/button_confirm"/>
+                android:id="@+id/button_confirm"
+                android:backgroundTint="@color/colorButtonDefault"
+                android:textColor="@color/colorButtonText"/>
 
         </LinearLayout>
 

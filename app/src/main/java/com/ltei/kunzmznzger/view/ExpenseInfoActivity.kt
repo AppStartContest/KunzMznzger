@@ -36,8 +36,8 @@ class ExpenseInfoActivity : AppCompatActivity() {
         roomIdx = intent.getIntExtra(EXTRAS_ROOM_IDX, -1)
         expenseIdxInRoom = intent.getIntExtra(EXTRAS_EXPENSE_IDX_IN_ROOM, -1)
 
-        text_title.text = getExpense().description
-        //TODO text_sender.text = getExpense().user!!.username
+        text_title.text = "Expense : ${getExpense().description}"
+        text_sender.text = getExpense().user!!.username
         text_amount.text = "spent ${getExpense().value}$"
         messagesview.setArray(ArrayList(getExpense().messages))
         button_add_message.setOnClickListener { onButtonAddMessageClickListener() }
@@ -49,7 +49,12 @@ class ExpenseInfoActivity : AppCompatActivity() {
             dialog.dialog_enter_text_title.text = "Write a message"
             dialog.dialog_enter_text_button.setOnClickListener {
                 if (dialog.dialog_enter_text_edittext.text.toString() != "") {
-                    LocalUserInfo.getInstance().sendMessageToExpense(dialog.dialog_enter_text_edittext.text.toString(), getExpense())
+                    LocalUserInfo.getInstance().sendMessageToExpense(dialog.dialog_enter_text_edittext.text.toString(), getExpense()).thenRun {
+                        LocalUserInfo.getInstance().load(this).thenRun {
+                            dialog.dismiss()
+                            this.runOnUiThread { messagesview.setArray(getExpense().messages) }
+                        }
+                    }
                 } else {
                     Toast.makeText(this, getText(R.string.dialog_void_input_error), Toast.LENGTH_SHORT).show()
                 }

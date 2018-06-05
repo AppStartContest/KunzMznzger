@@ -1,7 +1,9 @@
 package com.ltei.kunzmznzger.models.dao
 
+import com.ltei.kunzmznzger.libs.Helpers
 import com.ltei.kunzmznzger.libs.api.ApiQueryBuilder
 import com.ltei.kunzmznzger.libs.api.Http
+import com.ltei.kunzmznzger.libs.api.UrlParametersMap
 import com.ltei.kunzmznzger.libs.models.Model
 import com.ltei.kunzmznzger.libs.models.ModelManager
 import com.ltei.kunzmznzger.libs.models.exceptions.ModelException
@@ -33,6 +35,7 @@ class UserDAO : ModelManager<User>() {
      * @return the created user or null
      */
     fun register(username: String, password: String, name: String? = null): CompletableFuture<User?> {
+        Helpers.log("Registering...")
         val url = "${ModelManager.API_URL}register"
         val json = JSONObject()
         json["password"] = password
@@ -50,6 +53,7 @@ class UserDAO : ModelManager<User>() {
      * @return the authenticated user or null
      */
     fun auth(username: String, password: String): CompletableFuture<User?> {
+        Helpers.log("Authenticating...")
         val url = "${ModelManager.API_URL}auth"
         val json = JSONObject()
         json["password"] = password
@@ -57,5 +61,14 @@ class UserDAO : ModelManager<User>() {
 
         val query = ApiQueryBuilder.create(url, Http.POST).data(json).buildQuery()
         return query.execute().thenCompose { apiResponse -> CompletableFuture.supplyAsync { this.handleResponseObject(apiResponse) } }
+    }
+
+    fun findByUsername(username: String): CompletableFuture<User> {
+        return this.findByUsername(username, UrlParametersMap())
+    }
+
+    fun findByUsername(username: String, params: UrlParametersMap): CompletableFuture<User>{
+        params.where("username", username)
+        return this.all(params).thenApply { list -> if(list.isEmpty()) null else list[0] }
     }
 }

@@ -14,4 +14,17 @@
 
     <color name="colorListItemBackground">@color/colorLightGrey</color>
 
+
+    <!-- Change this to change the app -->
+    <color name="colorHeader">@color/colorPrimaryDark</color>
+    <color name="colorTextTitle">#FFF</color>
+    <color name="colorButtonDefault">@color/colorLightGrey</color>
+    <color name="colorButtonBar">@color/colorLightGrey</color>
+    <color name="colorButtonText">#444</color>
+    <color name="colorRoomList">@color/colorPrimary</color>
+    <color name="colorMessenger">@color/colorPrimary</color>
+    <color name="colorEventList">@color/colorAccent</color>
+    <color name="colorUserListList">@color/colorAccent</color>
+
+
 </resources>

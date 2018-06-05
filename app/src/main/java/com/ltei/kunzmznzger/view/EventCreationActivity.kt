@@ -87,7 +87,6 @@ class EventCreationActivity: AppCompatActivity() {
         ad_banner.loadAd(adRequest)
 
 
-
         roomIdx = intent.getIntExtra(EXTRAS_ROOM_IDX, -1)
         room = LocalUserInfo.getInstance().getRooms()[roomIdx]
         onViewIdxChange()

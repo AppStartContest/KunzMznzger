@@ -36,7 +36,7 @@ class RoomActivity : AppCompatActivity() {
 
 
         roomIdx = intent.getIntExtra(EXTRAS_ROOM_IDX, -1)
-        text_title.text = getRoom().name
+        text_title.text = "Room : ${getRoom().name}"
 
         button_menu.setOnClickListener({
             val dropDown = PopupMenu(applicationContext, button_menu)
@@ -63,17 +63,23 @@ class RoomActivity : AppCompatActivity() {
         eventlistview.init(getRoom().events, roomIdx!!)
     }
 
+    override fun onResume() {
+        super.onResume()
+        userlistview.setArray(getRoom().users)
+        messengerview.setArray(getRoom().messages)
+        eventlistview.init(getRoom().events, roomIdx!!)
+    }
+
 
 
     fun onButtonCreateExpensePressed() {
         val dialog = DialogCreateExpense(this)
         dialog.runOnCreate = Runnable {
             dialog.button_create.setOnClickListener {
-                if (dialog.edittext_title.text.toString() == "" || dialog.edittext_amount.text.toString() == "") {
-                    Toast.makeText(dialog.context, "You have to fill title and amount!", Toast.LENGTH_SHORT).show()
+                if (dialog.edittext_description.text.toString() == "" || dialog.edittext_amount.text.toString() == "") {
+                    Toast.makeText(dialog.context, "You have to fill description and amount!", Toast.LENGTH_SHORT).show()
                 } else {
                     LocalUserInfo.getInstance().createExpense(
-                            dialog.edittext_title.text.toString(),
                             dialog.edittext_amount.text.toString().toDouble(),
                             dialog.edittext_description.text.toString(),
                             getRoom()
@@ -115,9 +121,11 @@ class RoomActivity : AppCompatActivity() {
             dialog.dialog_enter_text_title.text = "Write a message"
             dialog.dialog_enter_text_button.setOnClickListener({
                 if (dialog.dialog_enter_text_edittext.text.toString() != "") {
-                    LocalUserInfo.globalInstance.sendMessageToRoom(dialog.dialog_enter_text_edittext.text.toString(), getRoom()).thenRun {
-                        dialog.dismiss()
-                        this.runOnUiThread { messengerview.setArray(getRoom().messages) }
+                    LocalUserInfo.getInstance().sendMessageToRoom(dialog.dialog_enter_text_edittext.text.toString(), getRoom()).thenRun {
+                        LocalUserInfo.getInstance().load(this).thenRun {
+                            dialog.dismiss()
+                            this.runOnUiThread { messengerview.setArray(getRoom().messages) }
+                        }
                     }
                 } else {
                     Toast.makeText(this, getText(R.string.dialog_void_input_error), Toast.LENGTH_SHORT).show()
