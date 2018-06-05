@@ -223,6 +223,21 @@ open class LocalUserInfo {
         })
     }
 
+    fun addUserToRoom(username: String, room: Room): CompletableFuture<Room> {
+        throwIfInvalidModel(room)
+
+
+        return UserDAO().all(UrlParametersMap().withAllRelations().where("username", username)).thenCompose {
+            it[0].addRoom(room)
+            it[0].save()
+        }
+                .thenCompose {
+                    room.addUser(it)
+                    room.save()
+                }
+
+    }
+
     private fun saveMessage(message: Message): CompletableFuture<Message> {
         message.user = this.user!!
         return message.save()

@@ -39,7 +39,7 @@ class RoomActivity : AppCompatActivity() {
             dropDown.menuInflater.inflate(R.menu.menu_group_items, dropDown.menu)
             dropDown.setOnMenuItemClickListener({
                 when (it.itemId) {
-                    R.id.menu_group_items_add_member -> { onButtonAddMemberPressed(room!!) }
+                    R.id.menu_group_items_add_member -> { onButtonAddMemberPressed() }
                     R.id.menu_group_items_add_message -> { onButtonAddMessagePressed(room!!) }
                     R.id.menu_group_items_add_event -> { onButtonAddEventPressed() }
                     R.id.menu_group_items_history -> { onButtonHistoryPressed() }
@@ -76,7 +76,20 @@ class RoomActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    fun onButtonAddMemberPressed(room: Room) {
+
+    fun onButtonAddMemberPressed() {
+        val dialog = DialogEnterText(this)
+        dialog.runOnCreate = Runnable {
+            dialog.dialog_enter_text_title.text = "Enter username to add:"
+            dialog.dialog_enter_text_button.setOnClickListener({
+                if (dialog.dialog_enter_text_edittext.text.toString() != "") {
+                    LocalUserInfo.globalInstance.addUserToRoom(dialog.dialog_enter_text_edittext.text.toString() ,room!!)
+                } else {
+                    Toast.makeText(this, getText(R.string.dialog_void_input_error), Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+        dialog.show()
     }
 
     fun onButtonAddMessagePressed(room: Room) {
