@@ -58,6 +58,7 @@ open class LocalUserInfo {
         val params = UrlParametersMap().with(
                 "rooms.events.messages.user",
                 "rooms.expenses.messages.user",
+                "rooms.expenses.user",
                 "rooms.users",
                 "rooms.messages.user")
 
