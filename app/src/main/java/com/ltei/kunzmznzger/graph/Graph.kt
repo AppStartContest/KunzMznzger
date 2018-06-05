@@ -14,8 +14,7 @@ import com.ltei.kunzmznzger.graph.DayAxisValueFormatter
 import com.ltei.kunzmznzger.models.Expense
 import com.ltei.kunzmznzger.models.Room
 import com.ltei.kunzmznzger.models.User
-import org.joda.time.DateTime
-import org.joda.time.Days
+import org.joda.time.*
 import kotlin.collections.ArrayList
 
 /**
@@ -100,17 +99,20 @@ class Graph() {
             val entry_list : ArrayList<ArrayList<Entry>> = ArrayList()
             val name_list : ArrayList<String?> = ArrayList()
 
-            var sortedList = expense_list.sortedWith(compareBy({ it.user!!.id }))
+            var sortedList = expense_list.sortedWith(compareBy({ it.user!!.id } , {it.createdAt}))
 
             entry_list.add(arrayListOf())
             var j = 0
             var id = sortedList[0].user!!.id
+            name_list.add(sortedList[0].user?.name)
             for (i in 0 until sortedList.size) {
 
                 if (id == sortedList[i].user!!.id){
                     var time_value = get_nb_day(sortedList[i].createdAt)
-                    entry_list[j].add(Entry(time_value,sortedList[i].value!!.toFloat()))
-                    name_list.add(sortedList[i].user?.name)
+                    var delta : Float = 0f
+                    if (entry_list[j].isNotEmpty()){
+                        delta = entry_list[j].last().y}
+                    entry_list[j].add(Entry(time_value,sortedList[i].value!!.toFloat()+delta))
                 }
                 else
                 {
@@ -118,7 +120,10 @@ class Graph() {
                     entry_list.add(arrayListOf())
                     j+=1
                     var time_value = get_nb_day(sortedList[i].createdAt)
-                    entry_list[j].add(Entry(time_value,sortedList[i].value!!.toFloat()))
+                    var delta : Float = 0f
+                    if (entry_list[j].isNotEmpty()){
+                        delta = entry_list[j].last().y}
+                    entry_list[j].add(Entry(time_value,sortedList[i].value!!.toFloat()+delta))
                     name_list.add(sortedList[i].user?.name)
                 }
 
@@ -152,9 +157,11 @@ class Graph() {
         fun get_nb_day(dateTime: DateTime?) : Float {
 
             val end = dateTime
-            val start = DateTime(2016,1,1,1,1)
+            val start = DateTime(0L)
 
-            return Days.daysBetween(start.toLocalDate(), end!!.toLocalDate()).getDays().toFloat()
+            var ecart : Float = Seconds.secondsBetween(start,end).seconds.toFloat()
+
+            return ecart
         }
 
         fun plot_graph(chart: LineChart , line_list : Array<Array<FloatArray>>) {

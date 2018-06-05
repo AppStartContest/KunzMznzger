@@ -80,11 +80,10 @@ class RoomActivity : AppCompatActivity() {
         val dialog = DialogCreateExpense(this)
         dialog.runOnCreate = Runnable {
             dialog.button_create.setOnClickListener {
-                if (dialog.edittext_title.text.toString() == "" || dialog.edittext_amount.text.toString() == "") {
-                    Toast.makeText(dialog.context, "You have to fill title and amount!", Toast.LENGTH_SHORT).show()
+                if (dialog.edittext_description.text.toString() == "" || dialog.edittext_amount.text.toString() == "") {
+                    Toast.makeText(dialog.context, "You have to fill description and amount!", Toast.LENGTH_SHORT).show()
                 } else {
                     LocalUserInfo.getInstance().createExpense(
-                            dialog.edittext_title.text.toString(),
                             dialog.edittext_amount.text.toString().toDouble(),
                             dialog.edittext_description.text.toString(),
                             getRoom()
