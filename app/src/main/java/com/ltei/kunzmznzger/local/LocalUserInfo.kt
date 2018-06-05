@@ -294,7 +294,7 @@ open class LocalUserInfo {
      * @param room an existing room
      * @throws ModelException if the room is not valid (if it doesn't correspond to db entry)
      */
-    fun createExpense(name: String , value : Double , description: String , room: Room) : CompletableFuture<Expense>
+    fun createExpense(value : Double , description: String , room: Room) : CompletableFuture<Expense>
     {
         throwIfInvalidModel(room)
         var expense = Expense()
