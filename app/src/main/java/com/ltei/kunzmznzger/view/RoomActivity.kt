@@ -77,7 +77,18 @@ class RoomActivity : AppCompatActivity() {
     }
 
     fun onButtonAddMemberPressed() {
-
+        val dialog = DialogEnterText(this)
+        dialog.runOnCreate = Runnable {
+            dialog.dialog_enter_text_title.text = "Enter username to add:"
+            dialog.dialog_enter_text_button.setOnClickListener({
+                if (dialog.dialog_enter_text_edittext.text.toString() != "") {
+                    LocalUserInfo.globalInstance.addUserToRoom(dialog.dialog_enter_text_edittext.text.toString() ,room!!)
+                } else {
+                    Toast.makeText(this, getText(R.string.dialog_void_input_error), Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+        dialog.show()
     }
 
     fun onButtonAddMessagePressed(room: Room) {
