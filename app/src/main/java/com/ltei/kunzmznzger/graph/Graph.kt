@@ -14,8 +14,7 @@ import com.ltei.kunzmznzger.graph.DayAxisValueFormatter
 import com.ltei.kunzmznzger.models.Expense
 import com.ltei.kunzmznzger.models.Room
 import com.ltei.kunzmznzger.models.User
-import org.joda.time.DateTime
-import org.joda.time.Days
+import org.joda.time.*
 import kotlin.collections.ArrayList
 
 /**
@@ -110,6 +109,8 @@ class Graph() {
 
                 if (id == sortedList[i].user!!.id){
                     var time_value = get_nb_day(sortedList[i].createdAt)
+                    if (entry_list[j].isNotEmpty()){
+                        time_value += entry_list[j].last().x}
                     entry_list[j].add(Entry(time_value,sortedList[i].value!!.toFloat()))
                 }
                 else
@@ -118,6 +119,8 @@ class Graph() {
                     entry_list.add(arrayListOf())
                     j+=1
                     var time_value = get_nb_day(sortedList[i].createdAt)
+                    if (entry_list[j].isNotEmpty()){
+                        time_value += entry_list[j].last().x}
                     entry_list[j].add(Entry(time_value,sortedList[i].value!!.toFloat()))
                     name_list.add(sortedList[i].user?.name)
                 }
@@ -152,9 +155,11 @@ class Graph() {
         fun get_nb_day(dateTime: DateTime?) : Float {
 
             val end = dateTime
-            val start = DateTime(2016,1,1,1,1)
+            val start = DateTime(0L)
 
-            return Days.daysBetween(start.toLocalDate(), end!!.toLocalDate()).getDays().toFloat()
+            var ecart : Float = Seconds.secondsBetween(start,end).seconds.toFloat()
+
+            return ecart
         }
 
         fun plot_graph(chart: LineChart , line_list : Array<Array<FloatArray>>) {
