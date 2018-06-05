@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private var roomListItemViewCreator = ListLinearLayout.ViewCreator {
-        item, _ ->
+        item, idx ->
         val listItemLayoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
         listItemLayoutParams.bottomMargin = 1
         val view = Button(this)
@@ -34,18 +34,27 @@ class MainActivity : AppCompatActivity() {
         view.layoutParams = listItemLayoutParams
         view.text = item.toString() //(item as Room).name
         view.textSize = 12f
-        view.setOnClickListener({ gotoActivityGroup(item as Room) })
+        view.setOnClickListener({ gotoActivityGroup(idx) })
         view
     }
 
     private var buttonCreateRoomClickListener = View.OnClickListener {
-        val dialog = DialogEnterText(this, "Enter a name for the new room")
-        dialog.setOnDismissListener({
-            LocalUserInfo.getInstance().createRoom(dialog.dialog_enter_text_edittext.text.toString()).thenAccept {
-                //Toast.makeText(this, it.rooms.size, Toast.LENGTH_SHORT).show()
-                gotoActivityGroup(it.rooms.last())
+        val dialog = DialogEnterText(this)
+        dialog.runOnCreate = Runnable {
+            dialog.dialog_enter_text_title.text = "Enter a name for the new room"
+            dialog.dialog_enter_text_button.setOnClickListener {
+                if (dialog.dialog_enter_text_edittext.text.toString() != "") {
+                    LocalUserInfo.getInstance().createRoom(dialog.dialog_enter_text_edittext.text.toString()).thenAccept {
+                        LocalUserInfo.getInstance().load(this).thenRun {
+                            dialog.cancel()
+                            gotoActivityGroup(LocalUserInfo.getInstance().getRooms().size -1)
+                        }
+                    }
+                } else {
+                    Toast.makeText(this, getText(R.string.dialog_void_input_error), Toast.LENGTH_SHORT).show()
+                }
             }
-        })
+        }
         dialog.show()
     }
 
@@ -64,13 +73,6 @@ class MainActivity : AppCompatActivity() {
         main_button_dept.setOnClickListener({ onButtonDeptsClicked() })
 
         main_button_create_group.setOnClickListener(buttonCreateRoomClickListener)
-
-        // TEST
-        button_TEST.setOnClickListener {
-            val intent = Intent(this, EventCreationActivity::class.java)
-            intent.putExtra(EventCreationActivity.EXTRAS_ROOM, LocalUserInfo.getInstance().getGroups().last())
-            startActivity(intent)
-        }
     }
 
 
@@ -81,11 +83,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         } else {
-            LocalUserInfo.getInstance().load(this, Runnable {
+            LocalUserInfo.getInstance().load(this).thenRun {
                 this.runOnUiThread {
                     listlinearlayout.init(LocalUserInfo.getInstance().getRooms(), roomListItemViewCreator)
                 }
-            })
+            }
         }
     }
 
@@ -100,9 +102,9 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra(HistoryActivity.EXTRAS_LIST, LocalUserInfo.getInstance().getUser().expenses)
         startActivity(intent)
     }
-    fun gotoActivityGroup(groupInfo: Room) {
+    fun gotoActivityGroup(roomIdx: Int) {
         val intent = Intent(this, RoomActivity::class.java)
-        intent.putExtra(RoomActivity.EXTRAS_ROOM, groupInfo)
+        intent.putExtra(RoomActivity.EXTRAS_ROOM_IDX, roomIdx)
         startActivity(intent)
     }
 }

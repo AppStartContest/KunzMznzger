@@ -56,6 +56,7 @@ class Expense : Model<Expense>(), Serializable {
         this.putFkIfRelationDefined(json, "room_id", this.room)
         this.putFkIfRelationDefined(json, "user_id", this.user)
         json["value"] = this.value
+        json["description"] = this.description
 
         return json
     }
