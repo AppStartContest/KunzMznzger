@@ -22,7 +22,7 @@ class RoomDeptsInfoListView: ListLinearLayout {
             View.inflate(context, R.layout.layout_depts_info_list_item, layout)
 
             val item = item as Debt
-            layout.list_item.text = "${item.fromWho.username} owes ${item.howMany}$ to ${item.toWho.username}"
+            layout.list_item.text = "${item.fromWho.username} owes ${"%.2f".format(item.howMany)}$ to ${item.toWho.username}"
             layout.setOnClickListener {
                 val intent = Intent(context, RoomActivity::class.java)
                 intent.putExtra(RoomActivity.EXTRAS_ROOM_IDX, idx)
