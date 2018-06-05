@@ -39,7 +39,7 @@ class RoomActivity : AppCompatActivity() {
             dropDown.menuInflater.inflate(R.menu.menu_group_items, dropDown.menu)
             dropDown.setOnMenuItemClickListener({
                 when (it.itemId) {
-                    R.id.menu_group_items_add_member -> { onButtonAddMemberPressed() }
+                    R.id.menu_group_items_add_member -> { onButtonAddMemberPressed(room!!) }
                     R.id.menu_group_items_add_message -> { onButtonAddMessagePressed(room!!) }
                     R.id.menu_group_items_add_event -> { onButtonAddEventPressed() }
                     R.id.menu_group_items_history -> { onButtonHistoryPressed() }
@@ -76,8 +76,7 @@ class RoomActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    fun onButtonAddMemberPressed() {
-
+    fun onButtonAddMemberPressed(room: Room) {
     }
 
     fun onButtonAddMessagePressed(room: Room) {

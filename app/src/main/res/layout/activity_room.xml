@@ -94,6 +94,16 @@
 
             </LinearLayout>
 
+            <com.ltei.kunzmznzger.view.UserListView
+                android:id="@+id/userlistview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <com.ltei.kunzmznzger.view.MessengerView
+                android:id="@+id/messengerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
             <com.ltei.kunzmznzger.view.ListLinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

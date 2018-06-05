@@ -1,25 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center|top"
-    android:orientation="vertical">
+    android:layout_height="match_parent" >
+
+    <!-- HEADER ALIGNED TO TOP (MENU BAR) -->
     <LinearLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:background="@color/colorPrimaryDark"
-        android:gravity="center|end">
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_menu"/>
+        android:layout_alignParentTop="true"
+        android:gravity="center|end"
+        android:orientation="horizontal">
 
     </LinearLayout>
+
+    <!-- FOOTER ALIGNED TO BOTTOM (AD) -->
+    <LinearLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/button_add_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:text="add message"/>
+
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/google_ad_banner_id"
+            android:id="@+id/ad_banner"/>
+
+    </LinearLayout>
+
+    <!-- CONTENT -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@id/footer"
+        android:layout_below="@id/header">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,17 +56,38 @@
             android:padding="12dp">
 
             <TextView
+                android:id="@+id/text_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/uninitialized"
+                android:textSize="24sp"/>
+
+            <com.ltei.kunzmznzger.view.UserListView
+                android:id="@+id/userlistview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/text_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/uninitialized"/>
 
-            <ListView
+            <TextView
+                android:id="@+id/text_datetime"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/uninitialized"/>
 
-            </ListView>
+            <com.ltei.kunzmznzger.view.MessengerView
+                android:id="@+id/messengerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+
+</RelativeLayout>

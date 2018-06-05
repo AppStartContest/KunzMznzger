@@ -1,5 +1,6 @@
 package com.ltei.kunzmznzger.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -19,6 +20,7 @@ class EventCreationActivity: AppCompatActivity() {
     }
 
 
+    var roomIdx: Int = -1
     var room: Room? = null
     var viewIdx = 0
 
@@ -49,7 +51,13 @@ class EventCreationActivity: AppCompatActivity() {
                 Date(datetime),
                 Time(datetime),
                 room!!).thenRun {
-            finish()
+            val intent = Intent(this, EventActivity::class.java)
+            intent.putExtra(EventActivity.EXTRAS_ROOM_IDX, roomIdx)
+            intent.putExtra(EventActivity.EXTRAS_EVENT_IDX_IN_ROOM, LocalUserInfo.getInstance().getRooms()[roomIdx].events.size-1)
+            this.runOnUiThread {
+                startActivity(intent)
+                finish()
+            }
         }
     }
 
@@ -57,7 +65,8 @@ class EventCreationActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event_creation)
 
-        room = LocalUserInfo.getInstance().getRooms()[intent.getIntExtra(EXTRAS_ROOM_IDX, -1)]
+        roomIdx = intent.getIntExtra(EXTRAS_ROOM_IDX, -1)
+        room = LocalUserInfo.getInstance().getRooms()[roomIdx]
         onViewIdxChange()
     }
 
