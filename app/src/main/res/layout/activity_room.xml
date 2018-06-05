@@ -95,7 +95,6 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:text="Users"/>
             <HorizontalScrollView
                 android:layout_width="match_parent"
@@ -105,8 +104,7 @@
                     android:paddingTop="16dp"
                     android:paddingBottom="16dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"/>
+                    android:layout_height="wrap_content"/>
             </HorizontalScrollView>
 
             <View
@@ -119,7 +117,6 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:text="Events"/>
             <com.ltei.kunzmznzger.view.listlinearlayout.EventListView
                 android:id="@+id/eventlistview"
@@ -137,7 +134,6 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:text="Messages"/>
             <com.ltei.kunzmznzger.view.listlinearlayout.MessengerView
                 android:id="@+id/messengerview"
