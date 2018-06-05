@@ -9,11 +9,6 @@
         android:title="Add member"
         android:visible="true" />
     <item
-        android:id="@+id/menu_group_items_add_message"
-        app:showAsAction="ifRoom|withText"
-        android:title="Add message"
-        android:visible="true" />
-    <item
         android:id="@+id/menu_group_items_add_event"
         app:showAsAction="ifRoom"
         android:title="Add event"

@@ -22,10 +22,10 @@ class UserListView: ListLinearLayout {
         })
     }
     constructor(context: Context): super(context) {
-        this.orientation = LinearLayout.VERTICAL
+        this.orientation = LinearLayout.HORIZONTAL
     }
     constructor(context: Context, attributeSet: AttributeSet): super(context, attributeSet) {
-        this.orientation = LinearLayout.VERTICAL
+        this.orientation = LinearLayout.HORIZONTAL
     }
 
 }

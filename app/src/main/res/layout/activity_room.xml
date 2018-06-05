@@ -31,12 +31,27 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true">
 
-        <Button
-            android:id="@+id/button_add_expense"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="add expense"
-            android:layout_margin="12dp"/>
+            android:layout_margin="12dp"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/button_add_message"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                style="@android:style/ButtonBar"
+                android:layout_marginEnd="1px"
+                android:text="add message"/>
+            <Button
+                android:id="@+id/button_add_expense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                style="@android:style/ButtonBar"
+                android:text="add expense"/>
+        </LinearLayout>
 
         <com.google.android.gms.ads.AdView
             xmlns:ads="http://schemas.android.com/apk/res-auto"
@@ -67,49 +82,44 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/uninitialized"
+                android:paddingBottom="16dp"
                 android:textSize="24sp"/>
 
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/uninitialized"
-                    android:backgroundTint="@color/colorButtonEarns"
-                    android:id="@+id/button_earns"/>
-
-                <Button
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/uninitialized"
-                    android:backgroundTint="@color/colorButtonDebt"
-                    android:id="@+id/button_dept"/>
-
-            </LinearLayout>
-
-            <com.ltei.kunzmznzger.view.listlinearlayout.UserListView
-                android:id="@+id/userlistview"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp"
+                android:gravity="center"
+                android:text="Users"/>
+            <HorizontalScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content">
+                <com.ltei.kunzmznzger.view.listlinearlayout.UserListView
+                    android:id="@+id/userlistview"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </HorizontalScrollView>
 
-            <com.ltei.kunzmznzger.view.listlinearlayout.MessengerView
-                android:id="@+id/messengerview"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp"
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Events"/>
             <com.ltei.kunzmznzger.view.listlinearlayout.EventListView
                 android:id="@+id/eventlistview"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Messages"/>
+            <com.ltei.kunzmznzger.view.listlinearlayout.MessengerView
+                android:id="@+id/messengerview"
                 android:paddingTop="16dp"
                 android:paddingBottom="16dp"
                 android:layout_width="match_parent"

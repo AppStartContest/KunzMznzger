@@ -10,6 +10,7 @@ import com.ltei.kunzmznzger.models.Event
 import com.ltei.kunzmznzger.models.Room
 import kotlinx.android.synthetic.main.activity_event.*
 import kotlinx.android.synthetic.main.dialog_enter_text.*
+import java.text.SimpleDateFormat
 
 class EventActivity : AppCompatActivity() {
 
@@ -41,9 +42,9 @@ class EventActivity : AppCompatActivity() {
         val room = getRoom()
         val event = getEvent()
         text_title.text = event.name
-        userlistview.setArray(room.users)
         text_description.text = event.description
-        text_datetime.text = event.date!!.toString()
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        text_datetime.text = sdf.format(event.date!!.toDateTime().toDate())
         messengerview.setArray(event.messages)
         button_add_message.setOnClickListener { onButtonAddMessagePressed(event) }
     }

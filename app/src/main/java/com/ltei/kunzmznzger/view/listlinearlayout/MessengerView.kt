@@ -7,6 +7,7 @@ import android.widget.LinearLayout
 import com.ltei.kunzmznzger.R
 import com.ltei.kunzmznzger.models.Message
 import kotlinx.android.synthetic.main.layout_messenger_message.view.*
+import java.text.SimpleDateFormat
 
 class MessengerView: ListLinearLayout {
 
@@ -19,7 +20,9 @@ class MessengerView: ListLinearLayout {
 
             layout.text_user.text = item.user!!.username
             layout.text_content.text = item.content
-            layout.text_datetime.text = item.createdAt.toString()
+
+            val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+            layout.text_datetime.text = sdf.format(item.createdAt!!.toDate())
 
             layout
         })

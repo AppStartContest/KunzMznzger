@@ -1,9 +1,11 @@
 package com.ltei.kunzmznzger.view
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.google.android.gms.ads.AdRequest
 import com.ltei.kunzmznzger.R
@@ -13,6 +15,7 @@ import com.ltei.kunzmznzger.local.LocalUserInfo
 import com.ltei.kunzmznzger.models.Room
 import kotlinx.android.synthetic.main.activity_event_creation.*
 import org.joda.time.DateTime
+
 
 class EventCreationActivity: AppCompatActivity() {
 
@@ -30,6 +33,14 @@ class EventCreationActivity: AppCompatActivity() {
             Toast.makeText(this, getString(R.string.dialog_void_input_error), Toast.LENGTH_SHORT).show()
         } else {
             viewIdx = 1
+
+            // Hide keyboard
+            val view = this.currentFocus
+            if (view != null) {
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
+            }
+
             onViewIdxChange()
         }
     }
@@ -46,9 +57,14 @@ class EventCreationActivity: AppCompatActivity() {
                 timepicker.minute,
                 0, 0)
 
+        val description = if (edittext_description.text.toString() == "") {
+            "_"
+        } else {
+            edittext_description.text.toString()
+        }
         LocalUserInfo.getInstance().createEvent(
                 edittext_name.text.toString(),
-                edittext_description.text.toString(),
+                description,
                 Date(datetime),
                 Time(datetime),
                 room!!).thenRun {
@@ -88,18 +104,20 @@ class EventCreationActivity: AppCompatActivity() {
     }
 
     private fun showView0() {
-        text_name.visibility = View.VISIBLE
+        layout1.visibility = View.VISIBLE
+        /*text_name.visibility = View.VISIBLE
         edittext_name.visibility = View.VISIBLE
         text_description.visibility = View.VISIBLE
-        edittext_description.visibility = View.VISIBLE
+        edittext_description.visibility = View.VISIBLE*/
         button_next.visibility = View.VISIBLE
         button_next.setOnClickListener(buttonNextClickListener1)
     }
     private fun hideView0() {
-        text_name.visibility = View.GONE
+        layout1.visibility = View.GONE
+        /*text_name.visibility = View.GONE
         edittext_name.visibility = View.GONE
         text_description.visibility = View.GONE
-        edittext_description.visibility = View.GONE
+        edittext_description.visibility = View.GONE*/
         button_next.visibility = View.GONE
     }
 

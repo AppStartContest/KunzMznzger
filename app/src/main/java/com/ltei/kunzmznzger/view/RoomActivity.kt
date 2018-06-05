@@ -45,7 +45,6 @@ class RoomActivity : AppCompatActivity() {
             dropDown.setOnMenuItemClickListener({
                 when (it.itemId) {
                     R.id.menu_group_items_add_member -> { onButtonAddMemberPressed() }
-                    R.id.menu_group_items_add_message -> { onButtonAddMessagePressed(getRoom()) }
                     R.id.menu_group_items_add_event -> { onButtonAddEventPressed() }
                     R.id.menu_group_items_history -> { onButtonHistoryPressed() }
                     R.id.menu_group_items_graph -> { onButtonGraphPressed() }
@@ -56,6 +55,7 @@ class RoomActivity : AppCompatActivity() {
             dropDown.show()
         })
 
+        button_add_message.setOnClickListener { onButtonAddMessagePressed() }
         button_add_expense.setOnClickListener { onButtonCreateExpensePressed() }
 
         userlistview.setArray(getRoom().users)
@@ -105,13 +105,13 @@ class RoomActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    fun onButtonAddMessagePressed(room: Room) {
+    fun onButtonAddMessagePressed() {
         val dialog = DialogEnterText(this)
         dialog.runOnCreate = Runnable {
             dialog.dialog_enter_text_title.text = "Write a message"
             dialog.dialog_enter_text_button.setOnClickListener({
                 if (dialog.dialog_enter_text_edittext.text.toString() != "") {
-                    LocalUserInfo.globalInstance.sendMessageToRoom(dialog.dialog_enter_text_edittext.text.toString(), room).thenRun {
+                    LocalUserInfo.globalInstance.sendMessageToRoom(dialog.dialog_enter_text_edittext.text.toString(), getRoom()).thenRun {
                         dialog.dismiss()
                         this.runOnUiThread { messengerview.setArray(getRoom().messages) }
                     }

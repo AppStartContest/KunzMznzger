@@ -61,12 +61,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/uninitialized"
+                android:paddingBottom="16dp"
                 android:textSize="24sp"/>
-
-            <com.ltei.kunzmznzger.view.listlinearlayout.UserListView
-                android:id="@+id/userlistview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
 
             <TextView
                 android:id="@+id/text_description"
@@ -80,8 +76,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:paddingBottom="16dp"
                 android:text="@string/uninitialized"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Messages"/>
             <com.ltei.kunzmznzger.view.listlinearlayout.MessengerView
                 android:id="@+id/messengerview"
                 android:layout_width="match_parent"
