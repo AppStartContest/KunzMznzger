@@ -161,7 +161,7 @@ public abstract class Model<T extends Model> implements Comparable<Model<T>>
      *
      * @param model the model to copy
      */
-    protected abstract void recopy(T model);
+    public abstract void recopy(T model);
 
     /**
      * @return the related DAO instance
