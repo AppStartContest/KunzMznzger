@@ -92,7 +92,8 @@
                 android:text="Users"/>
             <HorizontalScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp">
                 <com.ltei.kunzmznzger.view.listlinearlayout.UserListView
                     android:id="@+id/userlistview"
                     android:paddingTop="16dp"
@@ -109,7 +110,7 @@
             <com.ltei.kunzmznzger.view.listlinearlayout.EventListView
                 android:id="@+id/eventlistview"
                 android:paddingTop="16dp"
-                android:paddingBottom="16dp"
+                android:layout_marginBottom="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
@@ -121,7 +122,7 @@
             <com.ltei.kunzmznzger.view.listlinearlayout.MessengerView
                 android:id="@+id/messengerview"
                 android:paddingTop="16dp"
-                android:paddingBottom="16dp"
+                android:layout_marginBottom="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

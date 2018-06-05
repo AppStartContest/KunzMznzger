@@ -1,21 +1,12 @@
 package com.ltei.kunzmznzger.view
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.view.Gravity
-import android.view.MenuItem
-import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.PopupMenu
-import android.widget.TextView
 import com.ltei.kunzmznzger.R
 import com.ltei.kunzmznzger.graph.Graph
 import com.ltei.kunzmznzger.local.LocalUserInfo
-import com.ltei.kunzmznzger.models.Expense
 import com.ltei.kunzmznzger.models.Room
 import kotlinx.android.synthetic.main.activity_graph.*
-import kotlinx.android.synthetic.main.activity_history.*
 
 
 class GraphActivity : AppCompatActivity() {
