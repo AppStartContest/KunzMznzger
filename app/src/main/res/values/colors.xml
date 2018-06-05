@@ -15,6 +15,30 @@
     <color name="greyLighter">#F1F5F8</color>
     <color name="greyLightest">#F8FAFC</color>
 
+    <color name="redDarkest">#E3342F</color>
+    <color name="redDarker">#FCEBEA</color>
+    <color name="redDark">#F9ACAA</color>
+    <color name="red">#EF5753</color>
+    <color name="redLight">#E3342F</color>
+    <color name="redLighter">#CC1F1A</color>
+    <color name="redLightest">#621B18</color>
+
+    <color name="greenDarkest">#38C172</color>
+    <color name="greenDarker">#E3FCEC</color>
+    <color name="greenDark">#A2F5BF</color>
+    <color name="green">#51D88A</color>
+    <color name="greenLight">#38C172</color>
+    <color name="greenLighter">#1F9D55</color>
+    <color name="greenLightest">#1A4731</color>
+
+
+
+
+
+
+
+
+
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#00CC00</color>
