@@ -54,7 +54,7 @@ class RoomActivity : AppCompatActivity() {
 
         userlistview.setArray(getRoom().users)
         messengerview.setArray(getRoom().messages)
-        eventlistview.setArray(getRoom().events)
+        eventlistview.init(getRoom().events, roomIdx!!)
     }
 
 
