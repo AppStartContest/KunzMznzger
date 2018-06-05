@@ -105,12 +105,12 @@ class Graph() {
             entry_list.add(arrayListOf())
             var j = 0
             var id = sortedList[0].user!!.id
+            name_list.add(sortedList[0].user?.name)
             for (i in 0 until sortedList.size) {
 
                 if (id == sortedList[i].user!!.id){
                     var time_value = get_nb_day(sortedList[i].createdAt)
                     entry_list[j].add(Entry(time_value,sortedList[i].value!!.toFloat()))
-                    name_list.add(sortedList[i].user?.name)
                 }
                 else
                 {
