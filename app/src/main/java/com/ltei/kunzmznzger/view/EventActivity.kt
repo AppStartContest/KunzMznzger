@@ -21,6 +21,8 @@ class EventActivity : AppCompatActivity() {
 
     var roomIdx: Int = -1
     var eventIdxInRoom: Int = -1
+    private fun getRoom(): Room { return LocalUserInfo.getInstance().getRooms()[roomIdx] }
+    private fun getEvent(): Event { return getRoom().events[eventIdxInRoom] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,8 +31,8 @@ class EventActivity : AppCompatActivity() {
         roomIdx = intent.getIntExtra(EXTRAS_ROOM_IDX, -1)
         eventIdxInRoom = intent.getIntExtra(EXTRAS_EVENT_IDX_IN_ROOM, -1)
 
-        val room = LocalUserInfo.getInstance().getRooms()[roomIdx]
-        val event = room.events[eventIdxInRoom]
+        val room = getRoom()
+        val event = getEvent()
         text_title.text = event.name
         userlistview.setArray(room.users)
         text_description.text = event.description
@@ -46,7 +48,12 @@ class EventActivity : AppCompatActivity() {
             dialog.dialog_enter_text_button.setOnClickListener({
                 if (dialog.dialog_enter_text_edittext.text.toString() != "") {
                     LocalUserInfo.globalInstance.sendMessageToEvent(dialog.dialog_enter_text_edittext.text.toString(), event).thenRun {
-                        dialog.cancel()
+                        this.runOnUiThread {
+                            dialog.cancel()
+                            var messages = getEvent().messages
+                            messengerview.setArray(getEvent().messages)
+                            var a = messages.size
+                        }
                     }
                 } else {
                     Toast.makeText(this, getText(R.string.dialog_void_input_error), Toast.LENGTH_SHORT).show()

@@ -25,8 +25,12 @@ class MessengerView: ListLinearLayout {
             view
         })
     }
-    constructor(context: Context): super(context)
-    constructor(context: Context, attributeSet: AttributeSet): super(context, attributeSet)
+    constructor(context: Context): super(context) {
+        this.orientation = LinearLayout.VERTICAL
+    }
+    constructor(context: Context, attributeSet: AttributeSet): super(context, attributeSet) {
+        this.orientation = LinearLayout.VERTICAL
+    }
 
 }
 

@@ -24,15 +24,14 @@ class RoomActivity : AppCompatActivity() {
 
 
     private var roomIdx: Int? = null
-    private var room: Room? = null
+    private fun getRoom(): Room { return LocalUserInfo.getInstance().getRooms()[roomIdx!!] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_room)
 
         roomIdx = intent.getIntExtra(EXTRAS_ROOM_IDX, -1)
-        room = LocalUserInfo.getInstance().getRooms()[roomIdx!!]
-        text_title.text = room.toString()
+        text_title.text = getRoom().toString()
 
         button_menu.setOnClickListener({
             val dropDown = PopupMenu(applicationContext, button_menu)
@@ -40,7 +39,7 @@ class RoomActivity : AppCompatActivity() {
             dropDown.setOnMenuItemClickListener({
                 when (it.itemId) {
                     R.id.menu_group_items_add_member -> { onButtonAddMemberPressed() }
-                    R.id.menu_group_items_add_message -> { onButtonAddMessagePressed(room!!) }
+                    R.id.menu_group_items_add_message -> { onButtonAddMessagePressed(getRoom()) }
                     R.id.menu_group_items_add_event -> { onButtonAddEventPressed() }
                     R.id.menu_group_items_history -> { onButtonHistoryPressed() }
                     R.id.menu_group_items_graph -> { onButtonGraphPressed() }
@@ -52,6 +51,9 @@ class RoomActivity : AppCompatActivity() {
         })
 
         button_add_expense.setOnClickListener { onButtonCreateExpensePressed() }
+
+        userlistview.setArray(getRoom().users)
+        messengerview.setArray(getRoom().messages)
 
     }
 
@@ -68,7 +70,7 @@ class RoomActivity : AppCompatActivity() {
                             dialog.edittext_title.text.toString(),
                             dialog.edittext_amount.text.toString().toDouble(),
                             dialog.edittext_description.text.toString(),
-                            room!!
+                            getRoom()
                     ).thenRun { dialog.dismiss() }
                 }
             }
@@ -83,7 +85,8 @@ class RoomActivity : AppCompatActivity() {
             dialog.dialog_enter_text_title.text = "Enter username to add:"
             dialog.dialog_enter_text_button.setOnClickListener({
                 if (dialog.dialog_enter_text_edittext.text.toString() != "") {
-                    LocalUserInfo.globalInstance.addUserToRoom(dialog.dialog_enter_text_edittext.text.toString() ,room!!)
+                    LocalUserInfo.globalInstance.addUserToRoom(dialog.dialog_enter_text_edittext.text.toString(), getRoom())
+                    this.runOnUiThread { userlistview.setArray(getRoom().users) }
                 } else {
                     Toast.makeText(this, getText(R.string.dialog_void_input_error), Toast.LENGTH_SHORT).show()
                 }
@@ -99,7 +102,8 @@ class RoomActivity : AppCompatActivity() {
             dialog.dialog_enter_text_button.setOnClickListener({
                 if (dialog.dialog_enter_text_edittext.text.toString() != "") {
                     LocalUserInfo.globalInstance.sendMessageToRoom(dialog.dialog_enter_text_edittext.text.toString(), room).thenRun {
-                        dialog.cancel()
+                        dialog.dismiss()
+                        this.runOnUiThread { messengerview.setArray(getRoom().messages) }
                     }
                 } else {
                     Toast.makeText(this, getText(R.string.dialog_void_input_error), Toast.LENGTH_SHORT).show()
@@ -113,18 +117,6 @@ class RoomActivity : AppCompatActivity() {
         val intent = Intent(this, EventCreationActivity::class.java)
         intent.putExtra(EventCreationActivity.EXTRAS_ROOM_IDX, roomIdx)
         startActivity(intent)
-        /*val dialog = DialogEnterText(this, "Enter the title")
-        dialog.dialog_enter_text_button.setOnClickListener({
-            if (dialog.edittext.text.toString() != "") {
-                val event = Event()
-                event.name = dialog.edittext.text.toString()
-                LocalUserInfo.globalInstance.createEvent(room).thenRun {
-                    dialog.cancel()
-                }
-            } else {
-                Toast.makeText(this, getText(R.string.dialog_void_input_error), Toast.LENGTH_SHORT).show()
-            }
-        })*/
     }
 
     fun onButtonHistoryPressed() {

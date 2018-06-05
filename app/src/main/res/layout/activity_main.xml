@@ -87,11 +87,10 @@
 
             </LinearLayout>
 
-            <com.ltei.kunzmznzger.view.ListLinearLayout
+            <com.ltei.kunzmznzger.view.RoomListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:id="@+id/listlinearlayout"/>
+                android:id="@+id/roomlistview"/>
 
         </LinearLayout>
     </ScrollView>

@@ -22,21 +22,6 @@ import kotlinx.android.synthetic.main.dialog_enter_text.*
 class MainActivity : AppCompatActivity() {
 
 
-    private var roomListItemViewCreator = ListLinearLayout.ViewCreator {
-        item, idx ->
-        val listItemLayoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
-        listItemLayoutParams.bottomMargin = 1
-        val view = Button(this)
-        view.gravity = Gravity.CENTER
-        // /view.layout = getDrawable(android.R.layout.simple_list_item_1)
-        view.background = getDrawable(R.color.colorListItemBackground)
-        view.setPadding(16, 16, 16, 16)
-        view.layoutParams = listItemLayoutParams
-        view.text = item.toString() //(item as Room).name
-        view.textSize = 12f
-        view.setOnClickListener({ gotoActivityGroup(idx) })
-        view
-    }
 
     private var buttonCreateRoomClickListener = View.OnClickListener {
         val dialog = DialogEnterText(this)
@@ -46,7 +31,7 @@ class MainActivity : AppCompatActivity() {
                 if (dialog.dialog_enter_text_edittext.text.toString() != "") {
                     LocalUserInfo.getInstance().createRoom(dialog.dialog_enter_text_edittext.text.toString()).thenAccept {
                         LocalUserInfo.getInstance().load(this).thenRun {
-                            dialog.cancel()
+                            dialog.dismiss()
                             gotoActivityGroup(LocalUserInfo.getInstance().getRooms().size -1)
                         }
                     }
@@ -85,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             LocalUserInfo.getInstance().load(this).thenRun {
                 this.runOnUiThread {
-                    listlinearlayout.init(LocalUserInfo.getInstance().getRooms(), roomListItemViewCreator)
+                    roomlistview.setArray(LocalUserInfo.getInstance().getRooms())
                 }
             }
         }
